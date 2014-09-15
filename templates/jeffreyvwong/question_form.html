@@ -1,0 +1,67 @@
+{% extends "jeffreyvwong/base.html" %}
+
+{% block title %} {{ block.super }} | Question{% endblock title %} 
+
+{% block head %}
+     <script type="text/javascript">          
+          $(document).ready(function(){
+          
+          });
+     </script>
+     <style type="text/css">
+                    
+
+  
+     </style>          
+{% endblock head %}
+
+{% block content %}
+   
+
+<div id="question-container">
+     <p>
+          Kindly spare a few minutes to answer some questions about learning to program.
+          Besides your name and email, all the fields are optional. Only answer those that apply.          
+     </p>
+     
+     <div class="question-form">
+               <table id="question">
+                    
+                    <colgroup>
+                         <col class="description" />
+                         <col class="field" />
+                         <col class="errors" />
+                    </colgroup>
+                    
+                    <thead>
+                         <tr>
+                              <th scope="col">Description</th>
+                              <th scope="col">Field</th>
+                              <th scope="col">Errors</th>
+                         </tr>
+                    </thead>                                        
+
+                    <tbody>
+                         <form action="" method="post">    {% csrf_token %}
+                              {% for field in form %}                          
+                              <tr>
+                                   <td>{{ field.label_tag }}</td>
+                                   <td>{{ field }}</td>
+                                   <td>{{ field.errors }}</td>                                   
+                              </tr>
+                              {% endfor %}                             
+                              <input id="question-submit" type="submit" value="Submit"/>          
+                         </form>                         
+                    </<tbody>
+                    
+               </table> 
+               
+     </div>
+          
+</div>
+
+
+{% endblock content %}
+
+
+                   

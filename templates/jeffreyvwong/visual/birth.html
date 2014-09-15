@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <style>
+
+    svg{
+      background-color: black;
+
+    }
+
+    body {
+      /*background: #000;*/
+    }
+
+    ellipse {
+      fill: pink;
+    }
+
+    path {
+      fill: none;
+      stroke: #fff;
+      stroke-linecap: round;
+    }
+
+    .mid {
+      stroke-width: 4px;
+      stroke: pink;
+    }
+
+    .tail {
+      stroke-width: 2px;
+      stroke: pink;
+    }
+
+  </style>
+    <!-- Third party javascript -->
+    <script type="text/javascript" src="/static/jeffreyvwong/js/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="/static/jeffreyvwong/js/d3.v3.min.js"></script>
+</head>
+<body>
+
+  <script>
+    var margin = {top: 20, right: 20, bottom: 30, left: 40}
+            , width  = 800 - margin.left - margin.right
+            , height = 500 - margin.top - margin.bottom
+
+            , n = 1
+            , m = 12
+            , maxSperm = 125
+            , t = setIntervals(maxSperm)[0].map( function(a){ return Math.floor(5000 * +a.toFixed(4)); } )
+            , t_index = 1
+            , spermatozoa = [new Spermatozoa(m, width, height)]
+            , g_sperm
+            , degrees = 180 / Math.PI
+            , svg = d3.select("body").append("svg")
+                    .attr("width", width)
+                    .attr("height", height)
+            , delta = t[1]
+            , interval = setInterval(makeSperm, delta)
+            ;
+
+
+    update();
+
+    d3.timer(function() {
+      for (var i = -1; ++i < n;) {                  //for each sperm in the spermatozoa array
+        var spermatozoon = spermatozoa[i],
+                path = spermatozoon.path,         // array of 12 [x,y] arrays
+                dx = spermatozoon.vx,           // random element of [-1, 1]
+                dy = spermatozoon.vy,           // random element of [-1, 1]
+
+        // first element determines ellipse "head" translation
+                x = path[0][0] += dx,           // create x which is the first array's x value incremented by dx
+                y = path[0][1] += dy,
+                speed = Math.sqrt(dx * dx + dy * dy),// cartesian distance based on dx, dy values
+                count = speed * 10, // ?
+                k1 = -5 - speed / 3; // ?
+
+        // Bounce off the walls.
+        if (x < 0 || x > width) spermatozoon.vx *= -1;
+        if (y < 0 || y > height) spermatozoon.vy *= -1;
+
+        /* Swim! */
+        for (var j = 0; ++j < m;) {             // go through each (m) path arrays
+          var vx = x - path[j][0],              //  vx is the change in path[j] x value
+                  vy = y - path[j][1],          //  vy is the change in path[j] y value
+                  k2 = Math.sin(((spermatozoon.count += count) + j * 3) / 300) / speed; // ?
+          path[j][0] = (x += dx / speed * k1) - dy * k2; //update the path x val
+          path[j][1] = (y += dy / speed * k1) + dx * k2; //update  the path y val
+          speed = Math.sqrt((dx = vx) * dx + (dy = vy) * dy); //update the speed
+        }
+      }
+
+      d3.selectAll(".head").attr("transform", headTransform);
+      d3.selectAll(".tail, .mid").attr("d", tailPath);
+    });
+
+    ///Spermatozoa constructor
+    function Spermatozoa(m, h, w, x, y) {
+
+      x = typeof x === "undefined" ? (Math.random() * w) : x;
+      y = typeof y === "undefined" ? (Math.random() * h) : y;
+
+      //Declare publicly accessible object variables
+      this.count = 0;
+      this.path  = d3.range(m).map(function() { return [x, y]; });
+      this.vx = Math.random() * 4 - 2;
+      this.vy = Math.random() * 4 - 2;
+
+    }
+
+    function makeSperm() {
+      clearInterval(interval);
+      var i = Math.floor(Math.random() * n);
+      spermatozoa.push(new Spermatozoa(m, width, height, spermatozoa[i].path[0][0], spermatozoa[i].path[0][1]));
+      ++n;
+      update();
+      delta = Math.floor(t[t_index + 1] - t[t_index]);
+      ++t_index;
+      if (t_index >= maxSperm){
+        makeSperm  = "undefined";
+      }
+      interval = setInterval(makeSperm, delta);
+    }
+
+
+    function update(){
+
+      var g_sperm = svg.selectAll(".sperm")
+                       .data(spermatozoa)
+                    . enter()
+                       .append("g")
+                       .attr("class", "sperm");
+
+      //update selection
+      g_sperm.append("ellipse")
+              .attr("class", "head")
+              .attr("rx", 6.5)
+              .attr("ry", 4);
+
+      g_sperm.append("path")
+              .datum(function(d) { return d.path.slice(0, 3); })
+              .attr("class", "mid");
+
+      g_sperm.append("path")
+               .datum(function(d){ return d.path; })
+               .attr("class", "tail");
+
+    }
+
+    function setIntervals( limit ){
+
+      var b = 1
+              , n = [1]
+              , t = [0];
+
+      for (var i = 1; ++i <= limit;){
+        n.push(i);
+      }
+
+      for (var k = -1; ++k < limit - 1;){
+        t.push( ( t[k] - Math.log(Math.random())/(b * n[k]) ) );
+      }
+
+      return [t, n];
+
+    }
+
+
+    function headTransform(d) {
+      //arctan takes O and A and returns angle
+      return "translate(" + d.path[0] + ")rotate(" + Math.atan2(d.vy, d.vx) * degrees + ")";
+    }
+
+    function tailPath(d) { //this includes mid and tail sections
+      //M = moveto; L = lineto
+      return "M" + d.join("L");
+    }
+
+  </script>
+</body>

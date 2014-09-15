@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>JVW | Blog-o-sphere</title>
+    <style type="text/css">
+
+      .ca{
+        margin: 0em 0em;
+        background: black;
+        width: 50em;
+      }
+
+      .sliders{
+        margin: 1em 1em;
+        width: 48em;
+      }
+
+      label{
+        margin-bottom: 0.5em;
+        font-size: 0.9em;
+      }
+
+      .slider-text{
+        border: none;
+        margin-bottom: 0.5em;
+        font-size: 0.9em;
+      }
+
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="/static/jeffreyvwong/js/jquery-ui-1.10.4/themes/base/minified/jquery-ui.min.css">
+    <!-- Third party javascript -->
+    <script type="text/javascript" src="/static/jeffreyvwong/js/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="/static/jeffreyvwong/js/jquery-ui-1.10.4/ui/minified/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/static/jeffreyvwong/js/d3.v3.min.js"></script>
+
+  </head>
+  <body>
+    <div class="ca"></div>
+    <div class="sliders">
+      <label for="rule">Rule:</label>
+      <input class="slider-text" type="text" id="rule" size="4" />
+      <div id="slider-rule"></div><br>
+
+      <label for="numrows">Rows:</label>
+      <input class="slider-text" type="text" id="numrows" size="4" />
+      <div id="slider-numrows"></div>
+    </div>
+
+    <script>
+      //BEGIN /cell/ namespace//
+      var cell = (function(){
+
+        var CellAuto
+                , binary
+                ;
+
+        CellAuto = function(rule, m, ratio) {
+
+          /**
+           * Class variables
+           * @private
+           */
+          ratio = (typeof ratio === "undefined") ? 2 : ratio;
+          n     = (typeof n === "undefined") ? 100 : n;
+
+          this._table = make_table(rule);
+          this._m     = m;
+          this._n     = m * ratio + 1;
+          this._array = make_array(this._m, this._n);
+          this._next  = 1;
+
+
+          /**
+           * Generates the key, value table specifying the output rules for
+           * each of the seven possible input 3-tuple of previous states
+           * @param rule - the cell auto rule to follow
+           * @return table
+           * @method make_table
+           */
+          function make_table (rule){
+            var table = {}
+                    , bin_rule = binary(rule, 8)
+                    , t
+                    ;
+
+            for( var i = -1; ++i < 8; ){
+              t = binary(7-i, 3);
+              table[t] = bin_rule[i];
+            }
+
+            return table;
+          }
+
+          /**
+           * Generates the empty array in which to store the output values
+           * @param m rows and n columns
+           * @return array
+           * @method make_array
+           */
+          function  make_array(m, n){
+            var array = []
+                    , initCol
+                    ;
+
+            //create empty array
+            for (var i = -1; ++i < m;){
+              array[i] = [];
+              for (var j = -1; ++j < n;){
+                array[i].push(0);
+              }
+            }
+
+            //Starts with one cell in the middle of the top row.
+            initCol = Math.floor(n/2);
+            array[0][initCol] = 1;
+
+            return array;
+          }
+
+
+        }
+
+        CellAuto.prototype = {
+
+          //restore constructor
+          constructor: CellAuto,
+
+          /**
+           * fill in the next row of the CA
+           * @param
+           * @return none
+           * @method step
+           */
+          step : function (){
+
+            //Executes one time step by computing the next row of the array."""
+            var i, a, t
+                    ;
+
+            i = this._next;
+            ++this._next;
+
+            a = this._array;
+            t = this._table;
+
+            for ( var j = 0 ; ++j < (this._n-1); ){
+              a[i][j] = t[ a[i-1].slice(j-1, j+2) ]; //not including j+2
+            }
+          },
+
+          /**
+           * automated procedure to step through the remaining rows
+           * @param
+           * @return none
+           * @method loop
+           */
+
+          loop: function(){
+
+            //Executes the given number of time steps."""
+            for (var i = -1; ++i < (this._m - 1);){
+              this.step();
+            }
+          }
+
+        };
+
+        /**
+         * Generates the digit-tuple of n in binary
+         * @param decimal - an integer base-10 number
+         * @param digits - the tuple size
+         * @return array
+         * @method make_array
+         */
+        binary = function(decimal, digits){
+
+          var binary = []
+                  , remainder
+                  , quotient
+                  ;
+
+          for(var i = -1; ++i < digits;){
+            quotient = Math.floor(decimal / 2);
+            remainder = decimal % 2;
+            decimal = quotient;
+            binary[i] = remainder;
+          }
+
+          return binary.reverse();
+
+        }
+
+        return { CellAuto : CellAuto
+          , binary : binary
+        }
+
+      })();
+      //END /cell/ namespace//
+
+      //BEGIN visualization section//
+      var
+              numrows = 36
+              , rule = 30
+
+      //Fire up the DOM elements
+              , margin   = {top: 10, right: 10, bottom: 10, left: 10}
+              , height   = 400 - margin.top - margin.bottom
+              , width    = 800 - margin.left - margin.right
+              , xScale, yScale
+
+              , g_body = d3.select(".ca")
+                      .append("svg")
+                      .attr({
+                        width : width + margin.left + margin.right,
+                        height : height + margin.top + margin.bottom
+                      })
+                      .append("g")
+                      .attr({
+                        class : "body"
+                        , width : width
+                        , height : height
+                        , transform : "translate(" + margin.left + ", " + margin.top + ")"
+                      });
+
+      $("#rule").val( rule );
+      $("#numrows").val( numrows );
+      update( rule, numrows );
+
+      /* initialize sliders */
+      $("#slider-rule").slider({  value: 30,
+        max: 255,
+        min: 0,
+        step: 1,
+        change: function( event, ui ) {
+          rule = ui.value; //global value
+          update(rule, numrows);
+        },
+
+        slide: function( event, ui ) {
+          $("#rule").val( ui.value );
+        }
+      });
+
+      $("#slider-numrows").slider({ value: 30,
+        max: 150,
+        min: 1,
+        step: 1,
+        change: function( event, ui ) {
+          numrows = ui.value; //global value
+          update(rule, numrows);
+        },
+
+        slide: function( event, ui ) {
+          $("#numrows").val( ui.value );
+        }
+      });
+
+      /* helpers */
+      function makeCAarray( rule, numrows ){
+        var ca, array;
+
+        ca  = new cell.CellAuto(rule, numrows);
+        ca.loop();
+        array = ca._array;
+
+        return array;
+      }
+
+      function setScales( numrows ){
+        /* Initialize scales (x : letter, ordinal, y : frequency, linear)*/
+        xScale = d3.scale.ordinal()
+                .domain(d3.range( numrows * 2 + 1 ))
+                .rangeBands([0, width]);
+
+        yScale = d3.scale.ordinal()
+                .domain(d3.range( numrows ))
+                .rangeBands([0, height]);
+
+      }
+
+      function update( rule, numrows ){
+
+        var
+                array
+                , cellSize
+                , rows
+                , blocks
+                ;
+
+        setScales(numrows);
+        cellSize = xScale.rangeBand();
+        array = makeCAarray( rule, numrows );
+
+        /* attach <div class="row"> for each data row */
+        rows = g_body.selectAll(".row")
+                .data(array)
+                .attr({
+                  class  : "row",
+                  transform : function(d,i){ return "translate(0," + (i * cellSize)  + ")"; }
+                });
+
+        rows.enter()
+                .append("g")
+                .attr({
+                  class  : "row",
+                  transform : function(d,i){ return "translate(0," + (i * cellSize)  + ")"; }
+                });
+
+        rows.exit().remove();
+
+
+        /* attach a <div class="block"> for each data point */
+        blocks = rows.selectAll(".block")
+                .data( function(d,i){ return d; } )
+                .attr({
+                  class  : "block",
+                  width  : cellSize ,
+                  height : cellSize ,
+                  x : function(d,i){ return xScale(i); },
+                  y : function(d,i){ return 0; }
+                })
+                .style("fill", function(d,i){ return d > 0 ? "black" : "steelblue"; });
+
+        blocks.enter()
+                .append("rect")
+                .transition()
+                .duration(1000)
+                .attr({
+                  class  : "block",
+                  width  : cellSize ,
+                  height : cellSize ,
+                  x : function(d,i){ return xScale(i); },
+                  y : function(d,i){ return 0; }
+                })
+                .style("fill", function(d,i){ return d > 0 ? "black" : "steelblue"; });
+
+        blocks.exit().remove();
+      }
+      //END visualization section//
+    </script>
+  </body>
+</html>
+

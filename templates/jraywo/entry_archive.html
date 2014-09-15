@@ -1,0 +1,45 @@
+{% extends "jraywo/base_entries.html" %}
+
+{% block title %} {{ block.super }} | Latest Entries {% endblock title %}  
+
+{% block content %}
+
+{% for object in page_obj.object_list %}
+    <h2 class="title"><a class="title" href="{{ object.get_absolute_url }}">{{ object.title }}</a></h2>
+    <p class="author-date-detail">Posted by {{ object.author }} -- {{ object.pub_date | date:"F j, Y" }}<p>
+    
+    <p class="body">
+      {% if object.entry_tease %}
+        <div class="entry-archive-teaser">
+          <a href="{{ object.get_absolute_url }}"><img class="entry-archive-teaser-img" src="/static/jraywo/images/{{ object.entry_tease }}" alt="{{ object.entry_tease }}"></a>
+        </div>
+      {% endif %}
+
+
+      {% if object.excerpt_html %}
+          {{ object.excerpt|safe }}
+      {% else %}
+          {{ object.body_html|truncatewords_html:50| safe }}
+      {% endif %}
+    </p>
+    <br> 
+{% endfor%}
+
+
+{% if is_paginated %}
+    <div class="pagination">
+	<span class="page-links">
+	{% for page_num in paginator.page_range %}
+	    {% if page_obj.number == page_num %}
+		{{page_obj.number}}
+	    {% else %}
+		<a class="page-links" href="{% url 'jraywo_entry_archive_index' %}?page={{ page_num }}">{{ page_num }}</a>
+	    {% endif %}                    
+	{% endfor %}
+	</span>
+    </div>
+    <br>
+{% endif %}
+    
+{% endblock content %}
+

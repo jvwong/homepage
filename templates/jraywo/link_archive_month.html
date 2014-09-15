@@ -1,0 +1,22 @@
+{% extends "jraywo/link_archive.html" %}
+
+{% block title %} {{ block.super }} | {{ month| date:"M Y"}} {% endblock title %}  
+
+{% block content %}
+
+	<h2 class="title">Links - {{ month| date:"M/Y"}} </h2>
+	<ul class="date-list">
+		{% for date in date_list %}
+			<li>
+				<a href="{% url 'jraywo_link_archive_month' date|date:'Y' date|date:'b' %}{{ date|date:'j'}}/">{{ date|date:'j'}}</a>
+			</li>
+		{% endfor %}
+	</ul>
+	
+	{{ block.super }}
+	
+{% endblock content %}
+
+
+  
+

@@ -1,0 +1,58 @@
+{% extends "jeffreyvwong/base.html" %}
+
+{% block title %} Visualizations {{ block.super }}{% endblock title %}
+
+{% block meta_description %}
+    <meta name="description" content="Visualization. Sub-menu with links to samples of web visualizations" />
+{% endblock meta_description %}
+
+{% block content %}
+
+<div class="topic-list">
+     {% for object in page_obj.object_list %}
+          <div class="topic-container">
+
+               <!-- Cover Fade -->
+               <figure class="effeckt-caption shadow" data-effeckt-type="cover-fade">
+                 {% if object.snippet_tease %}
+
+                   <a href="{{ object.get_absolute_url }}">
+                       <img class="img-responsive" src="{{ object.snippet_tease.url }}" alt="{{ object }}">
+                   </a>
+                 {% endif %}
+                 <figcaption>
+                   <a class="effeckt-figcaption-link" href="{{ object.get_absolute_url }}">
+                         <div class="effeckt-figcaption-wrap">
+                              <p>
+                                   {{ object.title }}
+                                   <br><small>{{ object.pub_date | date:"F j, Y" }}</small>                              
+                              </p>
+                         </div>
+                    </a>
+                 </figcaption>
+               </figure>
+          
+          </div>
+    {% endfor%}
+     
+</div>
+
+{% if is_paginated %}
+    
+    <div class="pagination">
+	<span class="page-links">
+	{% for page_num in paginator.page_range %}
+	    {% if page_obj.number == page_num %}
+		{{page_obj.number}}
+	    {% else %}
+		<a class="page-links" href="{% url 'jeffreyvwong_visualization_list' %}?page={{ page_num }}">{{ page_num }}</a>
+	    {% endif %}                    
+	{% endfor %}
+	</span>
+    </div>
+    
+{% endif %}
+
+
+{% endblock content %}
+ 

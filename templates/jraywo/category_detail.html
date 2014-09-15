@@ -1,0 +1,9 @@
+{% extends "jraywo/entry_archive.html" %}
+
+{% block title %} | {{ model }} {% endblock title %}  
+
+{% block content %}
+  	<h2 class="title">Categorized under "{{ model }}"</h2>
+	{{ block.super }}
+
+{% endblock content %}

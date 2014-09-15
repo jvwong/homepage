@@ -1,0 +1,123 @@
+{% extends "jeffreyvwong/base.html" %}
+{% block head %}
+    <style>
+        a:link, a:visited{
+            text-decoration: none;
+            outline: 0;
+        }
+    </style>
+    <link href="/static/jeffreyvwong/css/carousel.css" rel="stylesheet">
+{% endblock head %}
+
+{% block title %}Home {{ block.super }}{% endblock title %}
+
+{% block meta_description %}
+    <meta name="description" content="Main navigation page with links to my publications, work
+                  involving mathematical modeling along with efforts in teaching, analytics and data visualization" />
+{% endblock meta_description %}
+
+{% block navbarjump %}
+        <li>
+            <a href="https://github.com/jvwong?tab=repositories">Github</a>
+        </li>
+        <li>
+            <a href="{% url 'jeffreyvwong_cv' %}">CV</a>
+        </li>
+        <li>
+            <a href="{% url 'jeffreyvwong_contact' %}">Contact</a>
+        </li>
+        <li>
+            <a href="{% url 'admin:index' %}">Admin</a>
+        </li>
+{% endblock navbarjump %}
+
+{% block content %}
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="item active">
+                <img class="img-responsive" src="/static/jeffreyvwong/images/panels/invaders.jpg"  alt="zipper">
+                <div class="container-fluid">
+                    <div class="carousel-caption invert">
+                        <h1>Bacterial Invaders</h1>
+                        <p class="lead"><small>Some pathogenic bacteria literally enter our cells. Why is this process so messy?</small></p>
+                        <p><a class="btn btn-sm btn-primary" href="/modelling/#Bacterial Invaders" role="button">Read more</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img src="/static/jeffreyvwong/images/panels/earth_lights.jpg" alt="gcifwebapps">
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h1>Earthly Intelligence</h1>
+                        <p class="lead"><small>The Global City Indicator Facility collects data so that cities across the globe can share, compare, and learn from each other</small></p>
+                        <p><a class="btn btn-sm btn-primary" href="/visualization/10/" role="button">Read more</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <img class="img-responsive" src="/static/jeffreyvwong/images/panels/multiscreen.jpg" alt="multitask">
+                <div class="container">
+                    <div class="carousel-caption invert">
+                        <h1>The Perils of Multitasking</h1>
+                        <p class="lead"><small>Walking and chewing gum can be challenge for any of us. Our own cells employ multitasking too - but at a steep cost.</small></p>
+                        <p><a class="btn btn-lgm btn-primary" href="/modelling/#The Perils of Multitasking" role="button">Read more</a></p>
+                    </div>
+                </div>
+            </div>
+            <!--<div class="item">-->
+                <!--<img class="img-responsive" src="/static/jeffreyvwong/images/panels/noise.jpg" alt="viralinfection">-->
+                <!--<div class="container">-->
+                    <!--<div class="carousel-caption invert">-->
+                        <!--<h1>Bring the Noise!</h1>-->
+                        <!--<p class="lead"><small>Variability is all around us; Viral infection is no different. How can we put biological "noise" to good use?</small></p>-->
+                        <!--<p><a class="btn btn-lgm btn-primary" href="/modelling/#A Built-In Brake for Cell Growth" role="button">Read more</a></p>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div><!-- /.carousel -->
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+    <div class="container marketing">
+
+        <!-- Three columns of text below the carousel -->
+        <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <!--<img class="img-circle" data-src="holder.js/140x140" alt="Generic placeholder image">-->
+                <h3><a href="{% url 'jeffreyvwong_visualization' %}">Visualization</a></h3>
+                <p>Web-based applications, dashboards, and data visualizations</p>
+            </div><!-- /.col-lg-4 -->
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <!--<img class="img-circle" data-src="holder.js/140x140" alt="Generic placeholder image">-->
+                <h3><a href="{% url 'jeffreyvwong_modelling' %}">Modelling</a></h3>
+                <p>Modelling, simulation, and optimization from industry and academia</p>
+            </div><!-- /.col-lg-4 -->
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <!--<img class="img-circle" data-src="holder.js/140x140" alt="Generic placeholder image">-->
+                <h3><a href="{% url 'jeffreyvwong_publication' %}">Publication</a></h3>
+                <p>Published work and reviews in experimental and computational biology</p>
+            </div><!-- /.col-lg-4 -->
+        </div><!-- /.row -->
+
+    </div><!-- /.container -->
+
+
+{% endblock content %}
+
+{% block footer %}
+{% endblock footer %}
+ 

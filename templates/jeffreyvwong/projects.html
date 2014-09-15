@@ -1,0 +1,50 @@
+{% extends "jeffreyvwong/base.html" %}
+
+{% block title %} {{ block.super }} | Projects {% endblock title %} 
+
+{% block content %}
+
+
+<br>
+
+<div class="project">     
+      <a class="title-projects" href="http://piehub.no-ip.ca/">piehub</a>
+      <p class="site-summary">The pulse of Toronto</p>     
+      <p class="software-descriptor">Built on <a href="https://www.djangoproject.com/">Django</a>;
+      Served with <a href="http://www.tornadoweb.org/en/stable/">Tornado</a>,
+      and <a href="http://wiki.nginx.org/Main">nginx</a></p>
+</div>
+
+<br>
+<br>
+     
+<div class="project">
+     <a class="title-projects" href="http://glastaprime.appspot.com">glasta.com</a>
+     <p class="site-summary">Event-based photo sharing</p>
+     <p class="software-descriptor">Built on <a href="https://developers.google.com/appengine/">Google AppEngine</a> 
+</div>
+
+<br>
+<br>
+     
+<div class="project">     
+     <a class="title-projects"  href="http://jraywo.no-ip.ca">jraywo</a>
+      <p class="site-summary">A blog of notable web articles</p>     
+      <p class="software-descriptor">Built on <a href="https://www.djangoproject.com/">Django</a>;
+      Served with <a href="http://www.tornadoweb.org/en/stable/">Tornado</a>
+      and <a href="http://wiki.nginx.org/Main">nginx</a></p>
+</div>
+
+<br>
+<br>
+     
+<div class="project">     
+    <a class="title-projects"  href="http://mousy.no-ip.org">mousy</a>
+      <p class="site-summary">A laboratory of real-time & interactive web apps</p>     
+      <p class="software-descriptor">Built with <a href="http://socket.io/">socket.io</a>
+      and <a href="http://d3js.org/">d3.js</a> on <a href="http://nodejs.org/">node</a></p>
+</div>
+
+
+
+{% endblock content %}

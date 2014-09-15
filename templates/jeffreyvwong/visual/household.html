@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+  <head>
+
+    <style type="text/css">
+      .row {
+        clear: both;
+      }
+      .span4, .span6, .span12 {
+        float: left;
+      }
+
+      .dc-chart rect.bar {
+        stroke: none;
+        fill: steelblue;
+      }
+
+      .dc-chart rect.bar:hover {
+        fill-opacity: .5;
+      }
+
+      .dc-chart rect.stack1 {
+        stroke: none;
+        fill: red;
+      }
+
+      .dc-chart rect.stack2 {
+        stroke: none;
+        fill: green;
+      }
+
+      .dc-chart rect.deselected {
+        stroke: none;
+        fill: #ccc;
+      }
+
+      .dc-chart .sub .bar {
+        stroke: none;
+        fill: #ccc;
+      }
+
+      .dc-chart .pie-slice {
+        fill: white;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .dc-chart .pie-slice :hover{
+        fill-opacity: .8;
+      }
+
+      .dc-chart .selected path{
+        stroke-width: 3;
+        stroke: #ccc;
+        fill-opacity: 1;
+      }
+
+      .dc-chart .deselected path{
+        strok: none;
+        fill-opacity: .5;
+        fill: #ccc;
+      }
+
+      .dc-chart .axis path, .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      .dc-chart .axis text {
+        font: 10px sans-serif;
+      }
+
+      .dc-chart .grid-line line {
+        fill: none;
+        stroke: #ccc;
+        opacity: .5;
+        shape-rendering: crispEdges;
+      }
+
+      .dc-chart .brush rect.background {
+        z-index: -999;
+      }
+
+      .dc-chart .brush rect.extent {
+        fill: steelblue;
+        fill-opacity: .125;
+      }
+
+      .dc-chart .brush .resize path {
+        fill: #eee;
+        stroke: #666;
+      }
+
+      .dc-chart path.line {
+        fill: none;
+        stroke: steelblue;
+        stroke-width: 1.5px;
+      }
+
+      .dc-chart circle.dot{
+        fill: steelblue;
+      }
+
+      .dc-chart g.stack1 path.line {
+        stroke: green;
+      }
+
+      .dc-chart g.stack1 circle.dot{
+        fill: green;
+      }
+
+      .dc-chart g.stack2 path.line {
+        stroke: red;
+      }
+
+      .dc-chart g.stack2 circle.dot{
+        fill: red;
+      }
+
+      .dc-chart g.dc-tooltip path{
+        fill: none;
+        stroke: grey;
+        stroke-opacity: .8;
+      }
+
+      .dc-chart path.area {
+        fill: steelblue;
+        fill-opacity: .3;
+        stroke: none;
+      }
+
+      .dc-chart g.stack1 path.area {
+        fill: green;
+      }
+
+      .dc-chart g.stack2 path.area {
+        fill: red;
+      }
+
+      .dc-chart .node {
+        font-size: 0.7em;
+        cursor: pointer;
+      }
+
+      .dc-chart .node :hover{
+        fill-opacity: .8;
+      }
+
+      .dc-chart .selected circle {
+        stroke-width: 3;
+        stroke: #ccc;
+        fill-opacity: 1;
+      }
+
+      .dc-chart .deselected circle {
+        strok: none;
+        fill-opacity: .5;
+        fill: #ccc;
+      }
+
+      .dc-chart .bubble {
+        stroke: none;
+        fill-opacity: 0.6;
+      }
+
+      .dc-data-count {
+        float: right;
+        margin-top: 15px;
+        margin-right: 15px;
+      }
+
+      .dc-data-count .filter-count {
+        color: #3182bd;
+        font-weight: bold;
+      }
+
+      .dc-data-count .total-count {
+        color: #3182bd;
+        font-weight: bold;
+      }
+
+      .dc-data-table {}
+
+      .dc-chart g.state{
+        cursor: pointer;
+      }
+
+      .dc-chart g.state :hover{
+        fill-opacity: .8;
+      }
+
+      .dc-chart g.state path {
+        stroke: white;
+      }
+
+      .dc-chart g.selected path {
+      }
+
+      .dc-chart g.deselected path {
+        fill: grey;
+      }
+
+      .dc-chart g.selected text {
+      }
+
+      .dc-chart g.deselected text {
+        display: none;
+      }
+
+      .dc-chart g.county path {
+        stroke: white;
+        fill: none;
+      }
+
+      .dc-chart g.debug rect{
+        fill: blue;
+        fill-opacity: .2;
+      }
+
+      .dc-chart g.row rect {
+        fill-opacity: 0.8;
+        cursor: pointer;
+      }
+
+      .dc-chart g.row rect:hover {
+        fill-opacity: 0.6;
+      }
+
+      .dc-chart g.row text {
+        fill: black; /*modified from white by Eamonn O'Loughlin */
+        font-size: 12px;
+      }
+    </style>
+    <style type="text/css">
+      /* page styling */
+      body{
+        font-family: Arial, Helvetica, Sans-serif;
+      }
+
+      .container{
+        max-width: 800px;
+        margin: auto auto;
+      }
+
+      /* table styling */
+      #dc-table-graph{
+        width: 700px;
+      }
+
+      #dc-table-graph .header{
+        text-align: center;
+        background: steelblue;
+        border: none;
+      }
+
+      #dc-table-graph .header th{
+        width: 25%;
+      }
+
+      #dc-table-graph tbody td{
+        text-align: center;
+        font-size: 0.9em;
+      }
+
+      #dc-table-graph tbody tr:nth-child(even) {
+        background: #CCC
+      }
+    </style>
+
+    <!-- Third party javascript -->
+    <script type="text/javascript" src="/static/jeffreyvwong/js/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="/static/jeffreyvwong/js/d3.v3.min.js"></script>
+    <script type="text/javascript" src="/static/jeffreyvwong/js/crossfilter.min.js"></script>
+    <script type="text/javascript" src="/static/jeffreyvwong/js/dc.min.js"></script>
+
+  </head>
+  <body>
+
+    <div class="content">
+      <div class="container">
+
+        <div class="row">
+          <div class="span6" id="dc-day-chart">
+            <h4>Daily Expenses</h4>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="span4" id="dc-month-chart">
+            <h4>Monthly Expenses</h4>
+          </div>
+          <div class="span4" id="dc-detail-chart">
+            <h4>Expense by Location</h4>
+          </div>
+          <div class="span4" id="dc-name-chart">
+            <h4>Expense by user</h4>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="span12" id="table-chart">
+            <table class="table table-hover" id="dc-table-graph">
+              <thead>
+              <tr class="header">
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Detail</th>
+                <th>Who</th>
+              </tr>
+              </thead>
+            </table>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      var
+              dayChart, monthChart, nameChart, dataTable, detailChart,
+              dtgFormat2, monthNames, parseDate
+              ;
+
+      //Utilities
+      parseDate = d3.time.format("%Y-%b-%d");
+      monthNames = [ "jan", "feb", "mar", "apr", "may", "jun",
+        "jul", "aug", "sep", "oct", "nov", "dec" ];
+
+
+      /* plots dc.js charts */
+      function generate(data) {
+        var
+                facts,
+                dayDimension, dayDimensionGroup,
+                monthDimension, monthDimensionGroup,
+                nameDimension, nameDimensionGroup,
+                detailDimension, detailDimensionGroup,
+                all,allDetail,
+
+
+                margins_template,
+                span_height, span4_width, span6_width, span12_width,
+
+
+
+                start_dayChart, end_dayChart,
+                start_monthChart, end_monthChart
+                ;
+
+
+        //formatting and utilities
+        margins_template = {top: 10, right: 10, bottom: 80, left: 60};
+        span_height = 350;
+        span4_width = 250;
+        span6_width = 400;
+        span12_width = 700;
+
+
+        data.forEach(function(d) {
+
+          d.date = parseDate.parse(d.date);
+          d.month = d3.time.month(d.date);
+          d.year = d.date.getFullYear().toString();
+          d._month = monthNames[d.date.getMonth()];
+          d.day = d.date.getDate().toString();
+          d.amount = +d.amount.toFixed(2);
+
+        });
+
+        // Run the data through crossfilter and load our 'facts'
+        facts = crossfilter(data);
+
+        // Create dataTable dimension
+        dayDimension = facts.dimension(function(d) { return d3.time.day(d.date); });
+        dayDimensionGroup = dayDimension.group().reduceSum(function(d) { return d.amount; });
+
+        monthDimension = facts.dimension(function(d) { return d.month; });
+        monthDimensionGroup = monthDimension.group().reduceSum(function(d) { return d.amount; });
+
+        nameDimension = facts.dimension(function(d) { return d.name; });
+        nameDimensionGroup = nameDimension.group().reduceSum(function(d) { return d.amount; });
+
+        detailDimension = facts.dimension(function(d) { return d.detail; });
+        detailDimensionGroup = detailDimension.group().reduceSum(function(d) { return d.amount; });
+
+        all = facts.groupAll();
+
+        allDetail = all.reduceSum( function(d) { return d.amount; } );
+
+        //// Receipts by day
+        start_dayChart = d3.time.day.offset(d3.extent(data, function(d){ return d.date; })[0], -1);
+        end_dayChart  = d3.time.day.offset(d3.extent(data, function(d){ return d.date; })[1], +1);
+        dayChart.width(span12_width)
+                .height(span_height)
+                .margins(margins_template)
+                .dimension(dayDimension)
+                .group(dayDimensionGroup)
+                .title("Daily Expenses")
+                .transitionDuration(500)
+                .centerBar(true)
+                .gap(1)
+                .xUnits(d3.time.days)
+                .x(d3.time.scale().domain([start_dayChart, end_dayChart]) )
+                .elasticY(true)
+                .xAxis();
+
+
+        //// Receipts by month
+        start_monthChart = d3.time.month.offset(d3.extent(data, function(d){ return d.month; })[0], -1);
+        end_monthChart  = d3.time.month.offset(d3.extent(data, function(d){ return d.month; })[1], +10);
+        monthChart.width(span4_width)
+                .height(span_height)
+                .margins(margins_template)
+                .dimension(monthDimension)
+                .group(monthDimensionGroup)
+                .transitionDuration(500)
+                .centerBar(false)
+                .xUnits(d3.time.months)
+                .gap(4)
+                .x(d3.time.scale().domain([start_monthChart, end_monthChart ]))
+                .elasticY(true)
+                .xAxis();
+
+
+        //// Receipts by name
+        nameChart.width(span4_width)
+                .height(span_height)
+                .margins(margins_template)
+                .dimension(nameDimension)
+                .group(nameDimensionGroup)
+                .transitionDuration(500)
+                .brushOn(false)
+                .renderTitle(true)
+                .title( function(d){
+                  return "Total: $" + (d.y).toFixed(2);
+                })
+                .centerBar(false)
+                .gap(25)
+                .elasticY(true)
+                .xUnits(dc.units.ordinal)
+                .x(d3.scale.ordinal().domain( data.map(function (d) { return d.name; }) ) )
+                .xAxis();
+
+
+        //// Receipts by location detail
+        detailChart
+                .width(span4_width)
+                .height(span_height)
+                .radius((span4_width/2.5))
+                .label(function (d) {
+                  return d.data.key;
+                })
+                .colors(d3.scale.category10())
+                .renderTitle(true)
+                .title( function(d){
+                  return d.data.key + "; Total: $" + (d.data.value).toFixed(2);
+                })
+                .transitionDuration(500)
+                .dimension(detailDimension)
+                .group(detailDimensionGroup);
+
+
+        // Table of receipt data
+        dataTable.width( span12_width )
+                .dimension( dayDimension )
+                .group(function() {
+                  return "";
+                })
+                .size(10).order(d3.descending)
+                .columns([
+                  function(d) { return d.date.toDateString(); },
+                  function(d) { return d.amount; },
+                  function(d) { return d.detail; },
+                  function(d) { return d.name; },
+                ]);
+
+
+        // Render the Charts
+        dc.renderAll();
+
+        // Post rendering formatting of x tick labels
+        d3.select("#dc-month-chart .axis.x")
+                .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", function() {
+                  return "rotate(-45)";
+                });
+
+        d3.select("#dc-day-chart .axis.x")
+                .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", function() {
+                  return "rotate(-45)";
+                });
+
+        d3.select("#dc-name-chart .axis.x")
+                .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", "1em")
+                .attr("transform", function() {
+                  return "rotate(-45)";
+                });
+      }
+
+      function init() {
+
+        // Create the dc.js chart objects & link to div
+        detailChart = dc.pieChart("#dc-detail-chart");
+        dayChart = dc.barChart("#dc-day-chart");
+        monthChart = dc.barChart("#dc-month-chart");
+        nameChart = dc.barChart("#dc-name-chart");
+        dataTable = dc.dataTable("#dc-table-graph");
+
+        var data =  [{"name": "jvw", "detail": "Garden Basket", "created_by": "burOak", "amount": 55.67, "date": "2014-Jan-21", "pk": 41}, {"name": "arw", "detail": "Metro", "created_by": "burOak", "amount": 90.73, "date": "2014-Jan-18", "pk": 40}, {"name": "jvw", "detail": "No Frills", "created_by": "burOak", "amount": 5.26, "date": "2014-Jan-14", "pk": 39}, {"name": "jvw", "detail": "Garden Basket", "created_by": "burOak", "amount": 57.54, "date": "2014-Jan-14", "pk": 38}, {"name": "arw", "detail": "Garden Basket", "created_by": "burOak", "amount": 35.54, "date": "2014-Jan-04", "pk": 36}, {"name": "arw", "detail": "Garden Basket", "created_by": "burOak", "amount": 26.02, "date": "2014-Jan-09", "pk": 35}, {"name": "jvw", "detail": "Longos", "created_by": "burOak", "amount": 55.93, "date": "2014-Jan-07", "pk": 34}, {"name": "jvw", "detail": "Garden Basket", "created_by": "burOak", "amount": 31.29, "date": "2014-Jan-09", "pk": 33}, {"name": "jvw", "detail": "Shoppers Drug Mart", "created_by": "burOak", "amount": 23.9, "date": "2014-Jan-06", "pk": 32}, {"name": "jvw", "detail": "Garden Basket", "created_by": "burOak", "amount": 17.94, "date": "2013-Dec-31", "pk": 31}, {"name": "arw", "detail": "Longos", "created_by": "burOak", "amount": 95.1, "date": "2013-Dec-29", "pk": 30}, {"name": "arw", "detail": "Whole Foods", "created_by": "burOak", "amount": 36.03, "date": "2013-Dec-19", "pk": 29}, {"name": "arw", "detail": "Loblaws", "created_by": "burOak", "amount": 45.2, "date": "2013-Dec-27", "pk": 28}, {"name": "arw", "detail": "Garden Basket", "created_by": "burOak", "amount": 65.39, "date": "2013-Dec-22", "pk": 27}, {"name": "arw", "detail": "Shoppers Drug Mart", "created_by": "burOak", "amount": 10.49, "date": "2013-Dec-22", "pk": 26}, {"name": "jvw", "detail": "Longos", "created_by": "burOak", "amount": 42.48, "date": "2013-Dec-24", "pk": 25}, {"name": "jvw", "detail": "Garden Basket", "created_by": "burOak", "amount": 51.81, "date": "2013-Dec-16", "pk": 24}, {"name": "arw", "detail": "Canadian Tire", "created_by": "burOak", "amount": 18.0, "date": "2013-Dec-14", "pk": 23}, {"name": "arw", "detail": "Longos", "created_by": "burOak", "amount": 40.07, "date": "2013-Dec-13", "pk": 22}, {"name": "arw", "detail": "Longos", "created_by": "burOak", "amount": 42.6, "date": "2013-Dec-13", "pk": 21}, {"name": "arw", "detail": "Longos", "created_by": "burOak", "amount": 18.59, "date": "2013-Dec-12", "pk": 20}, {"name": "arw", "detail": "Longos", "created_by": "burOak", "amount": 29.93, "date": "2013-Dec-07", "pk": 19}, {"name": "arw", "detail": "Longos", "created_by": "burOak", "amount": 40.07, "date": "2013-Dec-06", "pk": 18}, {"name": "jvw", "detail": "Garden Basket", "created_by": "burOak", "amount": 46.32, "date": "2013-Dec-09", "pk": 17}, {"name": "arw", "detail": "Longos", "created_by": "burOak", "amount": 40.41, "date": "2013-Dec-05", "pk": 16}, {"name": "arw", "detail": "Garden Basket", "created_by": "burOak", "amount": 93.64, "date": "2013-Dec-02", "pk": 15}, {"name": "jvw", "detail": "Garden Basket", "created_by": "burOak", "amount": 27.82, "date": "2013-Dec-03", "pk": 14}, {"name": "jvw", "detail": "Longos", "created_by": "burOak", "amount": 51.86, "date": "2013-Nov-19", "pk": 13}, {"name": "arw", "detail": "Garden Basket", "created_by": "burOak", "amount": 32.35, "date": "2013-Nov-14", "pk": 12}, {"name": "arw", "detail": "Whole Foods", "created_by": "burOak", "amount": 50.12, "date": "2013-Nov-13", "pk": 11}, {"name": "arw", "detail": "Longos", "created_by": "burOak", "amount": 65.12, "date": "2013-Nov-04", "pk": 10}, {"name": "arw", "detail": "Garden Basket", "created_by": "burOak", "amount": 20.35, "date": "2013-Oct-27", "pk": 9}, {"name": "arw", "detail": "Longos", "created_by": "burOak", "amount": 27.76, "date": "2013-Oct-28", "pk": 8}, {"name": "jvw", "detail": "Longos", "created_by": "burOak", "amount": 59.81, "date": "2013-Nov-11", "pk": 7}, {"name": "jvw", "detail": "Shoppers Drug Mart", "created_by": "burOak", "amount": 33.83, "date": "2013-Nov-07", "pk": 6}, {"name": "jvw", "detail": "Garden Basket", "created_by": "burOak", "amount": 48.39, "date": "2013-Nov-04", "pk": 5}, {"name": "jvw", "detail": "Longos", "created_by": "burOak", "amount": 85.57, "date": "2013-Oct-30", "pk": 4}, {"name": "jvw", "detail": "Shoppers Drug Mart", "created_by": "burOak", "amount": 15.33, "date": "2013-Oct-27", "pk": 3}, {"name": "jvw", "detail": "Garden Basket", "created_by": "burOak", "amount": 64.44, "date": "2013-Oct-26", "pk": 2}, {"name": "jvw", "detail": "Garden Basket", "created_by": "burOak", "amount": 53.28, "date": "2013-Oct-23", "pk": 1}];
+
+        generate(data);
+
+      }
+
+      init();
+
+    </script>
+
+  </body>
+</html>

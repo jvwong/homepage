@@ -1,0 +1,17 @@
+{% extends "jraywo/base_categories.html" %}
+
+{% block title %} | All {% endblock title %}  
+
+{% block content %}
+
+	<h2 class="title">Categories</h2>
+
+	{% for object in object_list %}
+		<ul class="object-list">
+			<li class="object-list">
+				<a class="list-link" href="{% url 'category_detail' object.title.lower %}">{{ object.title.lower }}</a>
+			</li>
+		</ul>
+	{% endfor %}
+	
+{% endblock content %}

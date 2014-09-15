@@ -1,0 +1,21 @@
+{% extends "jraywo/base_entries.html" %}
+
+{% block title %} {{ block.super }} | {{ year.year }} {% endblock title %}  
+
+{% block content %}		
+	<ul>		
+	{% for date in date_list %}
+		<li>
+			<a href="{% url 'jraywo_entry_archive_year' date|date:'Y' %}{{ date|date:'b'}}/">{{ date|date:'F'}}</a>
+			
+		</li>		
+	{% endfor %}
+	</ul>    
+{% endblock content %}
+
+
+
+
+
+  
+

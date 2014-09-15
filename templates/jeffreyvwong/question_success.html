@@ -1,0 +1,70 @@
+{% extends "jeffreyvwong/base.html" %}
+
+{% block title %} {{ block.super }} | Question{% endblock title %} 
+
+{% block head %}
+     <script type="text/javascript">          
+     </script>
+     <style type="text/css">
+          #questionnaire-success{
+               width: 500px;
+          }
+          
+          #questionnaire-success td{
+               font-weight: normal;
+               font-size: 0.8em;
+          }
+     </style>          
+{% endblock head %}
+
+{% block content %}
+   
+
+<div id="question-container">
+     <p class="noindent">
+          Thank you for your time! Your comments are greatly valued.<br>
+          We've saved the information for: <br>
+          
+          {% if latest_object %}
+               {% for object in latest_object %}
+                    <table id="questionnaire-success">
+                         <colgroup>
+                              <col class="field" />
+                              <col class="data" />                              
+                         </colgroup>
+                         
+                         <thead>
+                              <tr>
+                                   <th scope="col">Field</th>
+                                   <th scope="col">Data</th>                                   
+                              </tr>
+                         </thead>                                        
+
+                         <tbody>
+                              <tr>
+                                   <td>Name</td>
+                                   <td>{{ object.name}}</td>
+                              </tr>     
+                              <tr>
+                                   <td>E-mail</td>
+                                   <td>{{ object.email}}</td>
+                              </tr>     
+                              <tr>
+                                   <td>Location</td>
+                                   <td>{{ object.location}}</td>
+                              </tr>
+                         </tbody>
+                    </table>
+               {% endfor %}
+                    
+          {% endif %}
+                      
+          
+     </p>
+     
+     
+          
+</div>
+
+
+{% endblock content %}

@@ -1,0 +1,41 @@
+{% extends "jraywo/base.html" %}
+
+{% block content %}
+     <h2 class="entry-detail-title">{{ object.title }} </h2>
+     <p class="author-date-detail">Posted by {{ object.author }} -- {{ object.pub_date | date:"F j, Y" }}<p>
+     {% if object.entry_tease %}
+      <img class="entry-detail-teaser" src="/static/jraywo/images/{{ object.entry_tease }}" alt="{{ object.entry_tease }}">
+     {% endif %}
+     <div class="entry-detail-body">
+         {{ object.body_html | safe }}
+     </div>
+     <p> 
+         Categories: {{ object.categories | safe }} <br>
+         Tags: {{ object.tags }}
+     </p>
+     
+     <hr>
+     
+     <div class="comment">
+          
+          <h4 class="comment"> Comments </h4>
+          {% load comments %}
+          {% load markup %}
+          
+          {% get_comment_list for object as comment_list %}
+          
+          {% for comment in comment_list %}
+               <p>On {{ comment.submit_date|date:"F j, Y" }},
+                    {{comment.name}} said:</p>
+               <blockquote>{{comment.comment|markdown:"safe"}}</blockquote>
+               <br>
+          {% endfor %}
+          <a name="last_comment">
+          <hr>
+               
+          <h4 class="comment"> Post a comment </h4>
+          {% render_comment_form for object %}     
+                    
+     </div>
+     
+{% endblock content %}

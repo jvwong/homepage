@@ -1,0 +1,113 @@
+{% extends "jeffreyvwong/base.html" %}
+
+{% block title %} {{ block.super }} | Learning{% endblock title %}
+
+{% block head %}
+{% endblock head %}
+
+{% block content %}
+   
+<h2>A First Course in Computer programming <emph>[with Python]</emph></h2>
+<br>
+
+<h3>Why I'm In</h3>
+<p>
+     Aimed at novices and beginners, this is meant to be an accessible introduction to computer programming.
+     This course was motivated by encountering people who were:
+     <ul class="square">
+          <li>
+               Frustrated with the way technology was shaping their lives -- without their say
+          </li>
+          <li>
+               Curious about learning to do useful things with computers
+          </li>          
+          <li>
+               Interested in getting ahead in their job or changing directions altogether
+          </li>          
+     
+     </ul>
+</p><br>
+
+<h3>"Big Picture"</h3>
+<p>
+     There's a lot of buzz around learning to "program" for the web. It is important to keep in mind
+     that a great many people use programming for things that have nothing to do with the web. Just as
+     most people who learn advanced math never become mathematicians, not everyone who learns programming
+     has any intention of becoming a software engineer. 
+     I believe programming skills will be basic requirements in many professions in the future.
+     Here we aim to use relevant projects to drive learning, sustain motivation, and ensure that
+     programming remains relevant to the learner. Possible projects include:
+     <ul class="square">
+          <li>
+               Process, read, and write data from programs to text files               
+          </li>
+          <li>
+               Automate reading and writing from spreadsheets               
+          </li>          
+          <li>
+               Perform rudimentary analytics on data scraped from the web 
+          </li>               
+     </ul>
+</p><br>
+
+<h3>What's on Deck</h3>
+<p>
+     At this stage, the course is in development and I am really interested in getting as much input as possible
+     on what approaches would work best in a first course in learning to programming. Just as important, I want to hear
+     opinions on what NOT to include. The course will aim to be:
+     
+     <ul class="square">
+          <li>
+               Individually mentored and guided
+               <ul class="circle">
+                    <li>Tailored to you the learner, not "one-size-fits-all"</li>
+               </ul><br>
+          </li>
+          <li>
+               Focused on the problem-solving nature of programming 
+               <ul class="circle">
+                    <li>Using projects to drive learning</li>
+               </ul><br>     
+          </li>          
+          <li>
+               Grounded in fundamentals
+               <ul class="circle">
+                    <li>Not (another) course in front-end web development</li>
+               </ul><br>     
+               
+          </li>          
+     
+     </ul>
+     
+     Fill out the <a href="{% url 'jeffreyvwong_questionnaire' %}">questionnaire</a> and have your say!
+</p><br>
+
+<h3>What You Can Do</h3>
+<div id="learning-text">
+     While we are getting geared up, please, take some time and: 
+     <ul class="square">
+          <li>
+               Fill out the <a href="{% url 'jeffreyvwong_questionnaire' %}">questionnaire</a>
+          </li>
+          <li>
+               See the <a href="{% url 'jeffreyvwong_course' %}">course materials</a> I'm building
+          </li>
+          <li>
+               Drop me a <a href="{% url 'jeffreyvwong_contact' %}">line</a>
+          </li>
+          
+     </ul>
+     
+</div>
+<div id="poster-container">
+     <img class="learning-poster" src="/static/jeffreyvwong/images/learning/questionnaire_direct.png" />
+
+</div>
+<br class="clear_float">
+
+
+
+{% endblock content %}
+
+
+                   

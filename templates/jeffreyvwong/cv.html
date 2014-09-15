@@ -1,0 +1,700 @@
+{% extends "jeffreyvwong/base.html" %}
+
+{% block title %} Curriculum Vitae{{ block.super }}{% endblock title %}
+{% block meta_description %}
+    <meta name="description" content="Curriculum Vitae." />
+{% endblock meta_description %}
+
+
+{% block navbarjump %}
+    <li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Jump to Section<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#education">Education</a>
+            </li>
+            <li>
+                <a href="#data consulting">Data Consulting</a>
+            </li>
+            <li>
+                <a href="#industry experience">Industry Experience</a>
+            </li>
+            <li>
+                <a href="#academic experience">Academic Experience</a>
+            </li>
+            <li>
+                <a href="#other experience">Other Experience</a>
+            </li>
+            <li>
+                <a href="#skills">Skills</a>
+            </li>
+            <li>
+                <a href="#awards">Awards</a>
+            </li>
+            <li>
+                <a href="#teaching">Teaching</a>
+            </li>
+            <li>
+                <a href="#mentorship">Mentorship</a>
+            </li>
+            <li class="divider"></li>
+            <li>
+                <a href="{{ STATIC_URL }}jeffreyvwong/assets/jeffreyvwong_cv.pdf">
+                    <button class="cv-download">PDF</button>
+                </a>
+            </li>
+        </ul>
+    </li>
+{% endblock navbarjump %}
+
+{% block content %}
+<div class="container">
+  <h3 class="subsection"><a name="education">EDUCATION</a></h3>
+  <table id="table-education">
+    <colgroup>
+      <col class="date" />
+      <col class="degree" />
+      <col class="department-education" />
+      <col class="university" />      
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col">Year</th>
+        <th scope="col">Degree</th>
+        <th scope="col">Department</th>
+        <th scope="col">Institution</th>        
+      </tr>      
+    </thead>
+    <tr>
+      <td>2007</td>
+      <td>B. Math.</td>
+      <td><a href="http://www.ucalendar.uwaterloo.ca/0607/MATH/app_math.html">
+            Scientific Computation/Applied Math
+          </a>
+      </td>
+      <td>University of Waterloo</td>
+    </tr>
+    <tr>
+      <td>2005</td>
+      <td>Ph.D.</td>
+      <td><a href="http://medbio.utoronto.ca/">
+            Medical Biophysics
+          </a>
+      </td>
+      <td>University of Toronto</td>
+    </tr>
+    <tr>
+      <td>1998</td>
+      <td>B. Sc.</td>
+      <td>
+        <a href="http://www.artsandscience.utoronto.ca/ofr/archived/9899calendar/as_pro_mgb.html">
+          Molecular Biology &amp; Molecular Genetics
+        </a>
+      </td>
+      <td>University of Toronto</td>
+    </tr>
+  </table>
+
+  <br>    
+  <br>
+
+    <h3 class="subsection"><a name="data consulting">DATA CONSULTING</a></h3>
+    <table class="job-title">
+        <colgroup>
+            <col class="date" />
+            <col class="job-title" />
+            <col class="department" />
+            <col class="university" />
+        </colgroup>
+        <tr>
+            <td>2014</td>
+            <td>Data Analyst</td>
+            <td><a href="http://www.cityindicators.org/">Global City Indicator Facility</a></td>
+            <td>TORONTO, ON</td>
+        </tr>
+    </table>
+    <ul class="job-description">
+        <p class="job-summary">
+            The GCIF is an outgrowth of the <a href="http://www.globalcitiesinstitute.org/">Global Cities Institute</a> at the University of Toronto under the direction of <a href="http://politics.utoronto.ca/faculty/profile/?id=63">Patricia McCarney</a> at the <a href="http://www.daniels.utoronto.ca/">John H. Daniels Faculty of Architecture, Landscape, and Design</a>. The GCIF's goal is to, "...provide an established set of city indicators with a globally standardized methodology that allows for global comparability of city performance and knowledge sharing."
+            I was recruited as a data analyst with responsibilities that included cleaning and integrating the indicator data collected from cities around the globe and generate visualization tools that summarize and enable exploratory analysis.
+        </p>
+        <li>
+            Data Aggregation & Cleansing
+            <ul>
+                <li>Python scripts to extract, aggregate, and cleanse indicator data housed in database, spreadsheet, and text formats</li>
+                <li>Creation of document-based (MongoDB) database housing cleaned, normalized data suitable for web app visualization</li>
+            </ul>
+        </li>
+        <li>
+            <a href="http://protogcif.no-ip.ca">Data Visualization</a>
+            <ul>
+                <li>"Tally" - a d3-based web app that summarized indicator abundance </li>
+                <li>"Compare" - a d3-based, Parallel Coordinates visualization that displayed indicator data across cities and themes</li>
+                <li>"Correlate" - a d3-based scatter plot that displayed indicator data relationships across cities</li>
+            </ul>
+        </li>
+    </ul>
+
+    <br>
+    
+  <h3 class="subsection"><a name="industry experience">INDUSTRY EXPERIENCE</a></h3>
+  <table class="job-title">
+    <colgroup>
+      <col class="date" />
+      <col class="job-title" />
+      <col class="department" />
+      <col class="university" />  
+    </colgroup>
+    <tr>
+      <td>2012 - 2013</td>
+      <td>Mathematical modeller</td>
+      <td><a href="http://www.immunetrics.com/">Immunetrics</a></td>
+      <td>Pittsburgh PA</td>      
+     </tr>
+  </table>
+  <ul class="job-description">
+    <p class="job-summary">
+      <a href="http://www.immunetrics.com/">Immunetrics</a> is a bio-simulation company specializing in
+      predicting clinically-relevant endpoints for acute and chronic inflammatory disorders.
+      The large-scale mathematical models used for <span class="italic">in silico</span>
+      predictions span molecular interactions to "virtual" populations. As a mathematical
+      modeller, I worked on projects with pharmaceutical and technology companies to
+      create, train, and interpret model outputs, providing insight into rational approaches
+      to clinical trial design and disease treatment. 
+    </p>
+    <li>
+      Modelling 
+      <ul>
+        <li>Internal organs and intensive care unit interventions</li>
+        <li>Standard of care and development-phase pharmaceuticals</li>
+      </ul>
+    </li>
+    
+    <li>
+      Simulation 
+      <ul>
+        <li>Virtual patient trajectories to published literature results</li>
+        <li>Virtual populations against clinical trial results</li>
+        <li>Utilized array of in-house machine learning and optimization tools</li>
+      </ul>
+    </li>
+    
+   <li>
+      Data Analysis &amp; Visualization 
+      <ul>
+        <li>R-based visualization suite enabling team to interpret "virtual" trial optimization</li>
+        <li>Compiled research literature and clinical trials for model optimization runs</li>
+      </ul>
+    </li>
+    <p class="job-finish">
+      Cultivated team-based, time-limited problem solving capabilities
+    </p>    
+  </ul>		   
+
+  <br>
+
+  <h3 class="subsection"><a name="academic experience">ACADEMIC EXPERIENCE</a></h3>
+  <table class="job-title">
+    <colgroup>
+      <col class="date" />
+      <col class="job-title" />
+      <col class="department" />
+      <col class="university" />      
+    </colgroup>
+    <tr>
+      <td>2007 - 2011</td>
+      <td>Postdoctoral Associate</td>
+      <td><a href="http://www.bme.duke.edu/">Biomedical Engineering</a></td>
+      <td>Duke University</td>      
+    </tr>
+  </table>
+  <ul class="job-description">
+    <p class="job-summary">
+      I was advised by <a href="http://www.genome.duke.edu/labs/YouLab/">Lingchong You</a>
+      within the <a href="http://www.genome.duke.edu/">Duke Institute of Genome Sciences and Policy</a>.
+      My work in the system-level biology of cancer cell growth control required close collaboration
+      with experimentalists and statisticians. I was responsible for the design and creation of several,
+      novel experimental and computational tools and facilitated my transition from "wet-lab" work to modelling complex systems.
+    </p>
+    <li>
+      Systems Biology 
+      <ul>
+        <li>Discovered mechanism that curtails unchecked cell division, typical in human tumours</li>
+        <li>Proposed  biological networks trade-off "multitasking" with performance accuracy</li>
+      </ul>
+    </li>
+        
+    <li>
+      Modelling
+      <ul>
+        <li>Network underlying cell proliferation and tumour formation</li>
+        <li>Dynamics of bacterial invasion of mammalian cells</li>
+      </ul>
+    </li>
+    
+    <li>
+      Tool creation 
+      <ul>
+        <li>Experimental approach for high-throughput measurement of gene expression</li>
+        <li>Matlab suite performing automated learning and visualization of network function</li>
+      </ul>
+    </li>
+  </ul>
+  
+  <h4 class="publication">Peer-Reviewed Articles</h4>
+      <p class="reference">
+        Tae Lee* <span class="current-author">Jeffrey V. Wong*</span>, Sena Bae*, Anna Jisu Lee, Allison Lopatin, and Lingchong You<br>
+        <a href="#">
+          "A power-law dependence of bacterial invasion on mammalian host receptors"
+        </a><br>
+        Submitted<br>
+        <span>*Equal contribution</span>
+      </p>
+      <p class="reference">
+      <span class="current-author">Jeffrey V. Wong</span>, Bochong Li, and Lingchong You<br>
+      <a href="http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1002491">
+        "Tension and robustness in multitasking gene networks"
+      </a><br>
+      PLoS Computational Biology. Apr 26. 2012; 8(4):e1002491
+    </p>
+    <p class="reference">
+      <span class="current-author">Jeffrey V. Wong</span>, Guang Yao, Joseph R. Nevins, and Lingchong You<br>
+      <a href="http://www.cell.com/molecular-cell/retrieve/pii/S1097276511000414">
+        "Viral-mediated noisy gene expression reveals biphasic E2f1 response to MYC"
+      </a><br>
+      Molecular Cell, February 4 2011; 41(3):475-485 
+    </p>   
+
+
+  <h4 class="publication">Review Articles</h4>
+    <p class="reference">
+      <span class="current-author">Jeffrey V. Wong</span>, Peng Dong, Joseph R. Nevins, Bernard Mathey-Prevot, and Lingchong You<br>
+      <a href="https://www.landesbioscience.com/journals/cc/article/17350/">
+        "Network calisthenics: Control of E2F dynamics in cell cycle entry"
+      </a><br>
+      Cell Cycle. Sep 2011;10(18):3086-94
+    </p>
+    <p class="reference">
+      <span class="current-author">Jeffrey V. Wong</span>, Guang Yao, Joseph R. Nevins, and Lingchong You<br>
+      <a href="http://www.sciencedirect.com/science/article/pii/B978012385075100010X">
+        "Using noisy gene expression mediated by engineered adenovirus to probe signaling dynamics in Mammalian cells"
+      </a><br>
+      Methods in Enzymology – Synthetic Biology, Part A. June 2011; 497:221-237
+    </p>
+    <p class="reference">
+      <span class="current-author">Jeffrey V. Wong</span>, Hao Song, and Lingchong You<br>
+      <a href="http://pubs.acs.org/doi/abs/10.1021/cb700256w">
+        "A Whole More Than the Sum of Its Synthetic Parts"
+      </a><br>
+      ACS Chemical Biology, January 2008; 3(1): 27–29
+    </p>
+   
+    
+  <br>    
+ 		     
+  <table class="job-title">
+    <colgroup>
+      <col class="date" />
+      <col class="job-title" />
+      <col class="department" />
+      <col class="university" /> 
+    </colgroup>
+    <tr>
+      <td>1998 -2005</td>
+      <td>Doctoral candidate</td>
+      <td><a href="http://medbio.utoronto.ca/">Medical Biophysics</a></td>
+      <td>University of Toronto</td>      
+    </tr>
+  </table>
+  <ul class="job-description">
+    <p class="job-summary">
+      I was advised by Henry J. Klamut within the Division of Experimental Therapeutics.
+      Our group was focused on developing novel gene-therapy approaches for somatic diseases. My thesis examined the
+      cellular communication pathway involved in controlling the <span class="italic">Placental Transforming Growth Factor
+      beta</span> gene, which has showed potent activity against breast cancer cells. 
+    </p>
+    <li>Gene Therapy
+      <ul>
+        <li>Showed PTGF-beta controlled directly by the "p53" anti-tumour signalling network</li>
+        <li>Established PTGF-beta as a major component of the native 'cell-suicide' mechanism</li>
+        <li>Produced a fine map of the DNA sequences involved in regulating PTGF-beta expression</li>
+      </ul>
+    </li>
+    <li>Cancer Biology
+      <ul>
+        <li>Early adopter of the large-scale gene expression (microarray) tools and analysis software</li>
+        <li>Identified candidate genes controlled by PTGF-beta which mediate anti-tumour effects</li>
+      </ul>
+    </li>
+  </ul>
+  <h4 class="publication">Peer-Reviewed Articles</h4>
+    <p class="reference">
+      <span class="current-author">Jeffrey Wong</span>, Pei-Xiang Li, and Henry J. Klamut<br>
+      <a href="http://www.jbc.org/content/277/29/26699.short">
+        "A Novel p53 Transcriptional Repressor Element (p53TRE) and the Asymmetrical Contribution
+        of Two p53 Binding Sites Modulate the Response of the Placental Transforming Growth Factor-beta
+        Promoter to p53."
+      </a><br>
+      The Journal of Biological Chemistry, July 2002; 277: 26699 - 26707      
+    </p>
+    <p class="reference">
+      Pei-Xiang Li, <span class="current-author">Jeffrey Wong</span>, Ayeda Ayed, Duc Ngo,
+      Anthony M. Brade, Cheryl Arrowsmith, Richard C. Austin, and Henry J. Klamut <br>
+      <a href="http://www.jbc.org/content/275/26/20127">
+        "Placental Transforming Growth Factor-beta Is a Downstream Mediator of the Growth Arrest
+         and Apoptotic Response of Tumor Cells to DNA "
+      </a><br>
+      The Journal of Biological Chemistry, June 2000; 275: 20127 - 20135
+    </p>
+
+  <br>
+  <br>
+
+    <h3 class="subsection"><a name="other experience">OTHER EXPERIENCE</a></h3>
+    <table class="job-title">
+        <colgroup>
+            <col class="date" />
+            <col class="job-title" />
+            <col class="supervisor" />
+            <col class="university" />
+        </colgroup>
+        <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Title</th>
+            <th scope="col">Supervisor</th>
+            <th scope="col">Institution</th>
+        </tr>
+        </thead>
+        <tr>
+            <td>2006</td>
+            <td>Research Assistant</td>
+            <td>
+                <a href="http://www.math.uwaterloo.ca/~bingalls/">
+                    Brian Ingalls
+                </a>
+            </td>
+            <td>Applied Math (Waterloo)</td>
+        </tr>
+
+        <tr>
+            <td>1997-1998</td>
+            <td>Research Assistant</td>
+            <td>
+                <a href="http://www.moleculargenetics.utoronto.ca/index/index.php/component/comprofiler/userprofile/Ray">
+                    Peter N Ray
+                </a>
+            </td>
+            <td>Molecular Genetics (Toronto)</td>
+        </tr>
+        <tr>
+            <td>1997</td>
+            <td>Research Assistant</td>
+            <td>
+                <a href="http://www.stmichaelshospital.com/research/profile.php?id=marsden&">
+                    Philip A Marsden
+                </a>
+            </td>
+            <td>Medicine (Toronto)</td>
+        </tr>
+    </table>
+
+    <br>
+    <br>
+
+<h3 class="subsection"><a name="skills">SKILLS</a></h3>
+<h4>Computational</h4>
+  <table class="skill-table">
+    <colgroup>
+      <col class="name" />
+      <col class="usage" />
+      <col class="setting" />      
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Usage</th>
+        <th scope="col">Setting</th>        
+      </tr>      
+    </thead>
+    <tr>
+      <td>Matlab, Octave</td>
+      <td>++++</td>
+      <td>Postdoctoral, Undergraduate</td>
+    </tr>
+    <tr>
+      <td>R</td>
+      <td>+++</td>
+      <td>Industry, Undergraduate</td>
+    </tr>
+    <tr>
+      <td>XPP-AUTO</td>
+      <td>++++</td>
+      <td>Postdoctoral, Undergraduate</td>
+    </tr>
+    <tr>
+      <td>Linux</td>
+      <td>+++</td>
+      <td>Industry, Consulting</td>
+    </tr>
+    <tr>
+      <td>Python</td>
+      <td>+++</td>
+      <td>Industry, Consulting</td>
+    </tr>
+    <tr>
+      <td>MySQL, MongoDB</td>
+      <td>++</td>
+      <td>Industry, Consulting</td>
+    </tr>
+    <tr>
+      <td>HTML, CSS</td>
+      <td>++</td>
+      <td>Consulting, Personal</td>
+    </tr>
+    <tr>
+      <td>d3.js, Javascript</td>
+      <td>++</td>
+      <td>Consulting, Personal</td>
+    </tr>
+    <tr>
+      <td>Django, Node.js</td>
+      <td>++</td>
+      <td>Consulting, Personal</td>
+    </tr>
+    <tr>
+        <td>Java</td>
+        <td>+</td>
+        <td>Undergraduate</td>
+    </tr>
+    <tr>
+        <td>C/C++</td>
+        <td>+</td>
+        <td>Undergraduate</td>
+    </tr>
+
+  </table>
+
+   <br>
+
+<h4>Mathematical</h4>
+  <table class="skill-table">
+    <colgroup>
+      <col class="name" />
+      <col class="setting" />      
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Setting</th>        
+      </tr>      
+    </thead>
+    <tr>
+      <td>Stochastic Optimization</td>
+      <td>Industry, Post-Doctoral</td>
+    </tr>
+    <tr>
+      <td>Differential Equations</td>
+      <td>Industry, Post-Doctoral</td>
+    </tr>
+    <tr>
+       <td>
+        <a href="http://www.ucalendar.uwaterloo.ca/0607/COURSE/course-STAT.html#STAT331">
+            Applied Linear Models
+        </a>
+      </td>
+      <td>Undergraduate</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="http://www.ucalendar.uwaterloo.ca/0607/COURSE/course-CM.html#CM461">
+            Computational Inference
+        </a>
+      </td>
+      <td>Undergraduate</td>
+    </tr>
+    <tr>
+      <td>
+        <a href="http://www.ucalendar.uwaterloo.ca/0607/COURSE/course-CS.html#CS472">
+            Numerical Solutions of Large Sparse Systems of Equations
+        </a>
+      </td>
+      <td>Undergraduate</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.coursera.org/course/ml">Machine Learning</a></td>
+      <td>Coursera</td>
+    </tr>
+
+  </table>
+
+  <br>
+  <br>
+
+  <h3 class="subsection"><a name="awards">AWARDS</a></h3>
+  <table class="table-awards">
+    <colgroup>
+      <col class="date" />
+      <col class="scholarship" />
+      <col class="department" />
+      <col class="university" />      
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Name</th>
+        <th scope="col">Department</th>
+        <th scope="col">Institution</th>
+      </tr>      
+    </thead>
+    <tr>
+      <td>2010-2011</td>
+      <td>Kewaunee Postdoctoral Award</td>
+      <td>Center for Biomolecular & Tissue Engineering</td>
+      <td>Duke University</td>      
+    </tr>
+      <td>2005-2006</td>
+      <td>Upper-Year Scholarship</td>
+      <td>Department of Computational Mathematics</td>
+      <td>University of Waterloo</td>      
+    </tr>
+    <tr>
+      <td>2002-2003</td>
+      <td>Ontario Graduate Scholarship</td>
+      <td>Ministry of Training, Colleges and Universities </td>
+      <td>Government of Ontario</td>      
+    </tr>
+    <tr>
+      <td>2002-2003</td>
+      <td>University of Toronto Open Scholarship</td>
+      <td>Medical Biophysics</td>
+      <td>University of Toronto</td>      
+    </tr>
+    <tr>
+      <td>2001-2002</td>
+      <td>University of Toronto Open Scholarship</td>
+      <td>Medical Biophysics</td>
+      <td>University of Toronto</td>      
+    </tr>
+    <tr>
+      <td>2000-2001</td>
+      <td>Ontario Graduate Scholarship in Science & Technology</td>
+      <td>Medical Biophysics</td>
+      <td>University of Toronto</td>      
+    </tr>
+    <tr>
+      <td>1999-2000</td>
+      <td>University of Toronto Open Scholarship</td>
+      <td>Medical Biophysics</td>
+      <td>University of Toronto</td>      
+    </tr>
+    <tr>
+      <td>1998-1999</td>
+      <td>Princess Margaret Hospital Foundation Graduate Fellowship</td>
+      <td>Medical Biophysics</td>
+      <td>University of Toronto</td>      
+    </tr>
+    <tr>
+      <td>1997-1998</td>
+      <td>C.L. Burton Open Scholarship</td>
+      <td>University College </td>
+      <td>University of Toronto</td>      
+    </tr>
+  </table>
+
+  <br>
+  <br>
+  
+ <h3 class="subsection"><a name="teaching">TEACHING</a></h3>
+ <table id="table-teaching">
+    <colgroup>
+      <col class="date" />
+      <col class="course" />
+      <col class="teaching-department" />
+      <col class="university" />      
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Course</th>
+        <th scope="col">Department</th>
+        <th scope="col">Institution</th>
+      </tr>      
+    </thead>
+    <tr>
+      <td>2006</td>
+      <td>BIOL435: Molecular Biology Techniques</td>
+      <td>Biology</td>
+      <td>University of Waterloo</td>      
+    </tr>
+    <tr>
+      <td>2005</td>
+      <td>BIOL331: Advanced Cell Biology</td>
+      <td>Biology</td>
+      <td>University of Waterloo</td>      
+    </tr>
+    <tr>
+      <td>2004</td>
+      <td>BIOL120: Cell Biology Laboratory</td>
+      <td>Biology</td>
+      <td>University of Waterloo</td>      
+    </tr>
+    <tr>
+      <td>2000-2004</td>
+      <td>BIO349H1: Eukaryotic Molecular Biology</td>
+      <td>Botany</td>
+      <td>University of Toronto</td>      
+    </tr>    
+  </table>
+ 
+  <br>
+  <br>
+  
+ <h3 class="subsection"><a name="mentorship">MENTORSHIP</a></h3>
+  <table id="table-mentorship">
+    <colgroup>
+      <col class="date" />
+      <col class="name" />
+      <col class="department" />
+      <col class="university" />      
+    </colgroup>
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Name</th>
+        <th scope="col">Department</th>
+        <th scope="col">Institution</th>
+      </tr>      
+    </thead>
+    <tr>
+      <td>2011</td>
+      <td>Sena Bae, M.Sc.</td>
+      <td>Biomedical Engineering</td>
+      <td>Duke University</td>      
+    </tr>
+    <tr>
+      <td>2010</td>
+      <td>Kezia Addo, undergraduate</td>
+      <td>Institute for Genome Sciences and Policy</td>
+      <td>Duke University</td>      
+    </tr>
+    <tr>
+      <td>2008</td>
+      <td>Stephanie Chang , undergraduate</td>
+      <td>Howard Hughes VIP</td>
+      <td>Duke University</td>      
+    </tr>
+
+  </table>
+
+
+    <script>
+        $(".cv-download").click(function(){
+            ga('send', 'event', 'button', 'click', 'cv-download', 0);
+        });
+    </script>
+
+</div><!--container-->
+
+{% endblock content %}
+

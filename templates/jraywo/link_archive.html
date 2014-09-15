@@ -1,0 +1,37 @@
+{% extends "jraywo/base_links.html" %}
+
+{% block title %} {{ block.super }} | Archive {% endblock title %}  
+
+{% block content %}
+    
+    {% for object in page_obj.object_list %}
+	<h2 class="title"><a class="title" href="{{ object.url }}">{{ object.title }}</a></h2>
+	<p class="author-date-detail">Posted by {{ object.posted_by }} -- {{ object.pub_date | date:"F j, Y" }}<p>
+	
+	<p class="body">
+	{% if object.description_html %}
+    		{{ object.description_html|truncatewords_html:50| safe }}
+    	{% endif %}    	
+	</p>
+        <br>
+    {% endfor%}
+
+
+    {% if is_paginated %}
+	<div class="pagination">
+	    <span class="page-links">
+	    {% for page_num in paginator.page_range %}
+		{% if page_obj.number == page_num %}
+		    {{page_obj.number}}
+		{% else %}
+		    <a class="page-links" href='{% url "jraywo_entry_archive_index" %}?page={{ page_num }}'>{{ page_num }}</a>
+		{% endif %}                    
+	    {% endfor %}
+	    </span>
+	</div>
+	<br>
+    {% endif %}
+    
+    
+{% endblock content %}
+       

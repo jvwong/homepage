@@ -1,0 +1,16 @@
+{% extends "jraywo/base_tags.html" %}
+
+{% block title %} {{ block.super }} | All {% endblock title %}  
+
+{% block content %}
+    <h2 class="title">Tags</h2>
+    <ul class="object-list">
+        {% for object in object_list %}
+            <li>
+		<a class="list-link" href="{% url 'jraywo_entry_archive_tag' object.name %}">entries</a>
+		<a class="list-link" href="{% url 'jraywo_link_archive_tag' object.name %}">links</a>
+		-- {{ object.name.lower }}		
+	    </li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

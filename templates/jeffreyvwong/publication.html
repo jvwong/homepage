@@ -1,0 +1,267 @@
+{% extends "jeffreyvwong/base.html" %}
+
+{% block title %} Publications{{ block.super }}{% endblock title %}
+
+{% block meta_description %}
+    <meta name="description" content="Description of published academic work in biomedical engineering,
+        systems biology, experimental therapeutics, and cancer biology." />
+{% endblock meta_description %}
+
+{% block navbarjump %}
+    <li class="dropdown">
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Jump to Section<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#Review: Cell Cycle">Review: Cell Cycle</a>
+            </li>
+            <li>
+                <a href="#Article: Molecular Cel">Article: Molecular Cell</a>
+            </li>
+            <li>
+                <a href="#News &amp; Views: Nature">News &amp; Views: Nature</a>
+            </li>
+            <li>
+                <a href="#Review: Methods in Enzymology">Review: Methods in Enzymology</a>
+            </li>
+            <li>
+                <a href="#Review: ACS Chemical Biology">Review: ACS Chemical Biology</a>
+            </li>
+            <li>
+                <a href="#Article: Characterizing Control of PTGF-beta">Article: Characterizing Control of PTGF-beta</a>
+            </li>
+            <li>
+                <a href="#Article: Discovering a novel anti-cancer gene">Article: Discovering a novel anti-cancer gene</a>
+            </li>
+        </ul>
+    </li>
+{% endblock navbarjump %}
+
+{% block content %}
+<div class="container">
+
+    <div class="item">
+        <a name="Review: Cell Cycle"><h3 class="item-title">Review: Cell Cycle</h3></a>
+        <a href="https://www.landesbioscience.com/journals/cc/article/17350/">
+          <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/cellcycle.png" /><br>
+          <p>Cell Cycle, 15 September 2011, Vol. 10, Issue 18, pp.3086-3094</p>
+        </a>
+        <p>
+          Commissioned by the journal Cell Cycle, I authored a review 
+          describing the role of the E2F network in maintaining the precision
+          clockwork underlying cell division. The challenge here was in integrating
+          and conveying a unifying message from the voluminous, often contradictory
+          threads of research over two decades. An excerpt from the abstract:
+          <br>
+          <blockquote>The challenge to understand how E2F dynamics coordinate molecular events
+          required for high-fidelity DNA replication has great biological
+          implications. Indeed, precocious, prolonged, elevated or reduced
+          accumulation of E2F can generate replication stress that culminates
+          in either arrest or death. Accordingly, temporal characteristics of
+          E2F are regulated by several network modules that include feedforward
+          and autoregulatory loops. In this review, we discuss how these network
+          modules contribute to “shaping” E2F dynamics in the context of mammalian
+          cell cycle entry</blockquote>          
+        </p>  
+    </div>
+
+    <div class="item">
+        <a name="Article: Molecular Cell"><h3 class="item-title">Article: Molecular Cell</h3></a>
+        <a href="http://www.cell.com/molecular-cell/retrieve/pii/S1097276511000414">
+          <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/molCellCover.jpg" />
+          <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/graphAbstractCell.jpg" /><br>
+          <p>Molecular Cell, 4 February 2011, Vol. 41, Issue 3, pp.275-285 </p>
+        </a>
+        <p>
+          My research and artwork was chosen to grace the cover of Molecular Cell. Also shown is a "graphical abstract", present in the online edition. An excerpt from the cover description:
+          <br>
+          <blockquote>The cover image is constructed from a fluorescence image of rat fibroblasts (nuclei in blue/purple)
+          infected with an adenovirus expressing mCherry (red) and illustrates the striking difference in
+          expression between adjacent cells. The “stained glass” rendering evokes the uniqueness in elements of a
+          seemingly homogenous entity.</blockquote>
+        </p>
+
+        <p>
+        The National Science Foundation maintains a running news feed on science discoveries and picked up on my cover image for their "Picture of the Day".
+        <br>
+        <a href="http://news.science360.gov/obj/pic-day/20110215/">
+            <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/science360.png" />
+        </a>
+        <blockquote>
+        Gene expression varies from one cell to the next within a genetically identical population of rat fibroblasts, as shown in this fluorescence image. The cells were all infected with the same adenovirus, but their responses differed, as indicated by the range of reddish colors. The nuclei of the cells are seen in blue and pink. This picture, rendered artistically in a "stained glass" imaging technique, was created by post-doctoral fellow Jeffrey Wong in the biomedical engineering lab of Lingchong You as part of a study on how identical stimuli can cause unique responses.
+        </blockquote>
+        </p>
+
+        <p>
+            Along with this, Duke feature the cover on their "1,100 Words" site profiling research work done within it's institutes.
+            <br>
+            <a href="https://research.duke.edu/1100-words/4685">
+                <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/duke1100words.png" />
+            </a>
+        </p>
+    </div>
+
+    <div class="item">
+         <a name="News &amp; Views: Nature"><h3 class="item-title">News &amp; Views: Nature</h3></a>
+
+          <a href="http://www.nature.com/nature/journal/v469/n7329/full/469171a.html">
+               <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/natRev.jpg" />
+               <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/natRev_originalArt.png" /><br>
+               <p>Nature, 13 January 2011, Vol. 469, pp.171-172</p>
+          </a>
+          <br id="post-float">
+          <p>
+               We were commissioned by Nature to provide a "News &amp; Views" article reviewing
+               work by Chris Voigt's group. Previously, single strains of bacteria were engineered
+               to perform simple tasks in response to chemical signals, such as performing logical opertaions analagous to
+               those performed by digital electronics. In this case, Voigt's group split up the work between multiple
+               engineered strains, allowing researchers to mix-and-match strains to perform ever more complex
+               tasks. Though my authorship was punted from the final publication (Nature has a 2-author limit), my idea for a graphical summary of the Voigt lab's work
+               did manage to worm its way into the article (left - published graphic; right- my original drawing).
+               The original figure legend is below.
+               <br>
+               <blockquote>Figure 1 | A multicellular approach to
+               implementing complex logic circuits. a, Previously,
+               systems of logic gates composed of DNA, RNA
+               and proteins have been constructed within a single
+               cell. b, New work compartmentalizes logic gates
+               within different cells and uses diffusible output
+               molecules to ‘wire’ such cell consortia together.
+               (Adapted from a figure by Jeffrey Wong.)</blockquote>
+          </p>
+     </div>
+
+    <div class="item">
+         <a name="Review: Methods in Enzymology"><h3 class="item-title">Review: Methods in Enzymology</h3></a>
+         <a href="http://www.sciencedirect.com/science/article/pii/B978012385075100010X">
+               <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/methodEnz.png" /><br>
+               <p>Methods in Enzymology: Synthetic Biology, Part A, Vol. 497, pp.221-237</p>
+          </a>
+          <br id="post-float">
+          <p>
+               This figure appeared in a review commisioned by Methods in Enzymology as part of their Methods in
+               Synthetic Biology edition. Described is the experimental approach used as part of our report in Molecular
+               Cell (above). The figure describes how variability in the amount of viruses
+               that genetically identical cells tend to take up can be used to examine how different amounts of an input
+               affect each cell. The amount of input and the impact are measured using different colored read-out signals or "reporters"
+               produced by the engineered virus and cells, respectively.
+               The original figure legend is below.
+               <br>
+               <blockquote>
+                    Figure 10.1. Using viral-mediated expression variability to probe gene expression dose response. System input consists of a gene of interest (GOI) along with fluorescent protein (FP) expressed from a recombinant adenovirus (Ad); output is a stably integrated reporter under the control of a gene regulatory sequence of interest (promoter). Cell–cell variability in Ad-mediated input expression provides a convenient way to quantify output dose response in individual cells (green data points).
+               </blockquote>
+          </p>
+     </div>
+
+    <div class="item">
+          <a name="Review: ACS Chemical Biology"><h3 class="item-title">Review: ACS Chemical Biology</h3></a>
+
+          <a href="http://pubs.acs.org/doi/full/10.1021/cb700256w">
+               <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/acsChemBiol.png" /><br>
+               <p>ACS Chemical Biology: 18 January 2008, Vol. 3, No. 1, pp.27-29</p>
+          </a>
+          <br id="post-float">
+          <p>
+               This figure appeared in a review commisioned by ACS Chemical Biology as part of their
+               Synthetic Biology edition which describes work done in Francis Arnold's group. Briefly,
+               two engineered strains of bacteria - a consortia - with complementary gene circuits
+               interact in a reciprocal fashion to signal measure the density of the other in the environment.
+               The obligate cooperation demonstrated in this synthetic system parallels the interaction between B and T
+               cells in the adaptive immune response.
+          </p>
+     </div>
+
+    <div class="item">
+        <a name="Article: Characterizing Control of PTGF-beta"><h3 class="item-title">Article: Characterizing Control of PTGF-beta</h3></a>
+        <a href="http://www.jbc.org/content/277/29/26699.short">
+            <span class="reference">The Journal of Biological Chemistry, 19 July 2002, 277(29), pp.26699-26707</span>
+        </a>
+        <p>
+            p53 is often referred to as the "Guardian of the Genome" due to it's proposed ability to
+            monitor DNA damage that can contribute to the genesis of diseases such as cancer. A flurry of research in the last
+            three decades has implicated p53 in the control of hundreds if not thousands of genes.
+            Early findings were consistent with the notion that p53 could physically bind to genes and
+            change their expression levels, in this way influencing the tendency of cells to either repair
+            or kill themselves off.
+        </p>
+        <p>
+            A curious aspect p53 control of genes is the generic nature of the DNA target it binds to:
+            A p53 "consensus" is a 10 base-pair repeat separated by a variable "linker" region (top of figure below).
+            Adding to the confusion is the tremendous variation in what sequences are actually functional in response to p53.
+            Based off of our earlier findings linking p53 and PTGF-beta (next section)
+            we wished to dissect the exact nature of how p53 controls PTGF-beta expression.
+        </p>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/promoter_jbc.png" /><br>
+        <p>
+            In this report, we identified two canonical p53 binding sites in the sequences close to the PTGF-beta gene (p53-1 and p53-2
+            in the figure above). I used a panel of classical molecular biology tricks to show that one of the sites
+            plays a dominant role in the reponse while the other is much less responsive. This functional activity was
+            reflected in the amount of p53 we could see bound to each site. This was convincing
+            evidence of a direct link between the vast p53 and TGF-beta networks in the cell, both of which
+            have critical roles in a variety of cellular processes.
+        </p>
+        <p>
+            In the process of "bashing" the control regions of PTGF-beta to isolate
+            p53-response regions, we noticed that removing a particular section could actually sensitize PTGF-beta
+            to p53, an effect that had not previously been described. The figure below shows a rather ancient
+            technique called electrophoretic mobility gel-shift assay (EMSA) which is used to isolate regions of DNA
+            that bind to proteins. The shaded region in figure below indicated the p53TRE we mapped out near the PTGF-beta gene.
+        </p>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/emsa.png" /><br>
+        <p>
+            The take home message from this study was a two-fold: One, a direct link established between p53 and TGF-beta
+            signalling pathways and two, the presence of a complex set of DNA control sequences determining the quantitative
+            nature of this response. We speculated that these positive and negative regulatory sequences might restrict
+            full activation of PTGF-beta to high levels of p53 that would be present
+            with persistent/severe DNA damage.
+        </p>
+
+
+
+    </div>
+
+    <div class="item">
+        <a name="Article: Discovering a novel anti-cancer gene"><h3 class="item-title">Article: Discovering a novel anti-cancer gene</h3></a>
+        <a href="http://www.jbc.org/content/275/26/20127.long">
+            <span class="reference">The Journal of Biological Chemistry, 30 June 2000, 275(26): pp.20127-20135</span>
+        </a>
+        <p>
+            Dr. Pei-Xiang Li, a postdoc in or group at the time, reported the identification of a novel gene
+            Placental Transforming Growth Factor beta (PTGF-beta). Since publication,
+            this cell-cell communication molecule has been implicated in the response
+            to a vast array of stimuli spanning non-steroidal anti-inflammatory agents to resveratrol (the
+            proposed wonder ingredient in red wine) to ionizing radiation. In addition, PTGF-beta has
+            been proposed to as a valuable biomarker for cancer and cardiovascular risk.
+        </p>
+        <p>
+            At the time, our group was interested in finding genes activated by cancer therapies including
+            radiation as well as chemical DNA damaging agents. Pei-Xiang screened breast cancer-derived cells to identify
+            PTGF-beta from what is now an now ancient technique referred to as "differential display". The figure below
+            shows our confirmation that this gene was indeed activated by radiation (Rad) and by p53, which plays
+            a critical role in the response to DNA damage.
+        </p>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/radiation.jpg" /><br>
+        <p>
+            The response to both radiation and p53 led to the question of whether PTGF-beta could be a downstream mediator
+            of p53 activity, whose ability to initiate cell death ("apoptosis") or cell cycle arrest has been well-documented.
+            I performed promoter analyses that showed a direct link between p53 and the DNA sequences controlling PTGF-beta levels.
+            In addition, flow cytometry results below demonstrated that another adenovirus expressing PTGF-beta (AdPTGF-B) but not
+            control (AdBgal) could potentiate the arrested state (i.e. large G1/S ratio).
+        </p>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/flow.jpg" /><br>
+        <p>
+            This work was important for several reasons. First, it identified a novel downstream mediator of p53, which is a
+            critical gene at the nexus of the proper response to potentially cancer-causing DNA damage. Next, it linked the
+            p53 and TGF-beta pathways, which play ubiquitous roles in cell growth and development. Third, it demonstrated
+            PTGF-beta was sufficient to induce cell death. This last fact, coupled with the knowledge that PTGF-beta is an
+            extracellular protein make it an attractive target for cancer gene therapy: It's ability to kill cells from the outside
+            in would obviate the need to deliver the payload to every single cell. It hs been exciting
+            to see the discoveries that built upon PTGF-beta's discovery.
+        </p>
+
+    </div>
+
+
+</div>
+<!--container-->
+
+{% endblock content %}

@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>Zoom + Pan</title>
+  <style>
+    #graph{
+      font-family: "Trebuchet MS", Helvetica, sans-serif;
+    }
+  </style>
+
+  <style>
+    .capture-shell-graphpad{
+      width      : 100%;
+      margin     : auto auto;
+    }
+
+    .capture-shell-graphpad-graph{
+      /*background : lightgrey;*/
+      width      : 19em;
+      display: inline-block;
+      /*margin-left: 0.5em;*/
+    }
+  </style>
+
+  <style>
+    .capture-shell-graphpad-graph.scatter .title{
+      font-size: 0.9em;
+      font-weight : bold;
+      margin-bottom: 1em;
+    }
+
+    .capture-shell-graphpad-graph.scatter .reset{
+      padding-left: 1em;
+      font-size: 0.8em;
+      color: steelblue;
+      font-weight: bold;
+    }
+
+    .capture-shell-graphpad-graph .scatter.point {
+      stroke: black;
+      stroke-width: 0.5;
+    }
+
+    .capture-shell-graphpad-graph.scatter .background.scatter .scatter.point{
+      fill: lightgrey;
+    }
+
+    .capture-shell-graphpad-graph.scatter .foreground.scatter .scatter.point{
+      fill: #8B0000;
+    }
+
+    .capture-shell-graphpad-graph .scatter.node {
+      fill: none;
+      stroke: #8B4513;
+      opacity : 0.45;
+      shape-rendering: crispEdges;
+    }
+
+    .capture-shell-graphpad-graph .brush rect.extent {
+      fill: steelblue;
+      fill-opacity: .25;
+    }
+
+    .capture-shell-graphpad-graph .scatter.axis {
+      font: 0.6em sans-serif;
+    }
+
+    .capture-shell-graphpad-graph .scatter.axis > text{
+      font: 1.5em sans-serif;
+      font-weight: 800;
+    }
+
+    .capture-shell-graphpad-graph .scatter.axis path,
+    .capture-shell-graphpad-graph .scatter.axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+
+    }
+  </style>
+
+  <style>
+    .capture-shell-graphpad-graph.bar .title{
+      font-size: 0.9em;
+      font-weight : bold;
+      margin-bottom: 1em;
+    }
+
+    .capture-shell-graphpad-graph.bar .reset{
+      padding-left: 1em;
+      font-size: 0.8em;
+      color: steelblue;
+      font-weight: bold;
+    }
+
+    .capture-shell-graphpad-graph.bar a:link,
+    .capture-shell-graphpad-graph.bar a:visited{
+      text-decoration: none;
+    }
+
+
+    .capture-shell-graphpad-graph.bar .background.bar{
+      fill: lightgrey;
+    }
+
+    .capture-shell-graphpad-graph.bar .foreground.bar {
+      fill: #8B0000;
+    }
+
+
+    .capture-shell-graphpad-graph.bar .brush rect.extent {
+      fill: steelblue;
+      fill-opacity: .25;
+    }
+
+    .capture-shell-graphpad-graph.bar .brush .resize path {
+      fill: #eee;
+      stroke: #666;
+    }
+
+    .capture-shell-graphpad-graph.bar .bar.axis {
+      font: 0.6em sans-serif;
+    }
+
+    .capture-shell-graphpad-graph.bar .bar.axis .bar.label{
+      font: 1.5em sans-serif;
+      font-weight: 800;
+    }
+
+    .capture-shell-graphpad-graph.bar .bar.axes .bar.axis path,
+    .capture-shell-graphpad-graph.bar .bar.axes .bar.axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+
+    }
+  </style>
+
+
+</head>
+
+<body>
+  <div id="graph">
+    <div class="capture-shell-graphpad">
+      <div class="capture-shell-graphpad-graph scatter brushable myce2f"></div>
+      <div class="capture-shell-graphpad-graph scatter brushable fcsscs"></div>
+      <div class="capture-shell-graphpad-graph bar brushable myc"></div>
+      <div class="capture-shell-graphpad-graph bar brushable e2f"></div>
+    </div>
+  </div>
+
+  <!-- Third party javascript -->
+  <!-- Third party javascript -->
+  <script type="text/javascript" src="/static/jeffreyvwong/js/jquery-1.9.1.js"></script>
+  <script type="text/javascript" src="/static/jeffreyvwong/js/d3.v3.min.js"></script>
+  <script type="text/javascript" src="/static/jeffreyvwong/js/crossfilter.min.js"></script>
+
+  <script>
+    var capture_scatter = (function () {
+    'use strict';
+    var
+    scatterChart
+    ;
+
+    //------------------- BEGIN PUBLIC METHODS -------------------
+    // Begin Public method /scatterChart/
+    // Example   : chart.scatter.scatterChart();
+    // Purpose   :
+    //   Sets up a scatter plot
+    // Arguments : none
+    // Action    :
+    //   returns scatterChart with configurable attributes
+    // Returns   : chart(div)
+    // Throws    : none
+    scatterChart = function( $container ) {
+
+      var _chart = {};
+
+      _chart._g_pane = null;
+      _chart._g_body = null;
+      _chart._g_axes = null;
+      _chart._points = null;
+      _chart._id = 3;
+      _chart._radius = 2;
+      _chart._width = 0;
+      _chart._height = 0;
+      _chart._margins = {top: 20, left: 50, right: 20, bottom: 50};
+      _chart._xScale = d3.scale.linear().domain([0, 1]);
+      _chart._yScale = d3.scale.linear().domain([0, 1]);
+      _chart._xAxis = d3.svg.axis();
+      _chart._yAxis = d3.svg.axis();
+      _chart._xLabel = "";
+      _chart._yLabel = "";
+      _chart._title = "";
+      _chart._data = [];
+      _chart._dimension = null;
+      _chart._xValue = function(d){ return d.x; };
+      _chart._yValue = function(d){ return d.y; };
+      _chart._container = $container;
+      _chart._quadtree = null;
+      _chart._brush = d3.svg.brush();
+      _chart._brushDirty = false;
+      _chart._extent = [ [0,0], [0,0] ];
+      ;
+
+
+      /* BEGIN helper methods */
+
+      function bodyWidth() {
+        return _chart._width - _chart._margins.left - _chart._margins.right;
+      }
+
+      function bodyHeight() {
+        return _chart._height - _chart._margins.top - _chart._margins.bottom;
+      }
+
+      function renderTitle(container, title){
+
+        container.append("div")
+                .attr({ class : "title" })
+                .html(title)
+        ;
+      }
+
+      function renderPane(container, width, height){
+
+        container.select(".title").append("a")
+                .attr("href", "javascript:reset(" + _chart._id + ")")//calls the window.reset(id) function
+                .attr("class", "reset")
+                .text("reset")
+                .style("display", "none");
+
+
+        var g_pane = container.append("svg")
+                        .attr({ width  : width
+                          , height : height
+                        })
+                        .append("g")
+                        .attr("transform", "translate(" + _chart._margins.left + ", " + _chart._margins.top + ")")
+                ;
+        return g_pane
+      }
+
+      function defineBodyClip(g) {
+
+        g.append("clipPath")
+                .attr("id", "clip-" + _chart._id)
+                .append("rect")
+                .attr("width", bodyWidth())
+                .attr("height", bodyHeight());
+
+      }
+
+      function renderBody(g){
+
+        var body = g.append("g")
+                        .attr("class", "body")
+                ;
+
+        return body;
+      }
+
+      function renderXAxis(g_axes){
+
+        _chart._xAxis.scale(_chart._xScale.range([0, bodyWidth()]))
+                .orient("bottom")
+        ;
+
+        return g_axes.append("g")
+                .attr("class", "scatter x axis")
+                .attr("transform", "translate(0, " + bodyHeight() + ")")
+                .call(_chart._xAxis)
+                ;
+      }
+
+      function renderYAxis(g_axes){
+
+        _chart._yAxis.scale(_chart._yScale.range([bodyHeight(), 0]))
+                .orient("left");
+
+        return g_axes.append("g")
+                .attr("class", "scatter y axis")
+                .call(_chart._yAxis)
+                ;
+      }
+
+      function renderLabels(g_axes){
+
+        g_axes.select(".x.axis")
+                .append("text")
+                .attr({
+                  class : "scatter x label",
+                  x : ( ( bodyWidth() + _chart._margins.left ) / 2 ),
+                  y : 40
+                })
+                .style("text-anchor", "end")
+                .text(_chart._xLabel)
+        ;
+
+        g_axes.select(".y.axis")
+                .append("text")
+                .attr({
+                  class : "scatter y label",
+                  transform : "rotate(-90)",
+                  x : -( (bodyHeight() -  _chart._margins.bottom ) / 2 ),
+                  y : - 50
+                })
+                .style("text-anchor", "end")
+                .text(_chart._yLabel)
+        ;
+
+        return g_axes;
+      }
+
+      function renderAxes(g){
+        var g_axes = g.append("g")
+                .attr("class", "scatter axes");
+
+        renderXAxis(g_axes);
+        renderYAxis(g_axes);
+        renderLabels(g_axes);
+
+        return g_axes;
+      }
+
+      function renderData(g_body){
+
+        var g_data, points;
+
+        g_data = g_body.selectAll(".bar")
+                .data(["background", "foreground"])
+                .enter().append("g")
+                .attr("class", function(d) { return d + " scatter"; })
+        ;
+
+        //apply the clipPath as an attribute of the foreground
+        g_body.selectAll(".foreground.scatter")
+                .attr("clip-path", "url(#clip-" + _chart._id + ")")
+        ;
+
+        points = g_data.selectAll(".point")
+                .data(_chart._data)
+        ;
+
+        /* Enter */
+        points.enter()
+                .append("circle")
+                .attr("class", "scatter point")
+                .attr({
+                  cx      : function(d){ return _chart._xScale(d.x); }
+                  , cy      : function(d){ return _chart._yScale(d.y); }
+                  , r       :  _chart._radius
+                })
+        ;
+
+        /* update */
+        points
+                .attr({
+                  cx      : function(d){ return _chart._xScale(d.x); }
+                  , cy      : function(d){ return _chart._yScale(d.y); }
+                })
+        ;
+
+        /* update */
+        points.exit().remove()
+        ;
+
+        return points;
+      }
+
+      /* END helper methods */
+
+      function renderBrush(g_body, brush){
+
+        // Initialize the brush component
+        g_body.append("g").attr("class", "brush").call(brush);
+
+        //this disables {display : none} attribute for "reset"
+        brush.on("brushstart._chart", function() {
+          var div = d3.select(this.parentNode.parentNode.parentNode.parentNode);
+          div.select(".title a").style("display", null);
+        });
+
+        brush.on("brush._chart", function() {
+          var
+                  g_body = d3.select(this.parentNode), //this is <g class="brush">; parent node is <g class="body">
+                  extent = brush.extent();
+
+          g_body.select("#clip-" + _chart._id + " rect") //reselect the <rect> child of the <clipPath id="clip-n">
+                  .attr("x", _chart._xScale(extent[0][0])) //set the x val of the updated extent
+                  .attr("width", _chart._xScale(extent[1][0]) - _chart._xScale(extent[0][0])) // set the width of the updated extent
+                  .attr("y", _chart._yScale(extent[1][1])) //set the x val of the updated extent
+                  .attr("height", _chart._yScale(extent[0][1]) - _chart._yScale(extent[1][1])); // set the width of the updated extent
+          _chart._dimension_x.filterRange([extent[0][0], extent[1][0]]);//filter the data on the extent
+          _chart._dimension_y.filterRange([extent[0][1], extent[1][1]]);//filter the data on the extent
+        });
+
+//      //When you click off the map to disable the "end" the brush
+        brush.on("brushend._chart", function() {
+          if (brush.empty()) {
+            var div = d3.select(this.parentNode.parentNode.parentNode.parentNode);
+            div.select(".title a").style("display", "none");
+            div.select("#clip-" + _chart._id + " rect").attr("x", null).attr("width", "100%");
+            div.select("#clip-" + _chart._id + " rect").attr("y", null).attr("height", "100%");
+            _chart._dimension_x.filterAll();
+            _chart._dimension_y.filterAll();
+          }
+        });
+      }
+
+      /* BEGIN public methods */
+      _chart.render = function(){
+        renderTitle(_chart._container, _chart._title);
+        _chart._g_pane = renderPane(_chart._container, _chart._width, _chart._height);
+        _chart._g_body = renderBody(_chart._g_pane);
+        defineBodyClip(_chart._g_body);
+        _chart._g_axes = renderAxes(_chart._g_pane);
+        _chart._points = renderData(_chart._g_body);
+        renderBrush(_chart._g_body, _chart._brush);
+      };
+
+      //this is a dummy function
+      _chart.update = function(){
+
+        //update the data set
+        _chart.data(_chart._dimension_x.top(Infinity));
+
+        var g_data = _chart._g_body.selectAll(".foreground.scatter")
+                , points = g_data.selectAll(".scatter.point")
+                        .data(_chart._data);
+
+        /* Enter */
+        points.enter()
+                .append("circle")
+                .attr("class", "scatter point")
+                .attr({
+                  cx      : function(d){ return _chart._xScale(d.x); }
+                  , cy      : function(d){ return _chart._yScale(d.y); }
+                  , r       :  _chart._radius
+                })
+        ;
+
+        /* update */
+        points
+                .attr({
+                  cx      : function(d){ return _chart._xScale(d.x); }
+                  , cy      : function(d){ return _chart._yScale(d.y); }
+                })
+        ;
+
+        /* remove() */
+        points.exit().remove()
+        ;
+
+        // Only redraw the brush if set externally.
+        if (_chart._brushDirty) {
+
+          _chart._brushDirty = false;
+          _chart._g_body.selectAll(".brush").call( _chart._brush);
+          _chart._container.select(".title a").style("display",  _chart._brush.empty() ? "none" : null);
+
+          if ( _chart._brush.empty()) {
+            _chart._g_body.selectAll("#clip-" + _chart._id + " rect")
+                    .attr("x", 0)
+                    .attr("width", bodyWidth())
+                    .attr("y", 0)
+                    .attr("height", bodyHeight());
+          } else {
+            var extent =  _chart._brush.extent();
+            _chart._g_body.selectAll("#clip-" + _chart._id + " rect")
+                    .attr("x", _chart._xScale(extent[0][0]))
+                    .attr("width", _chart._xScale(extent[1][0]) - _chart._xScale(extent[0][0]))
+                    .attr("y", _chart._yScale(extent[1][1]))
+                    .attr("height", _chart._yScale(extent[1][1]) - _chart._yScale(extent[0][1]))
+            ;
+          }
+        }
+
+      };
+
+
+      /* BEGIN getters and setters */
+      _chart.data = function (dat) {
+        if (!arguments.length){ return _chart._data; }
+        _chart._data = dat.map(function(d, i) {
+          return {x: _chart._xValue.call({}, d), y: _chart._yValue.call({}, d) };
+        });
+        return _chart;
+      };
+
+      _chart.dimension_x = function(_) {
+        if (!arguments.length) return _chart._dimension_x;
+        _chart._dimension_x = _;
+        return _chart;
+      };
+
+      _chart.dimension_y = function(_) {
+        if (!arguments.length) return _chart._dimension_y;
+        _chart._dimension_y = _;
+        return _chart;
+      };
+
+      _chart.xValue = function(_) {
+        if (!arguments.length) { return _chart._xValue; }
+        _chart._xValue = _;
+        return _chart;
+      };
+
+      _chart.yValue = function(_) {
+        if (!arguments.length) { return _chart._yValue; }
+        _chart._yValue = _;
+        return _chart;
+      };
+
+      _chart.container = function () {
+        return _chart._container;
+      };
+
+      _chart.width = function (_) {
+        if (!arguments.length){  return _chart._width; }
+        _chart._width = _;
+        return _chart;
+      };
+
+      _chart.height = function (_) {
+        if (!arguments.length){  return _chart._height; }
+        _chart._height = _;
+        return _chart;
+      };
+
+      _chart.margins = function (_) {
+        if (!arguments.length){  return _chart._margins; }
+        _chart._margins = _;
+        return _chart;
+      };
+
+      _chart.colors = function (_) {
+        if (!arguments.length){  return _chart._colors; }
+        _chart._colors = _;
+        return _chart;
+      };
+
+      _chart.xScale = function (_) {
+        if (!arguments.length){  return _chart._xScale; }
+        _chart._xScale = _;
+        _chart._brush.x(_chart._xScale);
+        return _chart;
+      };
+
+      _chart.yScale = function (_) {
+        if (!arguments.length){  return _chart._yScale; }
+        _chart._yScale = _;
+        _chart._brush.y(_chart._yScale);
+        return _chart;
+      };
+
+      _chart.xAxis = function (_) {
+        if (!arguments.length){  return _chart._xAxis; }
+        _chart._xAxis = _;
+        return _chart;
+      };
+
+      _chart.yAxis = function (_) {
+        if (!arguments.length){  return _chart._yAxis; }
+        _chart._yAxis = _;
+        return _chart;
+      };
+
+      _chart.xDomain = function (_) {
+        if (!arguments.length){  return _chart._xScale.domain(); }
+        _chart._xScale.domain(_);
+        return _chart;
+      };
+
+      _chart.yDomain = function (_) {
+        if (!arguments.length){  return _chart._yScale.domain(); }
+        _chart._yScale.domain(_);
+        return _chart;
+      };
+
+      _chart.xRange = function () {
+        return _chart._xScale.range();
+      };
+
+      _chart.yRange = function () {
+        return _chart._yScale.range();
+      };
+
+      _chart.title = function (_) {
+        if (!arguments.length){  return _chart._title; }
+        _chart._title = _;
+        return _chart;
+      };
+
+      _chart.xLabel = function (_) {
+        if (!arguments.length){  return _chart._xLabel; }
+        _chart._xLabel = _;
+        return _chart;
+      };
+
+      _chart.yLabel = function (_) {
+        if (!arguments.length){  return _chart._yLabel; }
+        _chart._yLabel = _;
+        return _chart;
+      };
+
+      _chart.radius = function (_) {
+        if (!arguments.length){  return _chart._radius; }
+        _chart._radius = _;
+        return _chart;
+      };
+
+      _chart.extent = function (_) {
+        if (!arguments.length){  return _chart._extent; }
+        _chart._extent = _;
+        return _chart;
+      };
+
+      _chart.id = function (_) {
+        if (!arguments.length){  return _chart._id; }
+        _chart._id = _;
+        return _chart;
+      };
+
+      _chart.filter = function(_) {
+        if (_) {
+          _chart._brush.extent(_);
+          _chart._dimension_x.filterRange(_);
+          _chart._dimension_y.filterRange(_);
+        } else {
+          _chart._brush.clear();
+          _chart._dimension_x.filterAll();
+          _chart._dimension_y.filterAll();
+        }
+        _chart._brushDirty = true;
+        return _chart;
+      };
+      /* END getters and setters */
+      /* END public methods */
+
+      return d3.rebind(_chart, _chart._brush, "on");
+
+    };
+
+//END PUBLIC method /scatterChart/
+
+    return { scatterChart: scatterChart };
+    //------------------- END PUBLIC METHODS ---------------------
+  }());
+  </script>
+
+  <script>
+    var capture_bar = (function () {
+      'use strict';
+      var
+              barChart
+              ;
+
+      //------------------- BEGIN PUBLIC METHODS -------------------
+      // Begin Public method /barChart/
+      // Example   : charts.barChart();
+      // Purpose   :
+      //   Sets up a bar plot
+      // Arguments : none
+      // Action    :
+      //   returns barChart with configurable attributes
+      // Returns   : chart(div)
+      // Throws    : none
+
+      barChart = function( $container ) {
+
+        var _chart = {};
+
+        _chart._g_pane = null;
+        _chart._g_body = null;
+        _chart._g_axes = null;
+        _chart._points = null;
+        _chart._id = 0;
+        _chart._radius = 2;
+        _chart._width = 0;
+        _chart._height = 0;
+        _chart._margins = {top: 20, left: 50, right: 20, bottom: 50};
+        _chart._xScale = d3.scale.linear().domain([0, 1]);
+        _chart._yScale = d3.scale.linear().domain([0, 1]);
+        _chart._xAxis = d3.svg.axis();
+        _chart._yAxis = d3.svg.axis();
+        _chart._bwidth = 5;
+        _chart._xLabel = "";
+        _chart._yLabel = "";
+        _chart._title = "";
+        _chart._dimension = null;
+        _chart._group = null;
+        _chart._container = $container;
+        _chart._quadtree = null;
+        _chart._brush = d3.svg.brush();
+        _chart._brushDirty = false;
+        _chart._extent = [0,0];
+        ;
+
+        /* BEGIN helper methods */
+
+        function bodyWidth() {
+          return _chart._width - _chart._margins.left - _chart._margins.right;
+        }
+
+        function bodyHeight() {
+          return _chart._height - _chart._margins.top - _chart._margins.bottom;
+        }
+
+        function renderTitle(container, title){
+
+          container.append("div")
+                  .attr({ class : "title" })
+                  .html(title)
+          ;
+        }
+
+
+        function renderPane(container, width, height){
+
+          container.select(".title").append("a")
+                  .attr("href", "javascript:reset(" + _chart._id + ")")//calls the window.reset(id) function
+                  .attr("class", "reset")
+                  .text("reset")
+                  .style("display", "none");
+
+          var g_pane = container.append("svg")
+                          .attr({ width  : width
+                            , height : height
+                          })
+                          .append("g")
+                          .attr("transform", "translate(" + _chart._margins.left + ", " + _chart._margins.top + ")")
+                  ;
+          return g_pane
+        }
+
+        function defineBodyClip(g) {
+
+          g.append("clipPath")
+                  .attr("id", "clip-" + _chart._id)
+                  .append("rect")
+                  .attr("width", bodyWidth())
+                  .attr("height", bodyHeight());
+
+        }
+
+        function renderBody(g){
+
+          var body = g.append("g")
+                  .attr("class", "body");
+
+          return body;
+        }
+
+        function renderXAxis(g_axes){
+
+          _chart._xAxis.scale(_chart._xScale.range([0, bodyWidth()]))
+                  .orient("bottom")
+          ;
+
+          return g_axes.append("g")
+                  .attr("class", "bar x axis")
+                  .attr("transform", "translate(0, " + bodyHeight() + ")")
+                  .call(_chart._xAxis)
+                  ;
+        }
+
+        function renderYAxis(g_axes){
+
+          _chart._yAxis.scale(_chart._yScale.range([bodyHeight(), 0]))
+                  .orient("left");
+
+          return g_axes.append("g")
+                  .attr("class", "bar y axis")
+                  .call(_chart._yAxis)
+                  ;
+        }
+
+        function renderLabels(g_axes){
+
+          g_axes.select(".bar.x.axis")
+                  .append("text")
+                  .attr({
+                    class : "bar x label",
+                    x : ( ( bodyWidth() + _chart._margins.left ) / 2 ),
+                    y : 40
+                  })
+                  .style("text-anchor", "end")
+                  .text(_chart._xLabel)
+          ;
+
+          g_axes.select(".bar.y.axis")
+                  .append("text")
+                  .attr({
+                    class : "bar y label",
+                    transform : "rotate(-90)",
+                    x : -( (bodyHeight() -  _chart._margins.bottom ) / 2 ),
+                    y : - 50
+                  })
+                  .style("text-anchor", "end")
+                  .text(_chart._yLabel)
+          ;
+
+          return g_axes;
+        }
+
+        function renderAxes(g){
+          var g_axes = g.append("g")
+                  .attr("class", "bar axes");
+
+          renderXAxis(g_axes);
+          renderYAxis(g_axes);
+          renderLabels(g_axes);
+
+          return g_axes;
+        }
+
+        function renderBrush(g_body, brush){
+
+          // Initialize the brush component
+          var gBrush = g_body.append("g").attr("class", "brush").call(brush);
+          gBrush.selectAll("rect").attr("height", bodyHeight());
+
+          //this disables {display : none} attribute for "reset"
+          brush.on("brushstart._chart", function() {
+            var div = d3.select(this.parentNode.parentNode.parentNode.parentNode);
+            div.select(".title a").style("display", null);
+          });
+
+          brush.on("brush._chart", function() {
+            var g = d3.select(this.parentNode), //this is <g class="brush">; parent node is <g class="body">
+                    extent = brush.extent();
+
+            g.select("#clip-" + _chart._id + " rect") //reselect the <rect> child of the <clipPath id="clip-n">
+                    .attr("x", _chart._xScale(extent[0])) //set the x val of the updated extent
+                    .attr("width", _chart._xScale(extent[1]) - _chart._xScale(extent[0])); // set the width of the updated extent
+            _chart._dimension.filterRange(extent);//filter the data on the extent
+          });
+
+          //When you click off the map to disable the "end" the brush
+          brush.on("brushend._chart", function() {
+            if (brush.empty()) {
+              var div = d3.select(this.parentNode.parentNode.parentNode.parentNode);
+              div.select(".title a").style("display", "none");
+              div.select("#clip-" + _chart._id + " rect").attr("x", null).attr("width", "100%");
+              _chart._dimension.filterAll();
+            }
+          });
+        }
+
+
+        function renderData(g_body){
+
+          g_body.selectAll(".bar")
+                  .data(["background", "foreground"])
+                  .enter().append("path")
+                  .attr("class", function(d) { return d + " bar"; })
+          ;
+
+          //apply the clipPath as an attribute of the foreground
+          g_body.selectAll(".foreground.bar")
+                  .attr("clip-path", "url(#clip-" + _chart._id + ")")
+          ;
+
+
+        }
+
+        function barPath(groups) {
+          var path = [],
+                  i = -1,
+                  n = groups.length,
+                  d;
+          while (++i < n) {
+            d = groups[i];
+            path.push("M", _chart._xScale(d.key), ",", (bodyHeight()), "V", _chart._yScale(d.value), "h" + _chart._bwidth + "V", (bodyHeight()));
+          }
+          return path.join("");
+        }
+
+
+
+
+        /* BEGIN public methods */
+        _chart.render = function(){
+
+          renderTitle(_chart._container, _chart._title);
+
+          _chart._g_pane = renderPane(_chart._container, _chart._width, _chart._height);
+          _chart._g_body = renderBody(_chart._g_pane);
+          defineBodyClip(_chart._g_body);
+          _chart._g_axes = renderAxes(_chart._g_pane);
+          renderBrush(_chart._g_body, _chart._brush);
+          renderData(_chart._g_body);
+          _chart._yScale.domain([0, _chart._group.top(1)[0].value]);
+          _chart._g_body.selectAll(".bar").datum(_chart._group.all()).attr("d", barPath);
+
+        };
+
+        //this should be used only when other graphs are brushed
+        _chart.update = function(){
+
+          _chart._yScale.domain([0, _chart._group.top(1)[0].value]);
+          _chart._g_axes.select(".bar.y.axis").call(_chart._yAxis);
+          _chart._g_body.selectAll(".bar").datum(_chart._group.all()).attr("d", barPath);
+
+          // Only redraw the brush if set externally.
+          if (_chart._brushDirty) {
+
+            _chart._brushDirty = false;
+            _chart._g_body.selectAll(".brush").call( _chart._brush);
+            _chart._container.select(".title a").style("display",  _chart._brush.empty() ? "none" : null);
+
+            if ( _chart._brush.empty()) {
+              _chart._g_body.selectAll("#clip-" + _chart._id + " rect")
+                      .attr("x", 0)
+                      .attr("width", bodyWidth());
+            } else {
+              var extent =  _chart._brush.extent();
+              _chart._g_body.selectAll("#clip-" + _chart._id + " rect")
+                      .attr("x", _chart._xScale(extent[0]))
+                      .attr("width", _chart._xScale(extent[1]) - _chart._xScale(extent[0]));
+            }
+          }
+        };
+
+        /* BEGIN getters and setters */
+        _chart.dimension = function(_) {
+          if (!arguments.length) return _chart._dimension;
+          _chart._dimension = _;
+          return _chart;
+        };
+
+        _chart.group = function(_) {
+          if (!arguments.length) return _chart._group;
+          _chart._group = _;
+          return _chart;
+        };
+
+        _chart.container = function () {
+          return _chart._container;
+        };
+
+        _chart.width = function (_) {
+          if (!arguments.length){  return _chart._width; }
+          _chart._width = _;
+          return _chart;
+        };
+
+        _chart.height = function (_) {
+          if (!arguments.length){  return _chart._height; }
+          _chart._height = _;
+          return _chart;
+        };
+
+        _chart.bwidth  = function (_) {
+          if (!arguments.length){  return _chart._bwidth; }
+          _chart._bwidth = _;
+          return _chart;
+        };
+
+        _chart.margins = function (_) {
+          if (!arguments.length){  return _chart._margins; }
+          _chart._margins = _;
+          return _chart;
+        };
+
+        _chart.colors = function (_) {
+          if (!arguments.length){  return _chart._colors; }
+          _chart._colors = _;
+          return _chart;
+        };
+
+        _chart.xScale = function (_) {
+          if (!arguments.length){  return _chart._xScale; }
+          _chart._xScale = _;
+          _chart._brush.x(_chart._xScale);
+          return _chart;
+        };
+
+        _chart.yScale = function (_) {
+          if (!arguments.length){  return _chart._yScale; }
+          _chart._yScale = _;
+          return _chart;
+        };
+
+        _chart.xAxis = function (_) {
+          if (!arguments.length){  return _chart._xAxis; }
+          _chart._xAxis = _;
+          return _chart;
+        };
+
+        _chart.yAxis = function (_) {
+          if (!arguments.length){  return _chart._yAxis; }
+          _chart._yAxis = _;
+          return _chart;
+        };
+
+        _chart.xDomain = function (_) {
+          if (!arguments.length){  return _chart._xScale.domain(); }
+          _chart._xScale.domain(_);
+          return _chart;
+        };
+
+        _chart.yDomain = function (_) {
+          if (!arguments.length){  return _chart._yScale.domain(); }
+          _chart._yScale.domain(_);
+          return _chart;
+        };
+
+        _chart.xRange = function () {
+          return _chart._xScale.range();
+        };
+
+        _chart.yRange = function () {
+          return _chart._yScale.range();
+        };
+
+        _chart.title = function (_) {
+          if (!arguments.length){  return _chart._title; }
+          _chart._title = _;
+          return _chart;
+        };
+
+        _chart.xLabel = function (_) {
+          if (!arguments.length){  return _chart._xLabel; }
+          _chart._xLabel = _;
+          return _chart;
+        };
+
+        _chart.yLabel = function (_) {
+          if (!arguments.length){  return _chart._yLabel; }
+          _chart._yLabel = _;
+          return _chart;
+        };
+
+        _chart.radius = function (_) {
+          if (!arguments.length){  return _chart._radius; }
+          _chart._radius = _;
+          return _chart;
+        };
+
+        _chart.extent = function (_) {
+          if (!arguments.length){  return _chart._extent; }
+          _chart._extent = _;
+          return _chart;
+        };
+
+        _chart.id = function (_) {
+          if (!arguments.length){  return _chart._id; }
+          _chart._id = _;
+          return _chart;
+        };
+
+        _chart.filter = function(_) {
+          if (_) {
+            _chart._brush.extent(_);
+            _chart._dimension.filterRange(_);
+          } else {
+            _chart._brush.clear();
+            _chart._dimension.filterAll();
+          }
+          _chart._brushDirty = true;
+          return _chart;
+        };
+        /* END getters and setters */
+        /* END public methods */
+
+        return d3.rebind(_chart, _chart._brush, "on");
+      };
+
+
+
+      //END PUBLIC method /barChart/
+
+      return { barChart : barChart };
+      //------------------- END PUBLIC METHODS ---------------------
+
+    }());
+  </script>
+
+  <script>
+    (function(){
+      var
+      stateMap = {
+          graphs              : new Array()
+        , margins             : {top: 10, left: 60, right: 10, bottom: 60}
+        , width               : 300
+        , height              : 300
+        , radius              : 3
+      }
+      , d3Map = {}
+      , setd3Map
+      , renderGraphs
+      ;
+
+      setd3Map = function(){
+        d3Map = {
+            graphs         : d3.selectAll('.capture-shell-graphpad-graph')
+          , scatter        : d3.selectAll('.capture-shell-graphpad-graph.scatter.myce2f')
+          , scatter2       : d3.selectAll('.capture-shell-graphpad-graph.scatter.fcsscs')
+          , bar            : d3.selectAll('.capture-shell-graphpad-graph.bar.myc')
+          , bar2           : d3.selectAll('.capture-shell-graphpad-graph.bar.e2f')
+        };
+      };
+
+      renderGraphs = function(){
+
+        var data = [{"ARF": 1.7148437500001736, "E2F": 1.7031250000002176, "FCS": 427, "MYC": 1.3398437500001052, "SCS": 176.2356440572}, {"ARF": 1.2656250000002096, "E2F": 1.1289062500000158, "FCS": 209, "MYC": 2.9140625000000004, "SCS": 118.636615905}, {"ARF": 1.1953125000008393, "E2F": 1.1562500000009206, "FCS": 325, "MYC": 0.0312499999913847, "SCS": 81.3123008063}, {"ARF": 1.445312499999512, "E2F": 1.2812499999998999, "FCS": 445, "MYC": 1.0, "SCS": 105.5449600879}, {"ARF": 1.2812499999998999, "E2F": 1.4843750000004234, "FCS": 264, "MYC": 0.8828125000009474, "SCS": 100}, {"ARF": 1.0195312499998948, "E2F": 0.8789062499999332, "FCS": 316, "MYC": 0.14062500001322653, "SCS": 92.2239565104}, {"ARF": 1.4335937500002853, "E2F": 0.7031250000027985, "FCS": 354, "MYC": 0.8242187499991215, "SCS": 121.8814184842}, {"ARF": 1.445312499999512, "E2F": 0.6562499999999216, "FCS": 355, "MYC": 0.9218750000011302, "SCS": 122.9826225656}, {"ARF": 1.1914062499986098, "E2F": 0.7187499999987595, "FCS": 351, "MYC": 0.7382812500017283, "SCS": 96.4661619911}, {"ARF": 1.4140624999993279, "E2F": 1.0625000000002038, "FCS": 433, "MYC": 1.378906250000338, "SCS": 135.7727142105}, {"ARF": 1.4335937500002853, "E2F": 0.8906250000006839, "FCS": 348, "MYC": 2.7968750000000098, "SCS": 118.636615905}, {"ARF": 1.531249999999673, "E2F": 1.4648437499995355, "FCS": 485, "MYC": 1.003906249999377, "SCS": 114.4441900797}, {"ARF": 1.2226562500011542, "E2F": 0.6757812499988898, "FCS": 249, "MYC": 0.38281250000779954, "SCS": 86.596432336}, {"ARF": 0.9570312499987697, "E2F": 0.7421874999994419, "FCS": 367, "MYC": 0.32031250000442063, "SCS": 98.2171889188}, {"ARF": 1.5664062500005638, "E2F": 1.4804687499998972, "FCS": 448, "MYC": 2.027343749999825, "SCS": 243.6232598152}, {"ARF": 1.417968750000763, "E2F": 1.0859374999991842, "FCS": 458, "MYC": 0.4453124999979543, "SCS": 87.3788349853}, {"ARF": 1.511718749999969, "E2F": 0.7890625000006796, "FCS": 435, "MYC": 0.5039062499960383, "SCS": 106.498563535}, {"ARF": 1.531249999999673, "E2F": 0.7265625000028006, "FCS": 319, "MYC": 3.1210937499999973, "SCS": 176.2356440572}, {"ARF": 1.3945312499992797, "E2F": 0.7421874999994419, "FCS": 414, "MYC": 2.964843749999989, "SCS": 187.6884293576}, {"ARF": 1.0429687500010236, "E2F": 1.0664062499987987, "FCS": 329, "MYC": 2.4921875000000413, "SCS": 100.9035044841}, {"ARF": 1.2929687499999103, "E2F": 0.8671874999992759, "FCS": 402, "MYC": 0.9648437499979169, "SCS": 104.599895343}, {"ARF": 1.5585937499997586, "E2F": 1.179687499999821, "FCS": 421, "MYC": 2.753906249999967, "SCS": 182.6916717941}, {"ARF": 1.519531249999738, "E2F": 0.9492187500000815, "FCS": 286, "MYC": 2.5976562500000226, "SCS": 161.0761534618}, {"ARF": 1.58593749999965, "E2F": 1.593749999999498, "FCS": 248, "MYC": 2.3007812500001066, "SCS": 171.5437896343}, {"ARF": 1.9218750000000904, "E2F": 0.8671874999992759, "FCS": 456, "MYC": 0.5976562499979388, "SCS": 102.7350768179}, {"ARF": 0.683593749996948, "E2F": 0.49218749999654554, "FCS": 249, "MYC": 2.621093749999969, "SCS": 58.820843762}, {"ARF": 1.6015625000000124, "E2F": 1.2500000000002631, "FCS": 353, "MYC": 1.1757812499999245, "SCS": 122.9826225656}, {"ARF": 1.6445312499995133, "E2F": 1.2148437500004112, "FCS": 369, "MYC": 2.2265625000000417, "SCS": 248.0454414314}, {"ARF": 1.5273437500001432, "E2F": 1.1757812499999245, "FCS": 380, "MYC": 0.6523437500010222, "SCS": 84.2910085028}, {"ARF": 0.9570312499987697, "E2F": 1.1953125000008393, "FCS": 235, "MYC": 0.7968750000021592, "SCS": 71.0497411443}, {"ARF": 1.3007812499992373, "E2F": 0.69921875000215, "FCS": 307, "MYC": 0.7109375000024072, "SCS": 100}, {"ARF": 1.6796874999996558, "E2F": 0.9609375000021428, "FCS": 401, "MYC": 2.9609375000000044, "SCS": 182.6916717941}, {"ARF": 1.3515624999994889, "E2F": 1.0703124999997373, "FCS": 221, "MYC": 0.8437500000000832, "SCS": 112.4038663772}, {"ARF": 1.1015624999984641, "E2F": 0.828124999997098, "FCS": 263, "MYC": 2.6054687499999525, "SCS": 81.3123008063}, {"ARF": 1.3320312500006048, "E2F": 0.6367187500041303, "FCS": 223, "MYC": 1.1367187500010922, "SCS": 115.4781984689}, {"ARF": 1.574218749999463, "E2F": 1.6250000000004303, "FCS": 419, "MYC": 1.1601562500007774, "SCS": 88.964911282}, {"ARF": 1.6250000000004303, "E2F": 0.9374999999999672, "FCS": 292, "MYC": 2.933593749999979, "SCS": 145.9024215631}, {"ARF": 1.2656250000002096, "E2F": 0.6484375000042938, "FCS": 193, "MYC": 1.1679687499989555, "SCS": 84.2910085028}, {"ARF": 1.2617187499997802, "E2F": 1.1601562500007774, "FCS": 282, "MYC": 0.6015624999945774, "SCS": 98.2171889188}, {"ARF": 1.531249999999673, "E2F": 0.6093750000018099, "FCS": 336, "MYC": 1.4570312499994875, "SCS": 109.4113810577}, {"ARF": 1.2968749999999258, "E2F": 0.683593749996948, "FCS": 249, "MYC": 0.6406249999988982, "SCS": 85.0525815444}, {"ARF": 1.6718750000003244, "E2F": 1.4140624999993279, "FCS": 376, "MYC": 2.2617187500000178, "SCS": 168.4854879436}, {"ARF": 1.417968750000763, "E2F": 1.6289062500004683, "FCS": 421, "MYC": 0.800781249999473, "SCS": 105.5449600879}, {"ARF": 1.902343750000254, "E2F": 1.2968749999999258, "FCS": 394, "MYC": 2.824218750000033, "SCS": 186.0078401807}, {"ARF": 1.6171874999995381, "E2F": 1.675781249999806, "FCS": 395, "MYC": 1.3593750000003046, "SCS": 153.9926526059}, {"ARF": 1.1875000000001432, "E2F": 1.4218750000006424, "FCS": 327, "MYC": 0.9335937500023574, "SCS": 120.7900747425}, {"ARF": 1.234374999999271, "E2F": 0.9687500000001404, "FCS": 369, "MYC": 0.7070312500016938, "SCS": 77.0404392011}, {"ARF": 1.6093749999996747, "E2F": 1.4570312499994875, "FCS": 495, "MYC": 2.1796875000001084, "SCS": 112.4038663772}, {"ARF": 1.4843750000004234, "E2F": 1.0625000000002038, "FCS": 183, "MYC": 0.9296874999979594, "SCS": 113.4194403503}, {"ARF": 1.234374999999271, "E2F": 0.7968750000021592, "FCS": 340, "MYC": 2.2343750000000306, "SCS": 98.2171889188}, {"ARF": 1.7304687500003373, "E2F": 1.6367187500001203, "FCS": 434, "MYC": 1.4609374999996319, "SCS": 177.8279410039}, {"ARF": 1.5273437500001432, "E2F": 1.5000000000002225, "FCS": 363, "MYC": 2.679687500000019, "SCS": 147.2206564844}, {"ARF": 1.7812499999999045, "E2F": 1.7734375000002205, "FCS": 387, "MYC": 1.374999999999697, "SCS": 132.1580889565}, {"ARF": 1.4374999999993083, "E2F": 1.3906249999999651, "FCS": 412, "MYC": 1.449218750000189, "SCS": 177.8279410039}, {"ARF": 1.2851562500001812, "E2F": 0.9609375000021428, "FCS": 315, "MYC": 0.6640624999968736, "SCS": 76.3506080338}, {"ARF": 1.4335937500002853, "E2F": 1.1601562500007774, "FCS": 324, "MYC": 1.6210937500004885, "SCS": 98.2171889188}, {"ARF": 1.4882812500006102, "E2F": 1.468750000000106, "FCS": 256, "MYC": 2.265624999999974, "SCS": 181.0558243027}, {"ARF": 1.3007812499992373, "E2F": 1.335937500000317, "FCS": 367, "MYC": 0.8632812500029499, "SCS": 69.783058486}, {"ARF": 1.4531250000001905, "E2F": 1.0820312500016955, "FCS": 229, "MYC": 2.066406249999917, "SCS": 176.2356440572}, {"ARF": 1.9921874999999833, "E2F": 1.4765624999993674, "FCS": 421, "MYC": 1.2539062500001823, "SCS": 291.6377574053}, {"ARF": 1.304687499999929, "E2F": 1.2890625000003046, "FCS": 310, "MYC": 0.6640624999968736, "SCS": 93.8979801048}, {"ARF": 1.1875000000001432, "E2F": 0.9843749999994601, "FCS": 281, "MYC": 2.804687499999988, "SCS": 80.5842187761}, {"ARF": 1.374999999999697, "E2F": 1.3203125000002662, "FCS": 348, "MYC": 1.710937499999872, "SCS": 106.498563535}, {"ARF": 1.5156249999995417, "E2F": 1.32812500000074, "FCS": 413, "MYC": 2.582031250000038, "SCS": 148.5508017173}, {"ARF": 1.9335937499998272, "E2F": 1.410156250000565, "FCS": 454, "MYC": 1.5976562500001326, "SCS": 158.2044699487}, {"ARF": 1.6484375000003908, "E2F": 1.0585937500010159, "FCS": 241, "MYC": 0.2539062499880805, "SCS": 93.8979801048}, {"ARF": 1.58593749999965, "E2F": 1.3085937499992133, "FCS": 468, "MYC": 2.2421874999999707, "SCS": 162.5314837312}, {"ARF": 1.468750000000106, "E2F": 1.574218749999463, "FCS": 378, "MYC": 2.5585937499999987, "SCS": 153.9926526059}, {"ARF": 1.6562499999999216, "E2F": 1.0859374999991842, "FCS": 347, "MYC": 2.859375000000015, "SCS": 212.8751661796}, {"ARF": 1.5976562500001326, "E2F": 1.3437499999990967, "FCS": 395, "MYC": 0.8984374999993876, "SCS": 113.4194403503}, {"ARF": 1.7929687499999123, "E2F": 1.5234374999997349, "FCS": 401, "MYC": 2.3359374999999165, "SCS": 136.9994267717}, {"ARF": 1.2304687499992661, "E2F": 1.1562500000009206, "FCS": 279, "MYC": 0.6718749999993998, "SCS": 83.5362546958}, {"ARF": 1.5234374999997349, "E2F": 1.1328125000015405, "FCS": 261, "MYC": 2.734374999999974, "SCS": 128.6396944937}, {"ARF": 1.675781249999806, "E2F": 0.847656250002585, "FCS": 305, "MYC": 1.9492187500000815, "SCS": 159.6338544288}, {"ARF": 1.2929687499999103, "E2F": 0.6601562500029148, "FCS": 311, "MYC": 1.957031250000208, "SCS": 125.2149689066}, {"ARF": 1.7187499999995894, "E2F": 0.9921875000008676, "FCS": 307, "MYC": 2.6289062499999583, "SCS": 153.9926526059}, {"ARF": 1.6015625000000124, "E2F": 0.7968750000021592, "FCS": 472, "MYC": 1.0078125000007756, "SCS": 119.7085030496}, {"ARF": 1.7460937499996971, "E2F": 1.6406249999998916, "FCS": 323, "MYC": 1.8789062499999332, "SCS": 113.4194403503}, {"ARF": 1.6679687500001905, "E2F": 0.7851562499989607, "FCS": 249, "MYC": 2.4531250000000373, "SCS": 148.5508017173}, {"ARF": 1.5507812499997693, "E2F": 1.507812499999814, "FCS": 480, "MYC": 2.2773437500000258, "SCS": 93.057204093}, {"ARF": 1.4414062499992708, "E2F": 0.8945312500026819, "FCS": 394, "MYC": 2.687500000000033, "SCS": 140.746466334}, {"ARF": 1.8671874999998657, "E2F": 0.6328125000016708, "FCS": 213, "MYC": 0.0, "SCS": 174.6576047662}, {"ARF": 1.0468749999981277, "E2F": 1.1914062499986098, "FCS": 260, "MYC": 0.8398437500005718, "SCS": 76.3506080338}, {"ARF": 0.9765625000021197, "E2F": 0.7226562500015367, "FCS": 258, "MYC": 0.0, "SCS": 77.0404392011}, {"ARF": 1.6367187500001203, "E2F": 1.4296875000008005, "FCS": 243, "MYC": 1.2773437499997964, "SCS": 130.9747264301}, {"ARF": 1.4726562499996374, "E2F": 1.4296875000008005, "FCS": 320, "MYC": 1.2929687499999103, "SCS": 116.5215491703}, {"ARF": 1.1562500000009206, "E2F": 1.1562500000009206, "FCS": 206, "MYC": 2.2421874999999707, "SCS": 138.2372227358}, {"ARF": 1.7539062500002733, "E2F": 1.3085937499992133, "FCS": 500, "MYC": 2.8671874999999836, "SCS": 147.2206564844}, {"ARF": 1.511718749999969, "E2F": 1.0898437500015072, "FCS": 341, "MYC": 3.0742187499999876, "SCS": 149.892964872}, {"ARF": 1.511718749999969, "E2F": 1.511718749999969, "FCS": 341, "MYC": 1.0898437500015072, "SCS": 119.7085030496}, {"ARF": 1.4609374999996319, "E2F": 1.5781250000001572, "FCS": 328, "MYC": 1.9218750000000904, "SCS": 77.0404392011}, {"ARF": 1.1289062500000158, "E2F": 0.6875000000036895, "FCS": 257, "MYC": 2.7382812499999827, "SCS": 77.0404392011}, {"ARF": 1.19921875000085, "E2F": 1.0625000000002038, "FCS": 213, "MYC": 2.39453124999998, "SCS": 82.7882590628}, {"ARF": 1.562500000000193, "E2F": 1.2851562500001812, "FCS": 258, "MYC": 2.25390624999994, "SCS": 152.6137802579}, {"ARF": 1.58593749999965, "E2F": 1.3906249999999651, "FCS": 427, "MYC": 1.8515625000001963, "SCS": 181.0558243027}, {"ARF": 1.374999999999697, "E2F": 0.7656249999973125, "FCS": 296, "MYC": 2.5781250000000426, "SCS": 144.5959903067}, {"ARF": 1.179687499999821, "E2F": 1.097656250001541, "FCS": 436, "MYC": 0.6718749999993998, "SCS": 69.1582109489}, {"ARF": 1.2812499999998999, "E2F": 0.5664062500005638, "FCS": 290, "MYC": 1.039062500001117, "SCS": 111.3973859995}, {"ARF": 1.425781250000633, "E2F": 1.3437499999990967, "FCS": 253, "MYC": 1.2695312500006346, "SCS": 130.9747264301}, {"ARF": 1.4374999999993083, "E2F": 0.6679687500039219, "FCS": 301, "MYC": 1.097656250001541, "SCS": 89.7687132447}, {"ARF": 1.410156250000565, "E2F": 1.0898437500015072, "FCS": 281, "MYC": 0.3320312499965611, "SCS": 79.8626560972}, {"ARF": 1.7304687500003373, "E2F": 1.2109374999995017, "FCS": 377, "MYC": 2.789062499999974, "SCS": 291.6377574053}, {"ARF": 1.4296875000008005, "E2F": 0.9765625000021197, "FCS": 418, "MYC": 2.7656249999999947, "SCS": 138.2372227358}, {"ARF": 1.5000000000002225, "E2F": 1.19921875000085, "FCS": 328, "MYC": 1.035156250001133, "SCS": 84.2910085028}, {"ARF": 1.6210937500004885, "E2F": 1.6679687500001905, "FCS": 386, "MYC": 1.3398437500001052, "SCS": 158.2044699487}, {"ARF": 1.574218749999463, "E2F": 0.8203124999990268, "FCS": 346, "MYC": 0.0, "SCS": 114.4441900797}, {"ARF": 1.4804687499998972, "E2F": 0.8437500000000832, "FCS": 388, "MYC": 0.11328124999385003, "SCS": 102.7350768179}, {"ARF": 1.6171874999995381, "E2F": 1.710937499999872, "FCS": 494, "MYC": 1.0742187499998777, "SCS": 119.7085030496}, {"ARF": 1.710937499999872, "E2F": 1.2734375000008749, "FCS": 440, "MYC": 3.2578124999999947, "SCS": 159.6338544288}, {"ARF": 2.0976562500001537, "E2F": 1.4609374999996319, "FCS": 423, "MYC": 1.8671874999998657, "SCS": 132.1580889565}, {"ARF": 1.5234374999997349, "E2F": 1.6796874999996558, "FCS": 366, "MYC": 0.9414062499986495, "SCS": 120.7900747425}, {"ARF": 1.492187499999342, "E2F": 0.7734375000002205, "FCS": 229, "MYC": 2.6289062499999583, "SCS": 116.5215491703}, {"ARF": 1.5273437500001432, "E2F": 1.0859374999991842, "FCS": 332, "MYC": 2.6015625000000124, "SCS": 226.7089941041}, {"ARF": 1.5039062500001215, "E2F": 1.5039062500001215, "FCS": 213, "MYC": 1.8828124999998097, "SCS": 78.4388558145}, {"ARF": 1.4765624999993674, "E2F": 0.8828125000009474, "FCS": 233, "MYC": 0.054687499998944365, "SCS": 99.1045856249}, {"ARF": 1.386718749999697, "E2F": 0.7890625000006796, "FCS": 262, "MYC": 1.179687499999821, "SCS": 93.8979801048}, {"ARF": 1.0195312499998948, "E2F": 0.5937500000017114, "FCS": 346, "MYC": 0.3671875000073568, "SCS": 81.3123008063}, {"ARF": 1.5976562500001326, "E2F": 0.8945312500026819, "FCS": 420, "MYC": 1.035156250001133, "SCS": 135.7727142105}, {"ARF": 1.6015625000000124, "E2F": 1.003906249999377, "FCS": 289, "MYC": 2.632812499999951, "SCS": 142.0181169686}, {"ARF": 1.0507812499992057, "E2F": 1.0703124999997373, "FCS": 337, "MYC": 2.6718749999999547, "SCS": 76.3506080338}, {"ARF": 1.410156250000565, "E2F": 0.589843750002198, "FCS": 225, "MYC": 0.5507812499985475, "SCS": 87.3788349853}, {"ARF": 1.5039062500001215, "E2F": 1.3671874999998983, "FCS": 407, "MYC": 1.0742187499998777, "SCS": 153.9926526059}, {"ARF": 1.2890625000003046, "E2F": 1.562500000000193, "FCS": 480, "MYC": 1.1367187500010922, "SCS": 201.691455473}, {"ARF": 1.785156249999673, "E2F": 1.2617187499997802, "FCS": 338, "MYC": 2.2031250000000155, "SCS": 224.6790091813}, {"ARF": 1.6875000000001221, "E2F": 1.5664062500005638, "FCS": 406, "MYC": 0.6718749999993998, "SCS": 122.9826225656}, {"ARF": 1.4882812500006102, "E2F": 1.324218750000788, "FCS": 399, "MYC": 2.0078124999999223, "SCS": 173.0936954659}, {"ARF": 1.7890624999999738, "E2F": 0.835937500003163, "FCS": 248, "MYC": 2.363281249999931, "SCS": 85.8210354325}, {"ARF": 1.4882812500006102, "E2F": 0.828124999997098, "FCS": 462, "MYC": 0.8632812500029499, "SCS": 102.7350768179}, {"ARF": 1.2070312500006162, "E2F": 1.1210937499985183, "FCS": 199, "MYC": 3.0546875000000164, "SCS": 100.9035044841}, {"ARF": 1.445312499999512, "E2F": 1.0703124999997373, "FCS": 374, "MYC": 0.5820312500018573, "SCS": 76.3506080338}, {"ARF": 1.5507812499997693, "E2F": 0.9609375000021428, "FCS": 366, "MYC": 1.8593750000001952, "SCS": 122.9826225656}, {"ARF": 2.0546875000000933, "E2F": 1.4062500000001115, "FCS": 466, "MYC": 1.035156250001133, "SCS": 174.6576047662}, {"ARF": 1.32812500000074, "E2F": 1.6484375000003908, "FCS": 290, "MYC": 0.8437500000000832, "SCS": 135.7727142105}, {"ARF": 1.2421874999994733, "E2F": 0.917968750001024, "FCS": 366, "MYC": 1.0195312499998948, "SCS": 174.6576047662}, {"ARF": 1.5156249999995417, "E2F": 1.0820312500016955, "FCS": 303, "MYC": 2.6992187499999796, "SCS": 121.8814184842}, {"ARF": 1.234374999999271, "E2F": 1.1171874999998044, "FCS": 310, "MYC": 0.7031250000027985, "SCS": 102.7350768179}, {"ARF": 1.468750000000106, "E2F": 1.0703124999997373, "FCS": 294, "MYC": 2.359374999999925, "SCS": 147.2206564844}, {"ARF": 1.449218750000189, "E2F": 1.2968749999999258, "FCS": 346, "MYC": 1.8398437499999438, "SCS": 136.9994267717}, {"ARF": 1.5156249999995417, "E2F": 1.027343749999825, "FCS": 430, "MYC": 2.4374999999999427, "SCS": 186.0078401807}, {"ARF": 1.5039062500001215, "E2F": 1.4062500000001115, "FCS": 382, "MYC": 2.5351562499999827, "SCS": 96.4661619911}, {"ARF": 1.8359374999999947, "E2F": 1.183593750000295, "FCS": 230, "MYC": 1.2578125000006903, "SCS": 91.3981699465}, {"ARF": 1.2929687499999103, "E2F": 1.234374999999271, "FCS": 299, "MYC": 0.7968750000021592, "SCS": 119.7085030496}, {"ARF": 1.417968750000763, "E2F": 0.8320312500028468, "FCS": 437, "MYC": 0.7656249999973125, "SCS": 99.1045856249}, {"ARF": 1.4218750000006424, "E2F": 1.410156250000565, "FCS": 349, "MYC": 1.847656250000118, "SCS": 134.55698581}, {"ARF": 1.234374999999271, "E2F": 0.5624999999942466, "FCS": 230, "MYC": 1.9687500000001403, "SCS": 85.8210354325}, {"ARF": 1.652343750000055, "E2F": 1.4570312499994875, "FCS": 439, "MYC": 1.4765624999993674, "SCS": 93.8979801048}, {"ARF": 1.2617187499997802, "E2F": 0.9921875000008676, "FCS": 382, "MYC": 1.6015625000000124, "SCS": 120.7900747425}, {"ARF": 1.425781250000633, "E2F": 1.0859374999991842, "FCS": 378, "MYC": 1.164062499999833, "SCS": 85.0525815444}, {"ARF": 1.2421874999994733, "E2F": 1.3593750000003046, "FCS": 388, "MYC": 1.0664062499987987, "SCS": 106.498563535}, {"ARF": 1.5039062500001215, "E2F": 1.14062500000066, "FCS": 382, "MYC": 1.0859374999991842, "SCS": 120.7900747425}, {"ARF": 1.144531250000109, "E2F": 0.9023437499991663, "FCS": 190, "MYC": 2.117187500000136, "SCS": 100}, {"ARF": 1.2109374999995017, "E2F": 1.3203125000002662, "FCS": 319, "MYC": 2.2343750000000306, "SCS": 133.3521432163}, {"ARF": 1.6171874999995381, "E2F": 0.9804687500021316, "FCS": 394, "MYC": 2.949218749999984, "SCS": 158.2044699487}, {"ARF": 1.1914062499986098, "E2F": 1.3828125000006046, "FCS": 384, "MYC": 1.0625000000002038, "SCS": 104.599895343}, {"ARF": 1.5234374999997349, "E2F": 1.5507812499997693, "FCS": 390, "MYC": 1.0820312500016955, "SCS": 104.599895343}, {"ARF": 1.492187499999342, "E2F": 1.2617187499997802, "FCS": 308, "MYC": 1.8164062500001892, "SCS": 129.8019599018}, {"ARF": 1.593749999999498, "E2F": 1.0234375000005749, "FCS": 355, "MYC": 0.9921875000008676, "SCS": 153.9926526059}, {"ARF": 1.3984374999992004, "E2F": 0.8437500000000832, "FCS": 377, "MYC": 0.5117187500039794, "SCS": 78.4388558145}, {"ARF": 1.6445312499995133, "E2F": 1.7304687500003373, "FCS": 469, "MYC": 1.0585937500010159, "SCS": 181.0558243027}, {"ARF": 1.386718749999697, "E2F": 1.0117187500002949, "FCS": 241, "MYC": 2.2578124999999707, "SCS": 84.2910085028}, {"ARF": 1.3632812499997429, "E2F": 0.9804687500021316, "FCS": 279, "MYC": 2.445312499999979, "SCS": 109.4113810577}, {"ARF": 1.374999999999697, "E2F": 1.1328125000015405, "FCS": 423, "MYC": 0.9453125000021817, "SCS": 143.3012570237}, {"ARF": 1.3671874999998983, "E2F": 1.0937499999993983, "FCS": 373, "MYC": 2.8398437500000067, "SCS": 245.824406892}, {"ARF": 1.2226562500011542, "E2F": 1.32812500000074, "FCS": 402, "MYC": 2.3203125000000586, "SCS": 191.095297497}, {"ARF": 1.7382812500001414, "E2F": 1.6679687500001905, "FCS": 443, "MYC": 1.4765624999993674, "SCS": 145.9024215631}, {"ARF": 1.675781249999806, "E2F": 1.2929687499999103, "FCS": 320, "MYC": 1.9804687499998603, "SCS": 148.5508017173}, {"ARF": 1.0937499999993983, "E2F": 0.8632812500029499, "FCS": 410, "MYC": 0.38281250000779954, "SCS": 66.1169026241}, {"ARF": 1.5234374999997349, "E2F": 1.0234375000005749, "FCS": 405, "MYC": 3.0390625000000058, "SCS": 155.3839831275}, {"ARF": 1.3007812499992373, "E2F": 0.7929687500006118, "FCS": 339, "MYC": 2.5742187500000417, "SCS": 109.4113810577}, {"ARF": 1.4335937500002853, "E2F": 0.9257812500007956, "FCS": 314, "MYC": 0.47656249999936745, "SCS": 110.3999177917}, {"ARF": 1.3164062499991154, "E2F": 1.8906250000001252, "FCS": 434, "MYC": 1.874999999999736, "SCS": 116.5215491703}, {"ARF": 1.4335937500002853, "E2F": 1.0117187500002949, "FCS": 310, "MYC": 1.9921874999999833, "SCS": 138.2372227358}, {"ARF": 1.511718749999969, "E2F": 0.9023437499991663, "FCS": 310, "MYC": 2.363281249999931, "SCS": 91.3981699465}, {"ARF": 1.3515624999994889, "E2F": 0.683593749996948, "FCS": 219, "MYC": 0.9960937500004992, "SCS": 90.5797775943}, {"ARF": 1.1484375000000484, "E2F": 1.1054687499996652, "FCS": 230, "MYC": 0.7773437499988063, "SCS": 71.6916787415}, {"ARF": 1.5898437499999645, "E2F": 0.7968750000021592, "FCS": 490, "MYC": 0.5781250000047462, "SCS": 87.3788349853}, {"ARF": 1.6289062500004683, "E2F": 1.6015625000000124, "FCS": 449, "MYC": 1.4296875000008005, "SCS": 222.6672010352}, {"ARF": 1.1484375000000484, "E2F": 1.4023437500004508, "FCS": 330, "MYC": 0.8515624999983626, "SCS": 82.7882590628}, {"ARF": 1.8124999999998588, "E2F": 1.695312499999592, "FCS": 344, "MYC": 1.8046874999998517, "SCS": 136.9994267717}, {"ARF": 1.32812500000074, "E2F": 0.828124999997098, "FCS": 315, "MYC": 1.6796874999996558, "SCS": 126.3462917654}, {"ARF": 1.2734375000008749, "E2F": 1.1484375000000484, "FCS": 258, "MYC": 2.2578124999999707, "SCS": 107.4607828321}, {"ARF": 0.9804687500021316, "E2F": 1.1757812499999245, "FCS": 218, "MYC": 0.7187499999987595, "SCS": 79.8626560972}, {"ARF": 1.6015625000000124, "E2F": 1.5585937499997586, "FCS": 405, "MYC": 1.2695312500006346, "SCS": 152.6137802579}, {"ARF": 1.3632812499997429, "E2F": 0.6250000000014602, "FCS": 196, "MYC": 2.820312500000012, "SCS": 139.486202242}, {"ARF": 1.7148437500001736, "E2F": 1.6914062499999423, "FCS": 342, "MYC": 1.3320312500006048, "SCS": 102.7350768179}, {"ARF": 1.4374999999993083, "E2F": 1.3593750000003046, "FCS": 309, "MYC": 0.8164062500021775, "SCS": 85.0525815444}, {"ARF": 1.4296875000008005, "E2F": 0.8320312500028468, "FCS": 213, "MYC": 2.7382812499999827, "SCS": 88.1683066776}, {"ARF": 1.410156250000565, "E2F": 0.8984374999993876, "FCS": 301, "MYC": 1.8124999999998588, "SCS": 91.3981699465}, {"ARF": 1.9453125000002114, "E2F": 1.7656250000002924, "FCS": 339, "MYC": 1.8085937500001832, "SCS": 109.4113810577}, {"ARF": 1.6132812500003657, "E2F": 1.335937500000317, "FCS": 389, "MYC": 3.2578124999999947, "SCS": 199.8854811874}, {"ARF": 1.4609374999996319, "E2F": 1.3710937499993552, "FCS": 425, "MYC": 1.0195312499998948, "SCS": 109.4113810577}, {"ARF": 1.5585937499997586, "E2F": 1.425781250000633, "FCS": 368, "MYC": 1.5234374999997349, "SCS": 119.7085030496}, {"ARF": 1.468750000000106, "E2F": 1.1210937499985183, "FCS": 341, "MYC": 3.195312500000008, "SCS": 174.6576047662}, {"ARF": 1.2031250000005598, "E2F": 1.039062500001117, "FCS": 376, "MYC": 0.5390625000037741, "SCS": 57.2548788436}, {"ARF": 1.6328124999996478, "E2F": 0.9218750000011302, "FCS": 507, "MYC": 2.621093749999969, "SCS": 118.636615905}, {"ARF": 1.5000000000002225, "E2F": 0.7617187499975403, "FCS": 477, "MYC": 1.5234374999997349, "SCS": 132.1580889565}, {"ARF": 1.6054687499999527, "E2F": 1.7070312499999885, "FCS": 324, "MYC": 1.417968750000763, "SCS": 144.5959903067}, {"ARF": 1.5351562500006162, "E2F": 0.9687500000001404, "FCS": 378, "MYC": 2.828125000000001, "SCS": 170.0077618823}, {"ARF": 1.449218750000189, "E2F": 0.6640624999968736, "FCS": 237, "MYC": 2.843750000000021, "SCS": 119.7085030496}, {"ARF": 1.5429687499996962, "E2F": 1.3437499999990967, "FCS": 320, "MYC": 1.5039062500001215, "SCS": 116.5215491703}, {"ARF": 1.9492187500000815, "E2F": 1.8398437499999438, "FCS": 356, "MYC": 2.562499999999955, "SCS": 241.4418221257}, {"ARF": 1.5546874999994227, "E2F": 1.2265625000010727, "FCS": 299, "MYC": 2.8867187499999947, "SCS": 210.9690513406}, {"ARF": 1.5507812499997693, "E2F": 1.0937499999993983, "FCS": 312, "MYC": 2.9609375000000044, "SCS": 174.6576047662}, {"ARF": 1.80078125000016, "E2F": 1.4648437499995355, "FCS": 471, "MYC": 2.7031249999999596, "SCS": 125.2149689066}, {"ARF": 1.9414062500001406, "E2F": 1.8124999999998588, "FCS": 342, "MYC": 2.742187499999992, "SCS": 102.7350768179}, {"ARF": 1.6406249999998916, "E2F": 1.1249999999989175, "FCS": 432, "MYC": 1.8320312500002893, "SCS": 107.4607828321}, {"ARF": 1.5820312499995832, "E2F": 1.1953125000008393, "FCS": 211, "MYC": 0.828124999997098, "SCS": 83.5362546958}, {"ARF": 1.8945312499999134, "E2F": 1.6250000000004303, "FCS": 386, "MYC": 1.1718749999991886, "SCS": 281.3317514859}, {"ARF": 1.3437499999990967, "E2F": 1.7148437500001736, "FCS": 295, "MYC": 2.0, "SCS": 124.0937760752}, {"ARF": 1.3320312500006048, "E2F": 0.8554687499970949, "FCS": 342, "MYC": 2.7812499999999765, "SCS": 106.498563535}, {"ARF": 1.6601562500000655, "E2F": 1.0, "FCS": 280, "MYC": 2.5585937499999987, "SCS": 165.4817099943}, {"ARF": 1.507812499999814, "E2F": 1.6171874999995381, "FCS": 380, "MYC": 1.3710937499993552, "SCS": 145.9024215631}, {"ARF": 1.519531249999738, "E2F": 1.2070312500006162, "FCS": 342, "MYC": 1.1015624999984641, "SCS": 132.1580889565}, {"ARF": 0.9687500000001404, "E2F": 0.9687500000001404, "FCS": 252, "MYC": 0.39453124999752887, "SCS": 99.1045856249}, {"ARF": 1.4609374999996319, "E2F": 1.3554687499997142, "FCS": 264, "MYC": 2.5703124999999445, "SCS": 100.9035044841}, {"ARF": 1.675781249999806, "E2F": 1.5390625000000084, "FCS": 404, "MYC": 1.0546874999989444, "SCS": 104.599895343}, {"ARF": 1.1249999999989175, "E2F": 0.7343749999990933, "FCS": 270, "MYC": 0.43750000000565203, "SCS": 88.964911282}, {"ARF": 1.5703124999994773, "E2F": 1.3593750000003046, "FCS": 402, "MYC": 1.3906249999999651, "SCS": 101.8151721718}, {"ARF": 1.5781250000001572, "E2F": 0.7187499999987595, "FCS": 213, "MYC": 0.9453125000021817, "SCS": 89.7687132447}, {"ARF": 1.2421874999994733, "E2F": 1.0585937500010159, "FCS": 259, "MYC": 1.7304687500003373, "SCS": 156.7878843827}, {"ARF": 1.4023437500004508, "E2F": 1.0859374999991842, "FCS": 324, "MYC": 0.8945312500026819, "SCS": 114.4441900797}, {"ARF": 1.6250000000004303, "E2F": 1.0156250000009646, "FCS": 341, "MYC": 2.9257812500000226, "SCS": 214.7985028517}, {"ARF": 1.378906250000338, "E2F": 0.7734375000002205, "FCS": 315, "MYC": 0.757812500003157, "SCS": 96.4661619911}, {"ARF": 1.5273437500001432, "E2F": 0.6875000000036895, "FCS": 290, "MYC": 0.2773437499929167, "SCS": 100}, {"ARF": 1.4218750000006424, "E2F": 1.4414062499992708, "FCS": 461, "MYC": 0.9921875000008676, "SCS": 87.3788349853}, {"ARF": 1.5000000000002225, "E2F": 1.445312499999512, "FCS": 312, "MYC": 0.8320312500028468, "SCS": 118.636615905}, {"ARF": 1.593749999999498, "E2F": 1.335937500000317, "FCS": 274, "MYC": 1.3984374999992004, "SCS": 148.5508017173}, {"ARF": 1.0117187500002949, "E2F": 0.9453125000021817, "FCS": 264, "MYC": 1.2304687499992661, "SCS": 62.0824360719}, {"ARF": 1.58593749999965, "E2F": 1.035156250001133, "FCS": 294, "MYC": 2.6562500000000173, "SCS": 118.636615905}, {"ARF": 1.4570312499994875, "E2F": 1.4765624999993674, "FCS": 439, "MYC": 1.8398437499999438, "SCS": 114.4441900797}, {"ARF": 1.2578125000006903, "E2F": 1.3203125000002662, "FCS": 304, "MYC": 0.835937500003163, "SCS": 88.1683066776}, {"ARF": 1.4023437500004508, "E2F": 1.4882812500006102, "FCS": 176, "MYC": 2.304687499999929, "SCS": 124.0937760752}, {"ARF": 1.7617187499997955, "E2F": 0.9062499999992014, "FCS": 380, "MYC": 1.425781250000633, "SCS": 248.0454414314}, {"ARF": 1.5820312499995832, "E2F": 1.304687499999929, "FCS": 376, "MYC": 2.5468749999999876, "SCS": 129.8019599018}, {"ARF": 1.4960937500002474, "E2F": 1.2656250000002096, "FCS": 403, "MYC": 2.0390624999999263, "SCS": 105.5449600879}, {"ARF": 1.3085937499992133, "E2F": 1.2382812500002371, "FCS": 320, "MYC": 3.046874999999999, "SCS": 96.4661619911}, {"ARF": 1.58593749999965, "E2F": 1.039062500001117, "FCS": 436, "MYC": 1.097656250001541, "SCS": 80.5842187761}, {"ARF": 1.519531249999738, "E2F": 1.035156250001133, "FCS": 349, "MYC": 2.9960937500000173, "SCS": 156.7878843827}, {"ARF": 1.7421875000002283, "E2F": 1.6875000000001221, "FCS": 456, "MYC": 1.19921875000085, "SCS": 120.7900747425}, {"ARF": 1.710937499999872, "E2F": 1.1757812499999245, "FCS": 312, "MYC": 2.6132812500000484, "SCS": 149.892964872}, {"ARF": 1.5351562500006162, "E2F": 1.2226562500011542, "FCS": 389, "MYC": 0.9804687500021316, "SCS": 109.4113810577}, {"ARF": 1.410156250000565, "E2F": 0.6640624999968736, "FCS": 321, "MYC": 0.45312500000631006, "SCS": 88.1683066776}, {"ARF": 1.785156249999673, "E2F": 1.425781250000633, "FCS": 333, "MYC": 2.3359374999999165, "SCS": 129.8019599018}, {"ARF": 1.4843750000004234, "E2F": 1.1875000000001432, "FCS": 322, "MYC": 1.3007812499992373, "SCS": 110.3999177917}, {"ARF": 1.492187499999342, "E2F": 1.511718749999969, "FCS": 199, "MYC": 1.2539062500001823, "SCS": 140.746466334}, {"ARF": 1.378906250000338, "E2F": 0.9765625000021197, "FCS": 241, "MYC": 2.69531250000003, "SCS": 122.9826225656}, {"ARF": 1.8632812499999751, "E2F": 1.1875000000001432, "FCS": 422, "MYC": 2.976562500000011, "SCS": 268.9598785575}, {"ARF": 1.1718749999991886, "E2F": 1.0703124999997373, "FCS": 467, "MYC": 1.3320312500006048, "SCS": 118.636615905}, {"ARF": 1.5781250000001572, "E2F": 0.9960937500004992, "FCS": 391, "MYC": 2.824218750000033, "SCS": 222.6672010352}, {"ARF": 1.6484375000003908, "E2F": 0.917968750001024, "FCS": 372, "MYC": 0.746093750002035, "SCS": 168.4854879436}, {"ARF": 1.574218749999463, "E2F": 1.0820312500016955, "FCS": 290, "MYC": 2.898437499999991, "SCS": 194.5640061589}, {"ARF": 1.8359374999999947, "E2F": 1.5546874999994227, "FCS": 416, "MYC": 0.9648437499979169, "SCS": 133.3521432163}, {"ARF": 1.5546874999994227, "E2F": 1.1523437500012625, "FCS": 340, "MYC": 3.1171875000000036, "SCS": 162.5314837312}, {"ARF": 1.8164062500001892, "E2F": 1.2968749999999258, "FCS": 361, "MYC": 2.789062499999974, "SCS": 155.3839831275}, {"ARF": 1.3593750000003046, "E2F": 1.2539062500001823, "FCS": 429, "MYC": 0.8828125000009474, "SCS": 110.3999177917}, {"ARF": 1.304687499999929, "E2F": 1.144531250000109, "FCS": 324, "MYC": 1.335937500000317, "SCS": 163.9999629748}, {"ARF": 1.5000000000002225, "E2F": 1.1562500000009206, "FCS": 227, "MYC": 2.964843749999989, "SCS": 168.4854879436}, {"ARF": 1.6210937500004885, "E2F": 0.8945312500026819, "FCS": 355, "MYC": 2.7929687499999822, "SCS": 117.5743265921}, {"ARF": 1.6875000000001221, "E2F": 0.7656249999973125, "FCS": 352, "MYC": 1.1093750000010214, "SCS": 119.7085030496}, {"ARF": 1.3945312499992797, "E2F": 1.2617187499997802, "FCS": 271, "MYC": 0.6289062500035304, "SCS": 63.7804383889}, {"ARF": 1.4140624999993279, "E2F": 1.0781250000015492, "FCS": 298, "MYC": 0.9453125000021817, "SCS": 91.3981699465}, {"ARF": 1.3984374999992004, "E2F": 1.0664062499987987, "FCS": 280, "MYC": 2.785156250000029, "SCS": 113.4194403503}, {"ARF": 1.4140624999993279, "E2F": 0.7421874999994419, "FCS": 378, "MYC": 1.0078125000007756, "SCS": 71.0497411443}, {"ARF": 1.5820312499995832, "E2F": 1.3593750000003046, "FCS": 368, "MYC": 2.027343749999825, "SCS": 132.1580889565}, {"ARF": 1.445312499999512, "E2F": 0.835937500003163, "FCS": 363, "MYC": 0.6640624999968736, "SCS": 112.4038663772}, {"ARF": 1.5351562500006162, "E2F": 0.7656249999973125, "FCS": 302, "MYC": 2.7109375000000413, "SCS": 124.0937760752}, {"ARF": 1.1484375000000484, "E2F": 1.2578125000006903, "FCS": 286, "MYC": 0.04296874999315609, "SCS": 59.352292723}, {"ARF": 1.4062500000001115, "E2F": 0.7031250000027985, "FCS": 378, "MYC": 2.523437499999995, "SCS": 79.8626560972}, {"ARF": 1.7812499999999045, "E2F": 1.7773437500002567, "FCS": 435, "MYC": 1.0078125000007756, "SCS": 184.3422992409}, {"ARF": 1.1484375000000484, "E2F": 1.2421874999994733, "FCS": 171, "MYC": 1.9843749999999103, "SCS": 129.8019599018}, {"ARF": 1.5234374999997349, "E2F": 1.2500000000002631, "FCS": 256, "MYC": 1.6171874999995381, "SCS": 171.5437896343}, {"ARF": 1.445312499999512, "E2F": 0.9687500000001404, "FCS": 245, "MYC": 1.9492187500000815, "SCS": 77.7365030239}, {"ARF": 1.5585937499997586, "E2F": 1.1953125000008393, "FCS": 378, "MYC": 2.378906249999975, "SCS": 184.3422992409}, {"ARF": 1.3164062499991154, "E2F": 0.9140624999986772, "FCS": 288, "MYC": 0.6875000000036895, "SCS": 140.746466334}, {"ARF": 1.519531249999738, "E2F": 1.5585937499997586, "FCS": 259, "MYC": 0.8398437500005718, "SCS": 171.5437896343}, {"ARF": 1.1171874999998044, "E2F": 1.2578125000006903, "FCS": 244, "MYC": 0.6328125000016708, "SCS": 111.3973859995}, {"ARF": 1.5585937499997586, "E2F": 0.7226562500015367, "FCS": 311, "MYC": 2.562499999999955, "SCS": 149.892964872}, {"ARF": 1.3984374999992004, "E2F": 0.800781249999473, "FCS": 296, "MYC": 2.25390624999994, "SCS": 136.9994267717}, {"ARF": 1.3593750000003046, "E2F": 0.917968750001024, "FCS": 219, "MYC": 0.39062499999643174, "SCS": 86.596432336}, {"ARF": 1.652343750000055, "E2F": 1.5000000000002225, "FCS": 404, "MYC": 1.6718750000003244, "SCS": 203.5137468174}, {"ARF": 1.2929687499999103, "E2F": 0.8437500000000832, "FCS": 208, "MYC": 0.1054687500098849, "SCS": 83.5362546958}, {"ARF": 1.6601562500000655, "E2F": 1.1015624999984641, "FCS": 275, "MYC": 0.9023437499991663, "SCS": 98.2171889188}, {"ARF": 1.6328124999996478, "E2F": 1.183593750000295, "FCS": 408, "MYC": 2.2500000000000187, "SCS": 110.3999177917}, {"ARF": 1.2734375000008749, "E2F": 0.9726562500010656, "FCS": 262, "MYC": 2.2578124999999707, "SCS": 66.1169026241}, {"ARF": 1.507812499999814, "E2F": 0.9804687500021316, "FCS": 415, "MYC": 0.47656249999936745, "SCS": 65.5248823737}, {"ARF": 1.593749999999498, "E2F": 0.757812500003157, "FCS": 452, "MYC": 2.785156250000029, "SCS": 138.2372227358}, {"ARF": 1.2148437500004112, "E2F": 0.6718749999993998, "FCS": 233, "MYC": 0.7539062500002733, "SCS": 97.3377380904}, {"ARF": 1.6289062500004683, "E2F": 1.7265625000003553, "FCS": 389, "MYC": 1.1132812500005418, "SCS": 158.2044699487}, {"ARF": 1.378906250000338, "E2F": 1.5390625000000084, "FCS": 366, "MYC": 2.4648437499999822, "SCS": 126.3462917654}, {"ARF": 1.7734375000002205, "E2F": 0.7968750000021592, "FCS": 362, "MYC": 2.6171874999999574, "SCS": 90.5797775943}, {"ARF": 1.593749999999498, "E2F": 1.6367187500001203, "FCS": 436, "MYC": 1.2421874999994733, "SCS": 155.3839831275}, {"ARF": 1.7226562499998916, "E2F": 1.6093749999996747, "FCS": 459, "MYC": 1.4140624999993279, "SCS": 177.8279410039}, {"ARF": 1.574218749999463, "E2F": 1.2265625000010727, "FCS": 356, "MYC": 1.1367187500010922, "SCS": 120.7900747425}, {"ARF": 1.6875000000001221, "E2F": 1.0742187499998777, "FCS": 396, "MYC": 2.7187500000000044, "SCS": 281.3317514859}, {"ARF": 1.8164062500001892, "E2F": 1.5156249999995417, "FCS": 446, "MYC": 1.4062500000001115, "SCS": 132.1580889565}, {"ARF": 1.5546874999994227, "E2F": 0.6914062499981746, "FCS": 222, "MYC": 2.4414062500000564, "SCS": 115.4781984689}, {"ARF": 1.5156249999995417, "E2F": 1.5273437500001432, "FCS": 483, "MYC": 1.519531249999738, "SCS": 148.5508017173}, {"ARF": 1.7617187499997955, "E2F": 1.6445312499995133, "FCS": 360, "MYC": 1.14062500000066, "SCS": 133.3521432163}, {"ARF": 1.7460937499996971, "E2F": 1.531249999999673, "FCS": 400, "MYC": 1.1718749999991886, "SCS": 207.2078717154}, {"ARF": 1.4765624999993674, "E2F": 1.0859374999991842, "FCS": 300, "MYC": 2.367187500000085, "SCS": 191.095297497}, {"ARF": 1.445312499999512, "E2F": 1.1328125000015405, "FCS": 310, "MYC": 0.7734375000002205, "SCS": 114.4441900797}, {"ARF": 1.097656250001541, "E2F": 0.9570312499987697, "FCS": 256, "MYC": 1.2187499999991651, "SCS": 85.0525815444}, {"ARF": 1.5390625000000084, "E2F": 0.7421874999994419, "FCS": 249, "MYC": 2.2929687499999103, "SCS": 161.0761534618}, {"ARF": 1.6562499999999216, "E2F": 0.5742187499948325, "FCS": 230, "MYC": 1.9687500000001403, "SCS": 124.0937760752}, {"ARF": 1.6484375000003908, "E2F": 1.7070312499999885, "FCS": 502, "MYC": 1.7382812500001414, "SCS": 119.7085030496}, {"ARF": 1.7031250000002176, "E2F": 1.3710937499993552, "FCS": 420, "MYC": 1.2265625000010727, "SCS": 100.9035044841}, {"ARF": 1.562500000000193, "E2F": 1.1210937499985183, "FCS": 415, "MYC": 2.5937500000000515, "SCS": 181.0558243027}, {"ARF": 1.3007812499992373, "E2F": 0.45703125000100375, "FCS": 340, "MYC": 0.5820312500018573, "SCS": 58.2941534714}, {"ARF": 1.4882812500006102, "E2F": 1.3671874999998983, "FCS": 373, "MYC": 3.140625, "SCS": 117.5743265921}, {"ARF": 1.3671874999998983, "E2F": 0.8828125000009474, "FCS": 295, "MYC": 0.8984374999993876, "SCS": 174.6576047662}, {"ARF": 1.7812499999999045, "E2F": 0.9609375000021428, "FCS": 282, "MYC": 2.6054687499999525, "SCS": 140.746466334}, {"ARF": 1.6171874999995381, "E2F": 1.4804687499998972, "FCS": 389, "MYC": 1.304687499999929, "SCS": 136.9994267717}, {"ARF": 1.5703124999994773, "E2F": 1.1875000000001432, "FCS": 379, "MYC": 3.113281250000006, "SCS": 165.4817099943}, {"ARF": 1.6250000000004303, "E2F": 1.5820312499995832, "FCS": 413, "MYC": 1.2773437499997964, "SCS": 162.5314837312}, {"ARF": 1.6250000000004303, "E2F": 1.0234375000005749, "FCS": 342, "MYC": 1.164062499999833, "SCS": 82.0469610902}, {"ARF": 1.304687499999929, "E2F": 0.7499999999997304, "FCS": 284, "MYC": 2.0976562500001537, "SCS": 117.5743265921}, {"ARF": 1.4609374999996319, "E2F": 1.0898437500015072, "FCS": 432, "MYC": 2.0546875000000933, "SCS": 100.9035044841}, {"ARF": 1.3164062499991154, "E2F": 1.1484375000000484, "FCS": 382, "MYC": 2.39453124999998, "SCS": 100.9035044841}, {"ARF": 1.2812499999998999, "E2F": 0.8867187499994875, "FCS": 404, "MYC": 0.39453124999752887, "SCS": 100}, {"ARF": 1.5820312499995832, "E2F": 1.574218749999463, "FCS": 376, "MYC": 1.507812499999814, "SCS": 184.3422992409}, {"ARF": 1.507812499999814, "E2F": 0.8046875000005326, "FCS": 307, "MYC": 2.8671874999999836, "SCS": 155.3839831275}, {"ARF": 1.511718749999969, "E2F": 0.9843749999994601, "FCS": 450, "MYC": 1.449218750000189, "SCS": 153.9926526059}, {"ARF": 1.5976562500001326, "E2F": 1.6289062500004683, "FCS": 396, "MYC": 1.3515624999994889, "SCS": 124.0937760752}, {"ARF": 1.6914062499999423, "E2F": 1.2070312500006162, "FCS": 354, "MYC": 2.6757812499999893, "SCS": 118.636615905}, {"ARF": 1.8671874999998657, "E2F": 0.7812500000013419, "FCS": 199, "MYC": 0.5859374999973963, "SCS": 97.3377380904}, {"ARF": 1.179687499999821, "E2F": 0.9687500000001404, "FCS": 329, "MYC": 2.296874999999926, "SCS": 136.9994267717}, {"ARF": 1.4374999999993083, "E2F": 1.3476562499996256, "FCS": 405, "MYC": 2.527343750000014, "SCS": 93.057204093}, {"ARF": 1.2382812500002371, "E2F": 0.9062499999992014, "FCS": 356, "MYC": 0.769531250000231, "SCS": 127.4878361771}, {"ARF": 1.6328124999996478, "E2F": 1.0703124999997373, "FCS": 179, "MYC": 0.35546874999205175, "SCS": 101.8151721718}, {"ARF": 1.757812500000123, "E2F": 1.374999999999697, "FCS": 375, "MYC": 1.3593750000003046, "SCS": 86.596432336}, {"ARF": 1.5703124999994773, "E2F": 1.675781249999806, "FCS": 340, "MYC": 1.2304687499992661, "SCS": 209.0800041279}, {"ARF": 1.7187499999995894, "E2F": 1.7382812500001414, "FCS": 424, "MYC": 1.425781250000633, "SCS": 271.3899431208}, {"ARF": 0.8320312500028468, "E2F": 1.1875000000001432, "FCS": 295, "MYC": 0.8828125000009474, "SCS": 55.2315841731}, {"ARF": 1.492187499999342, "E2F": 1.0546874999989444, "FCS": 363, "MYC": 2.304687499999929, "SCS": 139.486202242}, {"ARF": 1.9453125000002114, "E2F": 1.5507812499997693, "FCS": 377, "MYC": 0.45703125000100375, "SCS": 139.486202242}, {"ARF": 1.3007812499992373, "E2F": 1.1132812500005418, "FCS": 254, "MYC": 2.8085937499999805, "SCS": 165.4817099943}, {"ARF": 1.4960937500002474, "E2F": 1.19921875000085, "FCS": 518, "MYC": 2.1874999999998614, "SCS": 114.4441900797}, {"ARF": 1.785156249999673, "E2F": 1.7031250000002176, "FCS": 466, "MYC": 1.4882812500006102, "SCS": 179.4346244249}, {"ARF": 1.8359374999999947, "E2F": 0.8593750000019964, "FCS": 382, "MYC": 0.8437500000000832, "SCS": 182.6916717941}, {"ARF": 1.562500000000193, "E2F": 1.1562500000009206, "FCS": 325, "MYC": 0.3750000000070225, "SCS": 98.2171889188}, {"ARF": 1.3437499999990967, "E2F": 1.0703124999997373, "FCS": 287, "MYC": 0.8984374999993876, "SCS": 71.0497411443}, {"ARF": 1.519531249999738, "E2F": 1.507812499999814, "FCS": 346, "MYC": 1.4609374999996319, "SCS": 86.596432336}, {"ARF": 1.468750000000106, "E2F": 0.24999999999049416, "FCS": 270, "MYC": 2.410156250000058, "SCS": 82.0469610902}, {"ARF": 1.0468749999981277, "E2F": 0.8593750000019964, "FCS": 337, "MYC": 1.6367187500001203, "SCS": 65.5248823737}, {"ARF": 1.3632812499997429, "E2F": 1.183593750000295, "FCS": 347, "MYC": 0.5546875000018443, "SCS": 74.9894209332}, {"ARF": 1.3437499999990967, "E2F": 1.0781250000015492, "FCS": 288, "MYC": 2.992187499999983, "SCS": 81.3123008063}, {"ARF": 1.6914062499999423, "E2F": 1.1562500000009206, "FCS": 442, "MYC": 2.687500000000033, "SCS": 310.5900223625}, {"ARF": 1.5898437499999645, "E2F": 0.8242187499991215, "FCS": 320, "MYC": 0.6250000000014602, "SCS": 139.486202242}, {"ARF": 1.6835937499996476, "E2F": 1.410156250000565, "FCS": 232, "MYC": 1.6289062500004683, "SCS": 173.0936954659}, {"ARF": 1.4726562499996374, "E2F": 1.183593750000295, "FCS": 314, "MYC": 2.5976562500000226, "SCS": 140.746466334}, {"ARF": 1.3984374999992004, "E2F": 0.4335937499986852, "FCS": 269, "MYC": 2.296874999999926, "SCS": 74.9894209332}, {"ARF": 1.847656250000118, "E2F": 1.1210937499985183, "FCS": 303, "MYC": 0.757812500003157, "SCS": 97.3377380904}, {"ARF": 1.468750000000106, "E2F": 1.593749999999498, "FCS": 371, "MYC": 1.8515625000001963, "SCS": 92.2239565104}, {"ARF": 1.6054687499999527, "E2F": 1.4218750000006424, "FCS": 294, "MYC": 0.910156249998378, "SCS": 113.4194403503}, {"ARF": 1.5781250000001572, "E2F": 1.5781250000001572, "FCS": 358, "MYC": 1.7265625000003553, "SCS": 127.4878361771}, {"ARF": 1.2734375000008749, "E2F": 1.0, "FCS": 303, "MYC": 0.695312500001344, "SCS": 77.0404392011}, {"ARF": 1.445312499999512, "E2F": 1.1601562500007774, "FCS": 422, "MYC": 2.382812500000065, "SCS": 199.8854811874}, {"ARF": 1.32812500000074, "E2F": 0.9765625000021197, "FCS": 439, "MYC": 0.6601562500029148, "SCS": 93.057204093}, {"ARF": 1.5390625000000084, "E2F": 1.0156250000009646, "FCS": 405, "MYC": 2.988281249999991, "SCS": 161.0761534618}, {"ARF": 1.4609374999996319, "E2F": 1.4765624999993674, "FCS": 389, "MYC": 1.8281249999996785, "SCS": 173.0936954659}, {"ARF": 1.757812500000123, "E2F": 1.2968749999999258, "FCS": 394, "MYC": 2.5390625000000084, "SCS": 205.3525026457}, {"ARF": 1.5703124999994773, "E2F": 1.417968750000763, "FCS": 367, "MYC": 1.1015624999984641, "SCS": 151.2472545311}, {"ARF": 1.449218750000189, "E2F": 1.2851562500001812, "FCS": 311, "MYC": 0.9414062499986495, "SCS": 107.4607828321}, {"ARF": 1.562500000000193, "E2F": 1.4531250000001905, "FCS": 244, "MYC": 1.1289062500000158, "SCS": 104.599895343}, {"ARF": 1.32812500000074, "E2F": 1.183593750000295, "FCS": 292, "MYC": 2.4609374999999325, "SCS": 107.4607828321}, {"ARF": 1.4296875000008005, "E2F": 0.8398437500005718, "FCS": 432, "MYC": 0.7851562499989607, "SCS": 128.6396944937}, {"ARF": 1.7539062500002733, "E2F": 1.445312499999512, "FCS": 406, "MYC": 2.499999999999948, "SCS": 205.3525026457}, {"ARF": 1.4374999999993083, "E2F": 1.2226562500011542, "FCS": 353, "MYC": 2.164062500000131, "SCS": 130.9747264301}, {"ARF": 1.7226562499998916, "E2F": 0.8828125000009474, "FCS": 270, "MYC": 2.7031249999999596, "SCS": 218.6974655009}, {"ARF": 1.7734375000002205, "E2F": 1.6835937499996476, "FCS": 412, "MYC": 1.32812500000074, "SCS": 139.486202242}, {"ARF": 1.1289062500000158, "E2F": 1.3632812499997429, "FCS": 272, "MYC": 0.39453124999752887, "SCS": 72.3394162737}, {"ARF": 1.9335937499998272, "E2F": 1.8203124999996838, "FCS": 463, "MYC": 1.3671874999998983, "SCS": 237.1373705662}, {"ARF": 1.2226562500011542, "E2F": 0.6523437500010222, "FCS": 285, "MYC": 0.6289062500035304, "SCS": 130.9747264301}, {"ARF": 1.3203125000002662, "E2F": 1.531249999999673, "FCS": 324, "MYC": 0.769531250000231, "SCS": 74.3179548784}, {"ARF": 1.468750000000106, "E2F": 1.3398437500001052, "FCS": 389, "MYC": 1.445312499999512, "SCS": 144.5959903067}, {"ARF": 1.7421875000002283, "E2F": 1.6093749999996747, "FCS": 398, "MYC": 1.417968750000763, "SCS": 143.3012570237}, {"ARF": 1.675781249999806, "E2F": 1.2148437500004112, "FCS": 228, "MYC": 2.382812500000065, "SCS": 140.746466334}, {"ARF": 1.2929687499999103, "E2F": 0.8242187499991215, "FCS": 271, "MYC": 0.8125000000025338, "SCS": 136.9994267717}, {"ARF": 1.4414062499992708, "E2F": 1.7343749999998939, "FCS": 262, "MYC": 2.027343749999825, "SCS": 104.599895343}, {"ARF": 1.3203125000002662, "E2F": 1.304687499999929, "FCS": 306, "MYC": 2.757812499999971, "SCS": 149.892964872}, {"ARF": 1.5039062500001215, "E2F": 0.9296874999979594, "FCS": 289, "MYC": 0.8203124999990268, "SCS": 105.5449600879}, {"ARF": 1.425781250000633, "E2F": 1.2968749999999258, "FCS": 248, "MYC": 2.1679687500001354, "SCS": 124.0937760752}, {"ARF": 1.1171874999998044, "E2F": 0.9062499999992014, "FCS": 291, "MYC": 0.746093750002035, "SCS": 96.4661619911}, {"ARF": 1.2148437500004112, "E2F": 0.8242187499991215, "FCS": 247, "MYC": 0.9374999999999672, "SCS": 87.3788349853}, {"ARF": 1.8906250000001252, "E2F": 1.7343749999998939, "FCS": 333, "MYC": 1.3632812499997429, "SCS": 151.2472545311}, {"ARF": 1.6015625000000124, "E2F": 1.6914062499999423, "FCS": 359, "MYC": 2.136718750000141, "SCS": 112.4038663772}, {"ARF": 1.2539062500001823, "E2F": 0.8789062499999332, "FCS": 301, "MYC": 2.640624999999991, "SCS": 135.7727142105}, {"ARF": 1.5351562500006162, "E2F": 1.2539062500001823, "FCS": 311, "MYC": 1.6835937499996476, "SCS": 113.4194403503}, {"ARF": 1.6640624999996974, "E2F": 1.1484375000000484, "FCS": 275, "MYC": 2.4921875000000413, "SCS": 205.3525026457}, {"ARF": 1.3203125000002662, "E2F": 0.6640624999968736, "FCS": 168, "MYC": 1.1679687499989555, "SCS": 106.498563535}, {"ARF": 1.4960937500002474, "E2F": 0.7773437499988063, "FCS": 285, "MYC": 2.7031249999999596, "SCS": 81.3123008063}, {"ARF": 1.417968750000763, "E2F": 0.6523437500010222, "FCS": 254, "MYC": 2.0976562500001537, "SCS": 107.4607828321}, {"ARF": 1.6015625000000124, "E2F": 1.2187499999991651, "FCS": 371, "MYC": 2.1132812499998725, "SCS": 155.3839831275}, {"ARF": 1.4882812500006102, "E2F": 1.4570312499994875, "FCS": 381, "MYC": 1.179687499999821, "SCS": 155.3839831275}, {"ARF": 1.4882812500006102, "E2F": 0.8789062499999332, "FCS": 412, "MYC": 0.3476562500093779, "SCS": 84.2910085028}, {"ARF": 1.7265625000003553, "E2F": 0.69921875000215, "FCS": 477, "MYC": 1.6210937500004885, "SCS": 152.6137802579}, {"ARF": 1.179687499999821, "E2F": 0.8828125000009474, "FCS": 370, "MYC": 0.5664062500005638, "SCS": 92.2239565104}, {"ARF": 1.5390625000000084, "E2F": 1.5898437499999645, "FCS": 414, "MYC": 0.828124999997098, "SCS": 88.964911282}, {"ARF": 1.511718749999969, "E2F": 1.2109374999995017, "FCS": 386, "MYC": 0.7265625000028006, "SCS": 66.1169026241}, {"ARF": 1.511718749999969, "E2F": 1.3515624999994889, "FCS": 459, "MYC": 0.847656250002585, "SCS": 99.1045856249}, {"ARF": 1.5273437500001432, "E2F": 1.1367187500010922, "FCS": 436, "MYC": 1.027343749999825, "SCS": 119.7085030496}, {"ARF": 1.6171874999995381, "E2F": 1.14062500000066, "FCS": 375, "MYC": 0.9531250000012993, "SCS": 165.4817099943}, {"ARF": 1.5390625000000084, "E2F": 0.8164062500021775, "FCS": 206, "MYC": 2.687500000000033, "SCS": 111.3973859995}, {"ARF": 1.6250000000004303, "E2F": 1.1601562500007774, "FCS": 270, "MYC": 2.9609375000000044, "SCS": 237.1373705662}, {"ARF": 1.1367187500010922, "E2F": 1.6328124999996478, "FCS": 335, "MYC": 0.410156250005632, "SCS": 91.3981699465}, {"ARF": 1.3476562499996256, "E2F": 1.1054687499996652, "FCS": 305, "MYC": 1.1718749999991886, "SCS": 64.9381631576}, {"ARF": 1.3593750000003046, "E2F": 1.0585937500010159, "FCS": 417, "MYC": 2.132812499999941, "SCS": 81.3123008063}, {"ARF": 1.492187499999342, "E2F": 1.562500000000193, "FCS": 465, "MYC": 1.874999999999736, "SCS": 199.8854811874}, {"ARF": 1.6015625000000124, "E2F": 1.7265625000003553, "FCS": 281, "MYC": 1.9218750000000904, "SCS": 117.5743265921}, {"ARF": 1.5390625000000084, "E2F": 1.6054687499999527, "FCS": 526, "MYC": 1.1757812499999245, "SCS": 117.5743265921}, {"ARF": 1.2812499999998999, "E2F": 1.324218750000788, "FCS": 459, "MYC": 2.2304687500000324, "SCS": 126.3462917654}, {"ARF": 1.3476562499996256, "E2F": 1.2929687499999103, "FCS": 253, "MYC": 0.410156250005632, "SCS": 72.9930061435}, {"ARF": 1.6093749999996747, "E2F": 1.5039062500001215, "FCS": 501, "MYC": 0.9023437499991663, "SCS": 104.599895343}, {"ARF": 1.3632812499997429, "E2F": 1.2148437500004112, "FCS": 290, "MYC": 0.683593749996948, "SCS": 93.8979801048}, {"ARF": 1.4062500000001115, "E2F": 0.9492187500000815, "FCS": 354, "MYC": 0.6914062499981746, "SCS": 59.8885433492}, {"ARF": 1.7031250000002176, "E2F": 1.6367187500001203, "FCS": 408, "MYC": 1.1015624999984641, "SCS": 203.5137468174}, {"ARF": 1.5039062500001215, "E2F": 1.19921875000085, "FCS": 414, "MYC": 2.0039062499998073, "SCS": 155.3839831275}, {"ARF": 1.4882812500006102, "E2F": 0.9960937500004992, "FCS": 307, "MYC": 2.6914062500000306, "SCS": 149.892964872}, {"ARF": 1.7617187499997955, "E2F": 1.2968749999999258, "FCS": 370, "MYC": 2.804687499999988, "SCS": 283.8735964759}, {"ARF": 1.0742187499998777, "E2F": 1.4570312499994875, "FCS": 265, "MYC": 0.6875000000036895, "SCS": 74.9894209332}, {"ARF": 1.374999999999697, "E2F": 1.5585937499997586, "FCS": 391, "MYC": 1.1132812500005418, "SCS": 199.8854811874}, {"ARF": 1.675781249999806, "E2F": 0.769531250000231, "FCS": 420, "MYC": 1.0429687500010236, "SCS": 104.599895343}, {"ARF": 1.519531249999738, "E2F": 0.9257812500007956, "FCS": 474, "MYC": 1.0429687500010236, "SCS": 114.4441900797}, {"ARF": 1.4296875000008005, "E2F": 0.769531250000231, "FCS": 341, "MYC": 0.6601562500029148, "SCS": 71.6916787415}, {"ARF": 1.6132812500003657, "E2F": 1.1523437500012625, "FCS": 460, "MYC": 1.58593749999965, "SCS": 92.2239565104}, {"ARF": 1.4882812500006102, "E2F": 1.039062500001117, "FCS": 226, "MYC": 3.1015625000000107, "SCS": 144.5959903067}, {"ARF": 1.2968749999999258, "E2F": 0.6757812499988898, "FCS": 233, "MYC": 2.355468749999906, "SCS": 52.8027145648}, {"ARF": 2.1054687500000058, "E2F": 1.3007812499992373, "FCS": 381, "MYC": 1.0781250000015492, "SCS": 133.3521432163}, {"ARF": 1.1679687499989555, "E2F": 0.6445312499985287, "FCS": 250, "MYC": 2.4648437499999822, "SCS": 79.8626560972}, {"ARF": 1.699218750000414, "E2F": 1.6054687499999527, "FCS": 425, "MYC": 2.406249999999941, "SCS": 220.6734069085}, {"ARF": 1.785156249999673, "E2F": 1.492187499999342, "FCS": 355, "MYC": 1.8046874999998517, "SCS": 134.55698581}, {"ARF": 1.6132812500003657, "E2F": 1.6406249999998916, "FCS": 383, "MYC": 1.4804687499998972, "SCS": 103.6632928438}, {"ARF": 1.574218749999463, "E2F": 1.5156249999995417, "FCS": 412, "MYC": 2.117187500000136, "SCS": 198.095677855}, {"ARF": 1.5546874999994227, "E2F": 1.5546874999994227, "FCS": 343, "MYC": 2.898437499999991, "SCS": 152.6137802579}, {"ARF": 1.5429687499996962, "E2F": 1.2773437499997964, "FCS": 329, "MYC": 0.7773437499988063, "SCS": 86.596432336}, {"ARF": 1.468750000000106, "E2F": 1.445312499999512, "FCS": 414, "MYC": 1.6015625000000124, "SCS": 70.4135515486}, {"ARF": 1.562500000000193, "E2F": 0.847656250002585, "FCS": 356, "MYC": 2.4335937499999654, "SCS": 152.6137802579}, {"ARF": 1.386718749999697, "E2F": 0.9140624999986772, "FCS": 276, "MYC": 0.7929687500006118, "SCS": 98.2171889188}, {"ARF": 1.507812499999814, "E2F": 1.3945312499992797, "FCS": 348, "MYC": 1.7656250000002924, "SCS": 125.2149689066}, {"ARF": 1.3476562499996256, "E2F": 0.9140624999986772, "FCS": 283, "MYC": 2.8828124999999805, "SCS": 114.4441900797}, {"ARF": 1.164062499999833, "E2F": 0.9062499999992014, "FCS": 312, "MYC": 0.6171875000037325, "SCS": 83.5362546958}, {"ARF": 1.2812499999998999, "E2F": 0.7890625000006796, "FCS": 188, "MYC": 2.8867187499999947, "SCS": 122.9826225656}, {"ARF": 1.3398437500001052, "E2F": 0.5937500000017114, "FCS": 186, "MYC": 2.9023437499999822, "SCS": 139.486202242}, {"ARF": 1.6796874999996558, "E2F": 1.1718749999991886, "FCS": 287, "MYC": 0.9453125000021817, "SCS": 91.3981699465}, {"ARF": 1.2148437500004112, "E2F": 0.8828125000009474, "FCS": 281, "MYC": 0.589843750002198, "SCS": 78.4388558145}, {"ARF": 1.7265625000003553, "E2F": 1.5000000000002225, "FCS": 370, "MYC": 2.0312499999998717, "SCS": 218.6974655009}, {"ARF": 1.6640624999996974, "E2F": 1.1875000000001432, "FCS": 359, "MYC": 2.4882812500000457, "SCS": 196.321900679}, {"ARF": 1.5507812499997693, "E2F": 1.2578125000006903, "FCS": 426, "MYC": 2.2695312499999343, "SCS": 151.2472545311}, {"ARF": 1.519531249999738, "E2F": 0.9414062499986495, "FCS": 340, "MYC": 0.48437500000469447, "SCS": 113.4194403503}, {"ARF": 1.2968749999999258, "E2F": 0.6015624999945774, "FCS": 230, "MYC": 1.0507812499992057, "SCS": 104.599895343}, {"ARF": 1.234374999999271, "E2F": 0.7890625000006796, "FCS": 280, "MYC": 2.5390625000000084, "SCS": 111.3973859995}, {"ARF": 1.6445312499995133, "E2F": 1.4570312499994875, "FCS": 409, "MYC": 2.359374999999925, "SCS": 155.3839831275}, {"ARF": 1.417968750000763, "E2F": 0.5820312500018573, "FCS": 269, "MYC": 1.2421874999994733, "SCS": 120.7900747425}, {"ARF": 1.8281249999996785, "E2F": 1.6054687499999527, "FCS": 434, "MYC": 2.527343750000014, "SCS": 222.6672010352}, {"ARF": 0.917968750001024, "E2F": 1.3554687499997142, "FCS": 330, "MYC": 0.4609374999966266, "SCS": 57.2548788436}, {"ARF": 1.6328124999996478, "E2F": 1.3945312499992797, "FCS": 505, "MYC": 1.0156250000009646, "SCS": 125.2149689066}, {"ARF": 1.5429687499996962, "E2F": 1.4414062499992708, "FCS": 353, "MYC": 2.1874999999998614, "SCS": 122.9826225656}, {"ARF": 1.7382812500001414, "E2F": 1.1054687499996652, "FCS": 401, "MYC": 3.0078125000000075, "SCS": 264.1648320386}, {"ARF": 1.5390625000000084, "E2F": 0.589843750002198, "FCS": 368, "MYC": 2.9531249999999933, "SCS": 196.321900679}, {"ARF": 1.7773437500002567, "E2F": 1.0117187500002949, "FCS": 313, "MYC": 2.316406249999954, "SCS": 271.3899431208}, {"ARF": 1.3164062499991154, "E2F": 1.3710937499993552, "FCS": 242, "MYC": 0.410156250005632, "SCS": 79.8626560972}, {"ARF": 1.4609374999996319, "E2F": 1.324218750000788, "FCS": 354, "MYC": 0.5156250000008666, "SCS": 152.6137802579}, {"ARF": 1.7148437500001736, "E2F": 1.0781250000015492, "FCS": 453, "MYC": 2.785156250000029, "SCS": 283.8735964759}, {"ARF": 1.5351562500006162, "E2F": 1.5703124999994773, "FCS": 382, "MYC": 1.5000000000002225, "SCS": 115.4781984689}, {"ARF": 1.0781250000015492, "E2F": 0.6523437500010222, "FCS": 233, "MYC": 0.8242187499991215, "SCS": 80.5842187761}, {"ARF": 1.2968749999999258, "E2F": 1.0117187500002949, "FCS": 337, "MYC": 1.0156250000009646, "SCS": 109.4113810577}, {"ARF": 1.695312499999592, "E2F": 1.507812499999814, "FCS": 333, "MYC": 2.2929687499999103, "SCS": 268.9598785575}, {"ARF": 1.5585937499997586, "E2F": 1.5039062500001215, "FCS": 320, "MYC": 1.0859374999991842, "SCS": 106.498563535}, {"ARF": 1.710937499999872, "E2F": 1.0742187499998777, "FCS": 343, "MYC": 0.9453125000021817, "SCS": 128.6396944937}, {"ARF": 1.3125000000006035, "E2F": 1.5585937499997586, "FCS": 435, "MYC": 1.2031250000005598, "SCS": 142.0181169686}, {"ARF": 1.2187499999991651, "E2F": 1.19921875000085, "FCS": 348, "MYC": 3.300781249999998, "SCS": 148.5508017173}, {"ARF": 1.2460937499995703, "E2F": 0.7656249999973125, "FCS": 206, "MYC": 0.40234375000389, "SCS": 100}, {"ARF": 1.3320312500006048, "E2F": 1.0898437500015072, "FCS": 227, "MYC": 2.476562499999947, "SCS": 93.8979801048}, {"ARF": 1.507812499999814, "E2F": 1.2031250000005598, "FCS": 477, "MYC": 1.1054687499996652, "SCS": 118.636615905}, {"ARF": 1.2265625000010727, "E2F": 0.9453125000021817, "FCS": 311, "MYC": 0.0, "SCS": 70.4135515486}, {"ARF": 1.374999999999697, "E2F": 1.183593750000295, "FCS": 283, "MYC": 2.7070312499999885, "SCS": 114.4441900797}, {"ARF": 1.562500000000193, "E2F": 1.4531250000001905, "FCS": 320, "MYC": 1.2929687499999103, "SCS": 228.7573200318}, {"ARF": 1.234374999999271, "E2F": 1.3593750000003046, "FCS": 387, "MYC": 1.3593750000003046, "SCS": 119.7085030496}, {"ARF": 1.2539062500001823, "E2F": 0.6367187500041303, "FCS": 323, "MYC": 0.7148437499968239, "SCS": 77.7365030239}, {"ARF": 1.5156249999995417, "E2F": 0.8906250000006839, "FCS": 492, "MYC": 2.7773437499999667, "SCS": 144.5959903067}, {"ARF": 1.492187499999342, "E2F": 1.003906249999377, "FCS": 317, "MYC": 0.6757812499988898, "SCS": 107.4607828321}, {"ARF": 0.9414062499986495, "E2F": 0.6796875000041959, "FCS": 261, "MYC": 2.5976562500000226, "SCS": 64.3566975098}, {"ARF": 1.3945312499992797, "E2F": 1.0859374999991842, "FCS": 313, "MYC": 1.8515625000001963, "SCS": 119.7085030496}, {"ARF": 1.417968750000763, "E2F": 1.027343749999825, "FCS": 342, "MYC": 0.43750000000565203, "SCS": 69.1582109489}, {"ARF": 1.0820312500016955, "E2F": 1.0156250000009646, "FCS": 295, "MYC": 0.8203124999990268, "SCS": 64.9381631576}, {"ARF": 1.4531250000001905, "E2F": 1.027343749999825, "FCS": 318, "MYC": 1.2304687499992661, "SCS": 158.2044699487}, {"ARF": 1.4726562499996374, "E2F": 0.9531250000012993, "FCS": 186, "MYC": 0.8242187499991215, "SCS": 91.3981699465}, {"ARF": 1.0703124999997373, "E2F": 1.7421875000002283, "FCS": 415, "MYC": 1.757812500000123, "SCS": 90.5797775943}, {"ARF": 1.5000000000002225, "E2F": 1.417968750000763, "FCS": 365, "MYC": 0.6289062500035304, "SCS": 122.9826225656}, {"ARF": 1.5390625000000084, "E2F": 1.6914062499999423, "FCS": 478, "MYC": 1.0468749999981277, "SCS": 149.892964872}, {"ARF": 1.445312499999512, "E2F": 1.1054687499996652, "FCS": 246, "MYC": 2.6484375000000004, "SCS": 121.8814184842}, {"ARF": 1.6054687499999527, "E2F": 1.410156250000565, "FCS": 416, "MYC": 0.9335937500023574, "SCS": 261.7994621585}, {"ARF": 1.3828125000006046, "E2F": 0.9023437499991663, "FCS": 374, "MYC": 0.7031250000027985, "SCS": 179.4346244249}, {"ARF": 1.3906249999999651, "E2F": 1.1562500000009206, "FCS": 299, "MYC": 2.367187500000085, "SCS": 94.7463525655}, {"ARF": 2.0898437500000946, "E2F": 1.3085937499992133, "FCS": 436, "MYC": 0.8671874999992759, "SCS": 189.3842027331}, {"ARF": 1.2656250000002096, "E2F": 1.2031250000005598, "FCS": 346, "MYC": 2.199218750000026, "SCS": 82.7882590628}, {"ARF": 1.6132812500003657, "E2F": 1.4648437499995355, "FCS": 318, "MYC": 0.7773437499988063, "SCS": 186.0078401807}, {"ARF": 1.0546874999989444, "E2F": 0.7148437499968239, "FCS": 207, "MYC": 2.4335937499999654, "SCS": 142.0181169686}, {"ARF": 1.378906250000338, "E2F": 1.2265625000010727, "FCS": 419, "MYC": 2.3359374999999165, "SCS": 116.5215491703}, {"ARF": 1.164062499999833, "E2F": 1.5273437500001432, "FCS": 337, "MYC": 0.6015624999945774, "SCS": 100.9035044841}];
+
+        //setup the crossfilter dimensions
+        var cf          = crossfilter(data)
+                , all         = cf.dimension( function(d){ return d;} )
+
+                , fcsDim      = cf.dimension( function(d) { return d.FCS; } )
+                , scsDim      = cf.dimension( function(d) { return d.SCS; } )
+
+                , mycDim      = cf.dimension( function(d) { return d.MYC; } )
+                , mycGroup    = mycDim.group( function(myc) { return myc.toFixed(1); } )
+
+                , e2fDim      = cf.dimension( function(d) { return d.E2F; } )
+                , e2fGroup    = e2fDim.group( function(e2f) { return e2f.toFixed(1); } )
+
+                , e2fDim_sc   = cf.dimension( function(d) { return d.E2F; } )
+                , mycDim_sc   = cf.dimension( function(d) { return d.MYC; } );
+
+
+        /* chart-specific stuff */
+        var sc = capture_scatter.scatterChart(d3Map.scatter).id(0)
+                        .width(stateMap.width).height(stateMap.height).margins(stateMap.margins)
+                        .xScale(d3.scale.linear().domain([0, 4]))
+                        .yScale(d3.scale.linear().domain([0, 2]))
+                        .xValue( function(d){ return d.MYC; } )
+                        .yValue( function(d){ return d.E2F; } )
+                        .dimension_x(mycDim_sc)
+                        .dimension_y(e2fDim_sc)
+                        .data(all.top(Infinity))
+                        .radius(stateMap.radius)
+                        .title("Flow Results")
+                        .xLabel("MYC")
+                        .yLabel("E2F")
+
+        , sc2 = capture_scatter.scatterChart(d3Map.scatter2).id(1)
+                .width(stateMap.width).height(stateMap.height).margins(stateMap.margins)
+                .xScale(d3.scale.linear().domain([100, 600]))
+                .yScale(d3.scale.linear().domain([1, 400]))
+                .xValue( function(d){ return d.FCS; } )
+                .yValue( function(d){ return d.SCS; } )
+                .dimension_x(fcsDim)
+                .dimension_y(scsDim)
+                .data(all.top(Infinity))
+                .radius(stateMap.radius)
+                .title("Flow Results")
+                .xLabel("FCS")
+                .yLabel("SCS")
+
+        , bc = capture_bar.barChart(d3Map.bar).id(2)
+                .width(stateMap.width).height(stateMap.height).margins(stateMap.margins)
+                .xScale(d3.scale.linear().domain([0, 4]))
+                .yScale(d3.scale.linear().domain([0, mycGroup.top(1)[0].value]))
+                .dimension(mycDim)
+                .group(mycGroup)
+                .bwidth(5)
+                .title("MYC Profile")
+                .xLabel("MYC")
+
+        , bc2 = capture_bar.barChart(d3Map.bar2).id(3)
+                .width(stateMap.width).height(stateMap.height).margins(stateMap.margins)
+                .xScale(d3.scale.linear().domain([0, 2]))
+                .yScale(d3.scale.linear().domain([0, e2fGroup.top(1)[0].value]))
+                .dimension(e2fDim)
+                .group(e2fGroup)
+                .bwidth(10)
+                .title("E2F Profile")
+                .xLabel("E2F")
+        ;
+
+        /* push graphs into array */
+        stateMap.graphs.push(sc);
+        stateMap.graphs.push(sc2);
+        stateMap.graphs.push(bc);
+        stateMap.graphs.push(bc2);
+
+        /* initial rendering */
+        stateMap.graphs.forEach( function(d){ d.render(); } );
+
+        /* register brush events */
+        stateMap.graphs.forEach( function(graph){
+          graph.on("brush", updateAll);
+          graph.on("brushend", updateAll);
+        });
+
+        function updateAll(){
+          stateMap.graphs.forEach( function(graph){
+            graph.update();
+          });
+        }
+
+        //this resets the filter of the given chart
+        window.reset = function(i) {
+
+          stateMap.graphs.forEach( function(graph){
+            if( i === graph.id() ){
+              graph.filter(null);
+            }
+          });
+          updateAll();
+        };
+
+      }
+
+      setd3Map();
+      renderGraphs();
+
+
+    })();
+  </script>
+
+</body>
