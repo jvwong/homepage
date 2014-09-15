@@ -1,6 +1,6 @@
 import os
 
-APP_NAME = "homepage"
+APP_NAME = "jeffreyvwong"
 
 DEBUG = True
 
@@ -142,9 +142,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.sessions',
     'django.contrib.flatpages',
-    'django.contrib.comments',
-    'django.contrib.markup',
-    'tagging',
+    'taggit',
     'json_field',
     'jeffreyvwong'
 )
@@ -157,8 +155,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
-    'social.apps.django_app.context_processors.backends',
-    'social.apps.django_app.context_processors.login_redirect',
 )
 
 # A sample logging configuration. The only tangible logging
