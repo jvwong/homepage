@@ -26,9 +26,8 @@ urlpatterns = patterns('',
     url(r'^contact/$', TemplateView.as_view(template_name='jeffreyvwong/contact.html'), name='jeffreyvwong_contact'),
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^visualization/', include('jeffreyvwong.urls.visualization')),
-    url(r'^modelling/$', TemplateView.as_view(template_name='jeffreyvwong/modelling.html'), name='jeffreyvwong_modelling'),
-    url(r'^publications/$', TemplateView.as_view(template_name='jeffreyvwong/publication.html'), name='jeffreyvwong_publication'),
+    url(r'^consulting/', include('jeffreyvwong.urls.consulting')),
+    url(r'^background/$', TemplateView.as_view(template_name='jeffreyvwong/background.html'), name='jeffreyvwong_background'),
 
     url(r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     url(r'^robots\.txt$', RobotsView.as_view(), name='robots')

@@ -15,87 +15,436 @@
 
 {% block content %}
 
-<div class="section">
-    <h2 class="header-title">Background & Experience</h2>
-    <div class="item">
-        <h2 class="item-title">Medical Research</h2>
-        <ul class="circle">
-            <li>Undergraduate degree in Molecular Biology and Molecular Genetics. Three undergraduate student research positions in diverse fields (cardiovascular, Duchenne Muscular Dystrphy, Synthetic Biology)</li>
-            <li>Doctorate in the division of experimental cancer therapeutics in the department of Medical Biophysics at Princess Margaret Hospital. Bench research on mechanisms underlying the response to radiation and DNA damage therapies</li>
-            <li>Postdoctoral work in the biology of mammalian cells, microbes, and viruses</li>
-            <li>Industry-based experience in analysis of basic research, clinical trials, pharmacokinetics and pharmacodynamics of rheumatoid arthritis therapies, human physiology,  and clinical interventions involved in treatment of widespread bacterial infection</li>
+<div class="container-fluid col-sm-offset-1 col-sm-10">
+    <ol class="breadcrumb">
+      <li><a href="{% url 'jeffreyvwong_home' %}">Home</a></li>
+      <li>Background</li>
+    </ol>
+
+    <div class="bs-example bs-example-tabs">
+        <ul id="myTab" class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#modelling" role="tab" data-toggle="tab">Modelling</a></li>
+            <li><a href="#publication" role="tab" data-toggle="tab">Publications</a></li>
         </ul>
-    </div>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="modelling">
+                <div class="container-fluid">
+                    <div class="item col-xs-12">
+                        <a name="Bacterial Invaders"><h3 class="item-title">Bacterial Invaders</h3></a>
+                        <p>This work has been submitted (March 04, 2014)</p><br>
+                        <p>
+                          The word "noise" can mean a lot of things to different people. To most, it's an annoying
+                          aspect of daily life that comes at us in the form of loud sounds. To a statistics major, its the
+                          irreducible variability in prediction error; For a physicist, it's the randomness in
+                          reactions that arise from thermal fluctuations. Mostly, it's just stuff we can't (or can't be bothered to)
+                          explain.
+                        </p>
+                        <p>
+                          The notion of noisiness has had a renaissance in biology stoked by observations that we could
+                          both <a href="http://www.sciencemag.org/content/297/5584/1183.abstract">see and measure</a> differences
+                          between seemingly identical cells. However, there are many instances in which "hidden" variables
+                          can <a href="http://www.nature.com/nrm/journal/v12/n2/full/nrm3044.html"> explain away</a>
+                          a lot of ostensibly random behavior.
+                        </p>
+                        <p>
+                          We have been interested in a class of bacteria that contaminate food and make humans sick by burrowing through intestinal
+                          cells. We have shown that when these bacteria invade humans it can be horribly variable.
+                          Below are microscope images of genetically identical HeLa cells, some harboring many bacteria
+                          (bright green spots; GFP) adjacent those with none. Why the difference?
+                        </p>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/invasion_fluorescent.png" /><br>
+                        <p>
+                          We had two pieces of evidence. First, invasion depends on successive, increasingly strong interactions
+                          between hosts and pathogen receptors (proteins that stick out of their surfaces) reminiscent of a zipper.
+                          Second, even genetically identical hosts have a distribution of receptors. So, we thought that
+                          the amount of invasion would be proportional to receptor number but that the great sensitivity would
+                          magnify event the tiniest differences.
+                        </p>
+                        <p>
+                          Below are some experiments where we either did not (left, top) or did (left, bottom)
+                          infect host cells with bacteria tagged with fluorescent proteins. We wanted to pick out infected from
+                          uninfected cells, but the difficulty is that the light signals we used to track them overlap.
+                          So we turned to a statistical modeling technique called the expectation-maximization
+                          (EM) algorithm to pick out uninfected (black) from infected (red) host cells by assuming the existence
+                          of Gaussian distributions describing each sub-population. This probabilistic classification technique
+                          enabled us to calculate the rotation (i.e. major axis) of each cloud through principal component analysis
+                          (red, right). The slight rotation in the major axis - up and to the right - indicated that indeed,
+                          increasing host receptor number is proportional to bacterial uptake.
+                        </p><br>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/pca_flow.png" />
+                        <br>
+                        <p>
+                          A primary goal of modeling is to provide a concise description. Based upon our
+                          observations and knowledge of the literature around uptake, we were able to distill a simple
+                          power-law describing the how the probability of bacterial invasion depends on receptor number. This
+                          model has but two parameters, which is orders of magnitude simpler than the numerous factors known
+                          to affect uptake.
+                        </p><br>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/power_law.png" />
+                        <p>
+                          So is that it? Two parameters? Well not really. There is still a tremendous amount of variation in uptake
+                          for cells with the same amount of receptor. It remains to be seen what other factors can explain away
+                          the differences in invasion. Maybe noise. Maybe not.
+                        </p><br>
 
-    <div class="item">
-        <h3 class="item-title">Mathematical Modelling</h3>
-        <ul class="circle">
-            <li>Undergraduate degree in Applied Mathematics and Scientific computation. Emphasis on numerical methods for computational mathematics and computational statistics</li>
-            <li>Post-doctoral experience with modelling, simulation, and optimization of biological networks</li>
-            <li>Industry experience in multi-scale modelling and simulation of virtual patients and populations. Deployed machine learning and statistical tools to optimize </li>
-            <li>Self-directed learning in machine learning [Coursera] and statistical learning techniques [Wiley: Introduction to Statistical Learning; The Elements of Statistical Learning]</li>
-        </ul>
-    </div>
+                    </div>
 
-    <div class="item">
-        <h3 class="item-title">Data Visualization & Analysis</h3>
-        <ul class="circle">
-            <li>Multiple primary and review articles published requireing use of graphic visualization to convey biological concepts. Publication of primary research required developing visualizations of complex, multidimensional data for presentation and publication</li>
-            <li>Industry experience in developing visualization pipeline to manage, intergrate , and present results of model optimization</li>
-            <li>Self-directed learning in full-stack web development (Udacity). Self-directed upgrade of skills to include Unix, Python, Javascript and web-related technolgies (Django, Node.js, CSS,  HTML)</li>
-        </ul>
-    </div>
 
-</div><br>
+                    <div class="item col-xs-12">
+                          <a name="The Perils of Multitasking"><h3 class="item-title">The Perils of Multitasking</h3></a>
+                        <a href="http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1002491">
+                          <p>PLoS Computational Biology, April 2012, 8(4): e1002491</p>
+                        </a>
+                        <p>
+                          The ubiquity of mobile electronic devices has probably taught us one thing: Multitasking
+                          results in poor performance and is potentially dangerous!
+                          This computational analysis examines how this notion applies to biological signaling networks.
+                          The E2F network (figure below) which controls cell growth has been shown to multitask:
+                          It performs different functions in cells depending on the type of stimulus it receives
+                          (e.g. growth factor versus MYC cancer gene activation).
+                          These different functions are produced by the same network exhibiting different dynamics
+                          (hysteresis, biphasic, adaptation). We were interested in seeing
+                          what trade-offs, if any, accompanied a network trying to accomplish this many jobs.
+                        </p>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/e2fNetwork.png" /><br>
+                        <p>
+                          Our approach was two-fold. First, we developed an algorithm that could learn
+                          typical parameter values which allowed our network to perform each "task".
+                          Second, we defined two measures of network performance: "Tension" was calculated by how far
+                          task-specific parameters sets were from one another; "Robustness", described how resilient parameters were
+                          to minor perturbation. A major challenge here was to convey the changes in the high-dimensional
+                          parameter space in a simple yet meaningful fashion.
+                        </p><br>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/parameterChange.png" />
+                        <br>
+                        <p>
+                          The above figure conveys the tension between a hysteretic response (baseline value) and a biphasic response.
+                          That is, the same network can operate function differently by modulating a subset of it's parameters,
+                          while leaving others largely unchanged.
+                          An alternative to this strategy is to find a middle ground - a single set of parameter values that accommodates
+                          multiple tasks. While we could identify such parameter values, they were much more sensitive to minor perturbations,
+                          and so less robust. This report shows that the amount of multitasking a network takes on may be limited by
+                          the amount of fragility it experiences in the process.
+                        </p><br>
+                    </div>
 
-<div class="section">
-    <h2 class="header-title">Biographical Sketch</h2>
 
-  <div class="item">
-    <h3 class="item-title">Part I: Molecular biology and “big data”</h3>
-    <p class="regular">
-      My earliest memory of being drawn to biology was in high school when I learned about the factory-like order and precision of activities in the cell. Breaking down these mini-machines and figuring out their peculiarities seemed to be the best route to understanding them. In my undergraduate study in Molecular Genetics & Molecular Biology I got a chance to try my hand at basic laboratory research with Philip Marsden (St. Michael's Hospital) and studied the biology of Duchenne Muscular Dystrophy with Peter N Ray (Hospital for Sick Children) in my final year. I was pretty smitten with bench work and all it entailed.
-    </p>
-    <p class="regular">
-      I joined the laboratory of Henry Klamut (Medical Biophysics) for my doctoral research where for a gene therapy effort aimed at identifying genes important for cell-suicide triggered by radiation and DNA damage – pillars of standard cancer treatment. The rationale was that such “killer” genes could be reactivated in cancer cells in order to destroy them. I picked up the torch on a cell communication gene called Placental Transforming Growth Factor beta (PTGF-ß). My early work was aimed at delineating how therapeutic stimuli controlled PTGF-ß levels in breast cancer-derived cells. By most accounts (i.e. publication), this effort was a success.
-    </p>
-    <p class="regular">
-      Next, I tried to find genes that PTGF-ß controlled in hopes of fashioning a guess at how it was triggering cell-suicide. I used DNA "microarrays" which at the time, was state-of-the-art technology enabling one to quantify alterations to every gene in a cell. However, I ended up with a big list of genes but little in terms of insight. Why the limited success? Beyond the numerous technical plaguing microarrays at the time were two main factors. First, there was a conceptual error that the quality and quantity of expression data would be sufficient to make solid guesses at why cells acted the way they did. Second, was  the recognition that the complexity and sheer mass of data being accumulated far outstripped our ability to make sense of them with words, pictures, intuition, experience, or dogged determination.
-    </p>
-    <p class="regular">
-      It was a humbling experience. By 2000, we were already drowning in “Big” data. Where would understanding emerge?
-    </p>
-  </div>
+                    <div class="item col-xs-12">
+                        <a name="A Built-In Brake for Cell Growth"><h3 class="item-title">A Built-In Brake for Cell Growth</h3></a>
+                        <a href="http://www.cell.com/molecular-cell/retrieve/pii/S1097276511000414">
+                             <p>Molecular Cell, 4 February 2011, Vol. 41, Issue 3, pp.275-285 </p>
+                        </a>
+                        <p>
+                          We all start from one, single, lonely cell; Given the fact that our bodies will be made of nearly
+                          100 trillion cells over a lifetime, it's pretty miraculous that we all don't get cancer
+                          sooner! This suggests some pretty good safety valves in place to prevent uncontrolled
+                          cell growth. Here we report a built-stopping mechanism in the E2F network that controls cell growth
+                          that is triggered by dangerous levels of growth signals originating from the MYC cancer gene.
+                        </p>
+                        <p>
+                          In this report, we wanted to examine how different amounts of the MYC gene affected the cell cycle response,
+                          as measured by the amount of E2F gene produced. E2F lies at the nexus of a network
+                          that governs the transition from resting to proliferation. MYC is induced by normal
+                          growth signals but is also produced in great excess in human tumours, leading to the theory that
+                          it's persistent activation contributes to cancer.The figure below shows microscope images of a single attempt to
+                          deliver different amounts of MYC to rat cells and measure E2F. The figure shows experiments where we
+                          deliver MYC (mCherry in red) at increasing levels to cells (DAPI in blue) and then track E2F (GFP in green).
+                        </p>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/modelling_confocal.png" /><br>
+                        <p>
+                          We automated the above technique so that we could track the MYC input (x-axis) and E2F
+                          output (y-axis) in hundreds of thousands of individual cells (data points) in one shot! Successive panels
+                          show results when the average doses of MYC was dialed up. These experiments revealed a heretofore unnoticed
+                          phenomenon: low MYC generates low E2F while high levels also leads to low levels!
+                        </p>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/scatterMolCell.png" /><br>
+                        <p>
+                          To help understand this behaviour better, we developed a mechanistic mathematical model of the wider MYC-E2F
+                          network to determine what was required to recapitulate our observations (figure below). The panel on the left
+                          shows the simplified network that we modelled having normal growth signals activating MYC which, in turn, upregulates
+                          E2F. Consistent with <a href="http://www.nature.com/ncb/journal/v10/n4/abs/ncb1711.html">previous work</a>, our model
+                          could generate the induction of E2F by MYC but could not generate the suppression at high MYC levels (right panel, grey trajectory).
+                          Indeed, our model indicated that other known suppressors of E2F downstream of MYC could not generate this behaviour,
+                          and that an additional source of repression must exist (right panel, green trajectory), the nature of which remains unknown.
+                        </p>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/modelling_model.png" /><br>
+                        <p>
+                          We theorized the biphasic E2F response to MYC is a built-in safety mechanism: normal,
+                          low levels of MYC stimulated by, for example, growth factors can drive cell cycle entry,
+                          while hyperactivated MYC, such as that observed in tumours, is unable to do the same.
+                          Thus, a built-in brake senses high MYC and prevents E2F from driving cell cycle responses.
+                        </p>
 
-  <div class="item">
-    <h3 class="item-title">Interlude: A more formal approach</h3>
-    <p class="regular">
-      I felt that we as biologists had much to gain from the rich body of thought in mathematics and computer science. I took up study in Applied Mathematics (Waterloo) and if anything, my time was a pretty fantastic meditation on diverse and often arcane fields of mathematics. I found a familiar place working in the laboratory on a project with Brian Ingalls (Applied Math) in “Synthetic Biology”, a nascent field that viewed biology from an engineering perspective. Regardless of the hype, derision, and confusion surrounding the field of Synthetic Biology, I appreciated attempts to use formal approaches to distill underlying principles that constrained the form, function, and behavior of biological systems. But what were these “rules”? Did they even exist?  Could we understand them?
-    </p>
-  </div>
+                    </div>
 
-  <div class="item">
-    <h3 class="item-title">Part II: Modeling & simulation</h3>
-    <p class="regular">
-      I rebooted my research career with Lingchong You (Biomedical Engineering) at Duke. My background in molecular biology and mathematics were an nice fit for the collaborative environment. With Joseph Nevin's group (Genetics) we looked at how networks of genes manage to control normal cell division while preventing unchecked proliferation, a threshold that is often breached during the development of human tumors. This was followed with a purely computational study teasing out how networks trade-off between “multitasking” (more than one thing) and “performance” (ability to do any particular thing accurately).
-    </p>
-    <p class="regular">
-      Beyond the specifics of any of the projects I worked on, I deeply appreciated how mathematics and computation could be used to serve understanding. On one hand, I was tasked with generating visual representations of novel, complex, and often multidimensional findings for journal articles. Effective visualization meant that I had to develop a mix of programming and artistic sensibility to corral results into form that was digestible and meaningful for reviewers and readers alike. On the other hand, I gained a deeper sense of how quantitative tools could be applied along with their dangers and limitations.
-    </p>
-  </div>
 
-  <div class="item">
-    <h3 class="item-title">Part III: The “Real World”</h3>
-    <p class="regular">
-      I wanted to know how modeling might provide value outside of academic research and joined Immunetrics Inc. (Pittsburgh, PA) as a mathematical modeller. Immunetrics is, for all intents and purposes, a consulting group for clients with a stake in acute immune disorders such as rheumatoid arthritis.  The efforts at the company were split between two activities: On one side, developing the engine for a bedside clinical device providing hourly intelligence on patients with systemic infections or sepsis; On the other side were attempts to predict the clinical efficacy of development-phase rheumatoid arthritis drugs.
-    </p>
-    <p class="regular">
-      At the core of each of these efforts are detailed models describing genes, cells, and organs that are combined in virtual “patients” which, in turn, are grouped to form virtual populations. The painstaking process of building and optimizing these enormous models to capture the results in published literature and clinical trials required a constellation of custom software be deployed in order to accomplish numerical simulation, optimization, machine learning, and visualization tasks.
-    </p>
-    <p class="regular">
-      My modeling, simulation, and optimization skills were pushed into high gear by having to turn client's often vague questions and requests into functional modules that could be plugged into our main models. I was able to develop my data visualization skills by producing a suite that transformed the voluminous output of our simulations into graphical form. This visualization tool turned out to be inclusive: Using graphs rather than arcane text output of our simulation engine allowed management, non-mathematical team members, and modellers alike to discuss the a common simulation result. It also aided interpretability: The hundreds of parameters across multiple categories could be instantly evaluated and compared within and between simulation runs. Lastly, I was able experience how judicious application of mathematical and computational tools could be combined to provide real value.
-    </p>
-  </div>
+                    <div class="item col-xs-12">
+                        <a name="Tracking 'virtual' arthritis populations"><h3 class="item-title">Tracking "virtual" arthritis populations</h3></a>
+                        <p>
+                            At <a href="http://www.immunetrics.com/">Immunetrics</a>, I had the opportunity to jump in
+                            on projects for acute and chronic immune disorders. Pharma companies interested in rheumatoid arthritis therapies
+                            asked us to predict how a new drug in their pipeline would behave in a model that reliably reproduced previous trial results.
+                            These days, companies want tips on how many patients they would need in a trial to get a
+                            <a href="http://www.medicine.ox.ac.uk/bandolier/booth/glossary/statpow.html">
+                                good chance</a> of observing a pre-defined minimum effect to save them the expense of over-enrollment.
+                        </p>
+                        <p>
+                            Our models spanned the molecular and cellular biology of the disease
+                            up to the relevant physiology of a "virtual" patient, which were then
+                            selected en masse for "virtual" clinical trials.
+                            Hurdles in making models realistic include the broad spectrum of patient responses to therapy
+                            set against the compendium of criteria test populations are known to satisfy (constraints).
+                            The modelling process involved many cycles of
+                            simulation, testing, and pruning to end up with a useable population.
+                            In more mathematical terms, this amounts to a large-scale
+                            constrained optimization problem in "patient space".
+                        </p>
+                        <p>
+                            One significant challenge we as modellers faced was in understanding how well a particular
+                            selection cycle was doing: Imagine testing thousands of patients for double digit types of therapies across
+                            several time points for a multitude of clinical measurements and you get the idea! I found
+                            trying to interpret reams of computer output in text format a dizzying experience and so created a suite of R
+                            scripts to grab and plot the data pouring out of our simulations database (below: red- simulation; blue - data).
+                        </p>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/visual/nlp.png" />
+                        <p>
+                            This analysis also included a variety of 2- and 3-dimensional analyses on proprietary clinical trial data provided
+                            by companies which, of course, I am unable to present. This 'slice-and-dice' approach enabled even
+                            better resolution in developing our "virtual" population.
+                        </p>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <div class="tab-pane fade" id="publication">
+                <div class="container-fluid">
+                    <div class="item">
+                        <a name="Review: Cell Cycle"><h3 class="item-title">Review: Cell Cycle</h3></a>
+                        <a href="https://www.landesbioscience.com/journals/cc/article/17350/">
+                          <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/cellcycle.png" /><br>
+                          <p>Cell Cycle, 15 September 2011, Vol. 10, Issue 18, pp.3086-3094</p>
+                        </a>
+                        <p>
+                          Commissioned by the journal Cell Cycle, I authored a review
+                          describing the role of the E2F network in maintaining the precision
+                          clockwork underlying cell division. The challenge here was in integrating
+                          and conveying a unifying message from the voluminous, often contradictory
+                          threads of research over two decades. An excerpt from the abstract:
+                          <br>
+                          <blockquote>The challenge to understand how E2F dynamics coordinate molecular events
+                          required for high-fidelity DNA replication has great biological
+                          implications. Indeed, precocious, prolonged, elevated or reduced
+                          accumulation of E2F can generate replication stress that culminates
+                          in either arrest or death. Accordingly, temporal characteristics of
+                          E2F are regulated by several network modules that include feedforward
+                          and autoregulatory loops. In this review, we discuss how these network
+                          modules contribute to “shaping” E2F dynamics in the context of mammalian
+                          cell cycle entry</blockquote>
+                        </p>
+                    </div>
+
+                    <div class="item">
+                        <a name="Article: Molecular Cell"><h3 class="item-title">Article: Molecular Cell</h3></a>
+                        <a href="http://www.cell.com/molecular-cell/retrieve/pii/S1097276511000414">
+                          <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/molCellCover.jpg" />
+                          <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/graphAbstractCell.jpg" /><br>
+                          <p>Molecular Cell, 4 February 2011, Vol. 41, Issue 3, pp.275-285 </p>
+                        </a>
+                        <p>
+                          My research and artwork was chosen to grace the cover of Molecular Cell. Also shown is a "graphical abstract", present in the online edition. An excerpt from the cover description:
+                          <br>
+                          <blockquote>The cover image is constructed from a fluorescence image of rat fibroblasts (nuclei in blue/purple)
+                          infected with an adenovirus expressing mCherry (red) and illustrates the striking difference in
+                          expression between adjacent cells. The “stained glass” rendering evokes the uniqueness in elements of a
+                          seemingly homogenous entity.</blockquote>
+                        </p>
+
+                        <p>
+                        The National Science Foundation maintains a running news feed on science discoveries and picked up on my cover image for their "Picture of the Day".
+                        <br>
+                        <a href="http://news.science360.gov/obj/pic-day/20110215/">
+                            <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/science360.png" />
+                        </a>
+                        <blockquote>
+                        Gene expression varies from one cell to the next within a genetically identical population of rat fibroblasts, as shown in this fluorescence image. The cells were all infected with the same adenovirus, but their responses differed, as indicated by the range of reddish colors. The nuclei of the cells are seen in blue and pink. This picture, rendered artistically in a "stained glass" imaging technique, was created by post-doctoral fellow Jeffrey Wong in the biomedical engineering lab of Lingchong You as part of a study on how identical stimuli can cause unique responses.
+                        </blockquote>
+                        </p>
+
+                        <p>
+                            Along with this, Duke feature the cover on their "1,100 Words" site profiling research work done within it's institutes.
+                            <br>
+                            <a href="https://research.duke.edu/1100-words/4685">
+                                <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/duke1100words.png" />
+                            </a>
+                        </p>
+                    </div>
+
+                    <div class="item">
+                         <a name="News &amp; Views: Nature"><h3 class="item-title">News &amp; Views: Nature</h3></a>
+
+                          <a href="http://www.nature.com/nature/journal/v469/n7329/full/469171a.html">
+                               <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/natRev.jpg" />
+                               <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/natRev_originalArt.png" /><br>
+                               <p>Nature, 13 January 2011, Vol. 469, pp.171-172</p>
+                          </a>
+                          <br id="post-float">
+                          <p>
+                               We were commissioned by Nature to provide a "News &amp; Views" article reviewing
+                               work by Chris Voigt's group. Previously, single strains of bacteria were engineered
+                               to perform simple tasks in response to chemical signals, such as performing logical opertaions analagous to
+                               those performed by digital electronics. In this case, Voigt's group split up the work between multiple
+                               engineered strains, allowing researchers to mix-and-match strains to perform ever more complex
+                               tasks. Though my authorship was punted from the final publication (Nature has a 2-author limit), my idea for a graphical summary of the Voigt lab's work
+                               did manage to worm its way into the article (left - published graphic; right- my original drawing).
+                               The original figure legend is below.
+                               <br>
+                               <blockquote>Figure 1 | A multicellular approach to
+                               implementing complex logic circuits. a, Previously,
+                               systems of logic gates composed of DNA, RNA
+                               and proteins have been constructed within a single
+                               cell. b, New work compartmentalizes logic gates
+                               within different cells and uses diffusible output
+                               molecules to ‘wire’ such cell consortia together.
+                               (Adapted from a figure by Jeffrey Wong.)</blockquote>
+                          </p>
+                     </div>
+
+                    <div class="item">
+                         <a name="Review: Methods in Enzymology"><h3 class="item-title">Review: Methods in Enzymology</h3></a>
+                         <a href="http://www.sciencedirect.com/science/article/pii/B978012385075100010X">
+                               <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/methodEnz.png" /><br>
+                               <p>Methods in Enzymology: Synthetic Biology, Part A, Vol. 497, pp.221-237</p>
+                          </a>
+                          <br id="post-float">
+                          <p>
+                               This figure appeared in a review commisioned by Methods in Enzymology as part of their Methods in
+                               Synthetic Biology edition. Described is the experimental approach used as part of our report in Molecular
+                               Cell (above). The figure describes how variability in the amount of viruses
+                               that genetically identical cells tend to take up can be used to examine how different amounts of an input
+                               affect each cell. The amount of input and the impact are measured using different colored read-out signals or "reporters"
+                               produced by the engineered virus and cells, respectively.
+                               The original figure legend is below.
+                               <br>
+                               <blockquote>
+                                    Figure 10.1. Using viral-mediated expression variability to probe gene expression dose response. System input consists of a gene of interest (GOI) along with fluorescent protein (FP) expressed from a recombinant adenovirus (Ad); output is a stably integrated reporter under the control of a gene regulatory sequence of interest (promoter). Cell–cell variability in Ad-mediated input expression provides a convenient way to quantify output dose response in individual cells (green data points).
+                               </blockquote>
+                          </p>
+                     </div>
+
+                    <div class="item">
+                          <a name="Review: ACS Chemical Biology"><h3 class="item-title">Review: ACS Chemical Biology</h3></a>
+
+                          <a href="http://pubs.acs.org/doi/full/10.1021/cb700256w">
+                               <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/acsChemBiol.png" /><br>
+                               <p>ACS Chemical Biology: 18 January 2008, Vol. 3, No. 1, pp.27-29</p>
+                          </a>
+                          <br id="post-float">
+                          <p>
+                               This figure appeared in a review commisioned by ACS Chemical Biology as part of their
+                               Synthetic Biology edition which describes work done in Francis Arnold's group. Briefly,
+                               two engineered strains of bacteria - a consortia - with complementary gene circuits
+                               interact in a reciprocal fashion to signal measure the density of the other in the environment.
+                               The obligate cooperation demonstrated in this synthetic system parallels the interaction between B and T
+                               cells in the adaptive immune response.
+                          </p>
+                     </div>
+
+                    <div class="item">
+                        <a name="Article: Characterizing Control of PTGF-beta"><h3 class="item-title">Article: Characterizing Control of PTGF-beta</h3></a>
+                        <a href="http://www.jbc.org/content/277/29/26699.short">
+                            <span class="reference">The Journal of Biological Chemistry, 19 July 2002, 277(29), pp.26699-26707</span>
+                        </a>
+                        <p>
+                            p53 is often referred to as the "Guardian of the Genome" due to it's proposed ability to
+                            monitor DNA damage that can contribute to the genesis of diseases such as cancer. A flurry of research in the last
+                            three decades has implicated p53 in the control of hundreds if not thousands of genes.
+                            Early findings were consistent with the notion that p53 could physically bind to genes and
+                            change their expression levels, in this way influencing the tendency of cells to either repair
+                            or kill themselves off.
+                        </p>
+                        <p>
+                            A curious aspect p53 control of genes is the generic nature of the DNA target it binds to:
+                            A p53 "consensus" is a 10 base-pair repeat separated by a variable "linker" region (top of figure below).
+                            Adding to the confusion is the tremendous variation in what sequences are actually functional in response to p53.
+                            Based off of our earlier findings linking p53 and PTGF-beta (next section)
+                            we wished to dissect the exact nature of how p53 controls PTGF-beta expression.
+                        </p>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/promoter_jbc.png" /><br>
+                        <p>
+                            In this report, we identified two canonical p53 binding sites in the sequences close to the PTGF-beta gene (p53-1 and p53-2
+                            in the figure above). I used a panel of classical molecular biology tricks to show that one of the sites
+                            plays a dominant role in the reponse while the other is much less responsive. This functional activity was
+                            reflected in the amount of p53 we could see bound to each site. This was convincing
+                            evidence of a direct link between the vast p53 and TGF-beta networks in the cell, both of which
+                            have critical roles in a variety of cellular processes.
+                        </p>
+                        <p>
+                            In the process of "bashing" the control regions of PTGF-beta to isolate
+                            p53-response regions, we noticed that removing a particular section could actually sensitize PTGF-beta
+                            to p53, an effect that had not previously been described. The figure below shows a rather ancient
+                            technique called electrophoretic mobility gel-shift assay (EMSA) which is used to isolate regions of DNA
+                            that bind to proteins. The shaded region in figure below indicated the p53TRE we mapped out near the PTGF-beta gene.
+                        </p>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/emsa.png" /><br>
+                        <p>
+                            The take home message from this study was a two-fold: One, a direct link established between p53 and TGF-beta
+                            signalling pathways and two, the presence of a complex set of DNA control sequences determining the quantitative
+                            nature of this response. We speculated that these positive and negative regulatory sequences might restrict
+                            full activation of PTGF-beta to high levels of p53 that would be present
+                            with persistent/severe DNA damage.
+                        </p>
+
+
+
+                    </div>
+
+                    <div class="item">
+                        <a name="Article: Discovering a novel anti-cancer gene"><h3 class="item-title">Article: Discovering a novel anti-cancer gene</h3></a>
+                        <a href="http://www.jbc.org/content/275/26/20127.long">
+                            <span class="reference">The Journal of Biological Chemistry, 30 June 2000, 275(26): pp.20127-20135</span>
+                        </a>
+                        <p>
+                            Dr. Pei-Xiang Li, a postdoc in or group at the time, reported the identification of a novel gene
+                            Placental Transforming Growth Factor beta (PTGF-beta). Since publication,
+                            this cell-cell communication molecule has been implicated in the response
+                            to a vast array of stimuli spanning non-steroidal anti-inflammatory agents to resveratrol (the
+                            proposed wonder ingredient in red wine) to ionizing radiation. In addition, PTGF-beta has
+                            been proposed to as a valuable biomarker for cancer and cardiovascular risk.
+                        </p>
+                        <p>
+                            At the time, our group was interested in finding genes activated by cancer therapies including
+                            radiation as well as chemical DNA damaging agents. Pei-Xiang screened breast cancer-derived cells to identify
+                            PTGF-beta from what is now an now ancient technique referred to as "differential display". The figure below
+                            shows our confirmation that this gene was indeed activated by radiation (Rad) and by p53, which plays
+                            a critical role in the response to DNA damage.
+                        </p>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/radiation.jpg" /><br>
+                        <p>
+                            The response to both radiation and p53 led to the question of whether PTGF-beta could be a downstream mediator
+                            of p53 activity, whose ability to initiate cell death ("apoptosis") or cell cycle arrest has been well-documented.
+                            I performed promoter analyses that showed a direct link between p53 and the DNA sequences controlling PTGF-beta levels.
+                            In addition, flow cytometry results below demonstrated that another adenovirus expressing PTGF-beta (AdPTGF-B) but not
+                            control (AdBgal) could potentiate the arrested state (i.e. large G1/S ratio).
+                        </p>
+                        <img class="caption img-responsive" src="/static/jeffreyvwong/images/publication/flow.jpg" /><br>
+                        <p>
+                            This work was important for several reasons. First, it identified a novel downstream mediator of p53, which is a
+                            critical gene at the nexus of the proper response to potentially cancer-causing DNA damage. Next, it linked the
+                            p53 and TGF-beta pathways, which play ubiquitous roles in cell growth and development. Third, it demonstrated
+                            PTGF-beta was sufficient to induce cell death. This last fact, coupled with the knowledge that PTGF-beta is an
+                            extracellular protein make it an attractive target for cancer gene therapy: It's ability to kill cells from the outside
+                            in would obviate the need to deliver the payload to every single cell. It hs been exciting
+                            to see the discoveries that built upon PTGF-beta's discovery.
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div><!-- /tabs -->
 </div>
 
 {% endblock content %}

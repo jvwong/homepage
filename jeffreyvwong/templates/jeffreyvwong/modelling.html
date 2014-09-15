@@ -8,7 +8,7 @@
 
 {% block navbarjump %}
     <li class="dropdown">
-        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Jump to Section<b class="caret"></b></a>
+        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Jump to section <b class="caret"></b></a>
         <ul class="dropdown-menu">
             <li>
                 <a href="#Bacterial Invaders">Bacterial Invaders</a>
@@ -27,191 +27,191 @@
 {% endblock navbarjump %}
 
 {% block content %}
-<div class="container">
-  <div class="item">
-    <a name="Bacterial Invaders"><h3 class="item-title">Bacterial Invaders</h3></a>
-    <p>This work has been submitted (March 04, 2014)</p><br>
-    <p>
-      The word "noise" can mean a lot of things to different people. To most, it's an annoying
-      aspect of daily life that comes at us in the form of loud sounds. To a statistics major, its the
-      irreducible variability in prediction error; For a physicist, it's the randomness in
-      reactions that arise from thermal fluctuations. Mostly, it's just stuff we can't (or can't be bothered to)
-      explain.
-    </p>
-    <p>
-      The notion of noisiness has had a renaissance in biology stoked by observations that we could
-      both <a href="http://www.sciencemag.org/content/297/5584/1183.abstract">see and measure</a> differences
-      between seemingly identical cells. However, there are many instances in which "hidden" variables
-      can <a href="http://www.nature.com/nrm/journal/v12/n2/full/nrm3044.html"> explain away</a>
-      a lot of ostensibly random behavior.
-    </p>
-    <p>
-      We have been interested in a class of bacteria that contaminate food and make humans sick by burrowing through intestinal
-      cells. We have shown that when these bacteria invade humans it can be horribly variable.
-      Below are microscope images of genetically identical HeLa cells, some harboring many bacteria
-      (bright green spots; GFP) adjacent those with none. Why the difference?
-    </p>
-    <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/invasion_fluorescent.png" /><br>
-    <p>
-      We had two pieces of evidence. First, invasion depends on successive, increasingly strong interactions
-      between hosts and pathogen receptors (proteins that stick out of their surfaces) reminiscent of a zipper.
-      Second, even genetically identical hosts have a distribution of receptors. So, we thought that
-      the amount of invasion would be proportional to receptor number but that the great sensitivity would
-      magnify event the tiniest differences.
-    </p>
-    <p>
-      Below are some experiments where we either did not (left, top) or did (left, bottom)
-      infect host cells with bacteria tagged with fluorescent proteins. We wanted to pick out infected from
-      uninfected cells, but the difficulty is that the light signals we used to track them overlap.
-      So we turned to a statistical modeling technique called the expectation-maximization
-      (EM) algorithm to pick out uninfected (black) from infected (red) host cells by assuming the existence
-      of Gaussian distributions describing each sub-population. This probabilistic classification technique
-      enabled us to calculate the rotation (i.e. major axis) of each cloud through principal component analysis
-      (red, right). The slight rotation in the major axis - up and to the right - indicated that indeed,
-      increasing host receptor number is proportional to bacterial uptake.
-    </p><br>
-    <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/pca_flow.png" />
-    <br>
-    <p>
-      A primary goal of modeling is to provide a concise description. Based upon our
-      observations and knowledge of the literature around uptake, we were able to distill a simple
-      power-law describing the how the probability of bacterial invasion depends on receptor number. This
-      model has but two parameters, which is orders of magnitude simpler than the numerous factors known
-      to affect uptake.
-    </p><br>
-    <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/power_law.png" />
-    <p>
-      So is that it? Two parameters? Well not really. There is still a tremendous amount of variation in uptake
-      for cells with the same amount of receptor. It remains to be seen what other factors can explain away
-      the differences in invasion. Maybe noise. Maybe not.
-    </p><br>
+<div class="container-fluid">
+    <div class="item col-xs-12">
+        <a name="Bacterial Invaders"><h3 class="item-title">Bacterial Invaders</h3></a>
+        <p>This work has been submitted (March 04, 2014)</p><br>
+        <p>
+          The word "noise" can mean a lot of things to different people. To most, it's an annoying
+          aspect of daily life that comes at us in the form of loud sounds. To a statistics major, its the
+          irreducible variability in prediction error; For a physicist, it's the randomness in
+          reactions that arise from thermal fluctuations. Mostly, it's just stuff we can't (or can't be bothered to)
+          explain.
+        </p>
+        <p>
+          The notion of noisiness has had a renaissance in biology stoked by observations that we could
+          both <a href="http://www.sciencemag.org/content/297/5584/1183.abstract">see and measure</a> differences
+          between seemingly identical cells. However, there are many instances in which "hidden" variables
+          can <a href="http://www.nature.com/nrm/journal/v12/n2/full/nrm3044.html"> explain away</a>
+          a lot of ostensibly random behavior.
+        </p>
+        <p>
+          We have been interested in a class of bacteria that contaminate food and make humans sick by burrowing through intestinal
+          cells. We have shown that when these bacteria invade humans it can be horribly variable.
+          Below are microscope images of genetically identical HeLa cells, some harboring many bacteria
+          (bright green spots; GFP) adjacent those with none. Why the difference?
+        </p>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/invasion_fluorescent.png" /><br>
+        <p>
+          We had two pieces of evidence. First, invasion depends on successive, increasingly strong interactions
+          between hosts and pathogen receptors (proteins that stick out of their surfaces) reminiscent of a zipper.
+          Second, even genetically identical hosts have a distribution of receptors. So, we thought that
+          the amount of invasion would be proportional to receptor number but that the great sensitivity would
+          magnify event the tiniest differences.
+        </p>
+        <p>
+          Below are some experiments where we either did not (left, top) or did (left, bottom)
+          infect host cells with bacteria tagged with fluorescent proteins. We wanted to pick out infected from
+          uninfected cells, but the difficulty is that the light signals we used to track them overlap.
+          So we turned to a statistical modeling technique called the expectation-maximization
+          (EM) algorithm to pick out uninfected (black) from infected (red) host cells by assuming the existence
+          of Gaussian distributions describing each sub-population. This probabilistic classification technique
+          enabled us to calculate the rotation (i.e. major axis) of each cloud through principal component analysis
+          (red, right). The slight rotation in the major axis - up and to the right - indicated that indeed,
+          increasing host receptor number is proportional to bacterial uptake.
+        </p><br>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/pca_flow.png" />
+        <br>
+        <p>
+          A primary goal of modeling is to provide a concise description. Based upon our
+          observations and knowledge of the literature around uptake, we were able to distill a simple
+          power-law describing the how the probability of bacterial invasion depends on receptor number. This
+          model has but two parameters, which is orders of magnitude simpler than the numerous factors known
+          to affect uptake.
+        </p><br>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/power_law.png" />
+        <p>
+          So is that it? Two parameters? Well not really. There is still a tremendous amount of variation in uptake
+          for cells with the same amount of receptor. It remains to be seen what other factors can explain away
+          the differences in invasion. Maybe noise. Maybe not.
+        </p><br>
 
-  </div>
-
-
-  <div class="item">
-      <a name="The Perils of Multitasking"><h3 class="item-title">The Perils of Multitasking</h3></a>
-    <a href="http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1002491">
-      <p>PLoS Computational Biology, April 2012, 8(4): e1002491</p>
-    </a>
-    <p>
-      The ubiquity of mobile electronic devices has probably taught us one thing: Multitasking
-      results in poor performance and is potentially dangerous!
-      This computational analysis examines how this notion applies to biological signaling networks.
-      The E2F network (figure below) which controls cell growth has been shown to multitask:
-      It performs different functions in cells depending on the type of stimulus it receives
-      (e.g. growth factor versus MYC cancer gene activation).
-      These different functions are produced by the same network exhibiting different dynamics
-      (hysteresis, biphasic, adaptation). We were interested in seeing
-      what trade-offs, if any, accompanied a network trying to accomplish this many jobs.
-    </p>
-    <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/e2fNetwork.png" /><br>
-    <p>
-      Our approach was two-fold. First, we developed an algorithm that could learn
-      typical parameter values which allowed our network to perform each "task".
-      Second, we defined two measures of network performance: "Tension" was calculated by how far
-      task-specific parameters sets were from one another; "Robustness", described how resilient parameters were
-      to minor perturbation. A major challenge here was to convey the changes in the high-dimensional
-      parameter space in a simple yet meaningful fashion.
-    </p><br>
-    <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/parameterChange.png" />
-    <br>
-    <p>
-      The above figure conveys the tension between a hysteretic response (baseline value) and a biphasic response.
-      That is, the same network can operate function differently by modulating a subset of it's parameters,
-      while leaving others largely unchanged.
-      An alternative to this strategy is to find a middle ground - a single set of parameter values that accommodates
-      multiple tasks. While we could identify such parameter values, they were much more sensitive to minor perturbations,
-      and so less robust. This report shows that the amount of multitasking a network takes on may be limited by
-      the amount of fragility it experiences in the process.
-    </p><br>
-  </div>
+    </div>
 
 
-  <div class="item">
-    <a name="A Built-In Brake for Cell Growth"><h3 class="item-title">A Built-In Brake for Cell Growth</h3></a>
-    <a href="http://www.cell.com/molecular-cell/retrieve/pii/S1097276511000414">
-         <p>Molecular Cell, 4 February 2011, Vol. 41, Issue 3, pp.275-285 </p>
-    </a>
-    <p>
-      We all start from one, single, lonely cell; Given the fact that our bodies will be made of nearly
-      100 trillion cells over a lifetime, it's pretty miraculous that we all don't get cancer
-      sooner! This suggests some pretty good safety valves in place to prevent uncontrolled
-      cell growth. Here we report a built-stopping mechanism in the E2F network that controls cell growth
-      that is triggered by dangerous levels of growth signals originating from the MYC cancer gene.
-    </p>
-    <p>
-      In this report, we wanted to examine how different amounts of the MYC gene affected the cell cycle response,
-      as measured by the amount of E2F gene produced. E2F lies at the nexus of a network
-      that governs the transition from resting to proliferation. MYC is induced by normal
-      growth signals but is also produced in great excess in human tumours, leading to the theory that
-      it's persistent activation contributes to cancer.The figure below shows microscope images of a single attempt to
-      deliver different amounts of MYC to rat cells and measure E2F. The figure shows experiments where we
-      deliver MYC (mCherry in red) at increasing levels to cells (DAPI in blue) and then track E2F (GFP in green).
-    </p>
-    <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/modelling_confocal.png" /><br>
-    <p>
-      We automated the above technique so that we could track the MYC input (x-axis) and E2F
-      output (y-axis) in hundreds of thousands of individual cells (data points) in one shot! Successive panels
-      show results when the average doses of MYC was dialed up. These experiments revealed a heretofore unnoticed
-      phenomenon: low MYC generates low E2F while high levels also leads to low levels!
-    </p>
-    <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/scatterMolCell.png" /><br>
-    <p>
-      To help understand this behaviour better, we developed a mechanistic mathematical model of the wider MYC-E2F
-      network to determine what was required to recapitulate our observations (figure below). The panel on the left
-      shows the simplified network that we modelled having normal growth signals activating MYC which, in turn, upregulates
-      E2F. Consistent with <a href="http://www.nature.com/ncb/journal/v10/n4/abs/ncb1711.html">previous work</a>, our model
-      could generate the induction of E2F by MYC but could not generate the suppression at high MYC levels (right panel, grey trajectory).
-      Indeed, our model indicated that other known suppressors of E2F downstream of MYC could not generate this behaviour,
-      and that an additional source of repression must exist (right panel, green trajectory), the nature of which remains unknown.
-    </p>
-    <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/modelling_model.png" /><br>
-    <p>
-      We theorized the biphasic E2F response to MYC is a built-in safety mechanism: normal,
-      low levels of MYC stimulated by, for example, growth factors can drive cell cycle entry,
-      while hyperactivated MYC, such as that observed in tumours, is unable to do the same.
-      Thus, a built-in brake senses high MYC and prevents E2F from driving cell cycle responses.
-    </p>
-
-  </div>
+    <div class="item col-xs-12">
+          <a name="The Perils of Multitasking"><h3 class="item-title">The Perils of Multitasking</h3></a>
+        <a href="http://www.ploscompbiol.org/article/info%3Adoi%2F10.1371%2Fjournal.pcbi.1002491">
+          <p>PLoS Computational Biology, April 2012, 8(4): e1002491</p>
+        </a>
+        <p>
+          The ubiquity of mobile electronic devices has probably taught us one thing: Multitasking
+          results in poor performance and is potentially dangerous!
+          This computational analysis examines how this notion applies to biological signaling networks.
+          The E2F network (figure below) which controls cell growth has been shown to multitask:
+          It performs different functions in cells depending on the type of stimulus it receives
+          (e.g. growth factor versus MYC cancer gene activation).
+          These different functions are produced by the same network exhibiting different dynamics
+          (hysteresis, biphasic, adaptation). We were interested in seeing
+          what trade-offs, if any, accompanied a network trying to accomplish this many jobs.
+        </p>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/e2fNetwork.png" /><br>
+        <p>
+          Our approach was two-fold. First, we developed an algorithm that could learn
+          typical parameter values which allowed our network to perform each "task".
+          Second, we defined two measures of network performance: "Tension" was calculated by how far
+          task-specific parameters sets were from one another; "Robustness", described how resilient parameters were
+          to minor perturbation. A major challenge here was to convey the changes in the high-dimensional
+          parameter space in a simple yet meaningful fashion.
+        </p><br>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/parameterChange.png" />
+        <br>
+        <p>
+          The above figure conveys the tension between a hysteretic response (baseline value) and a biphasic response.
+          That is, the same network can operate function differently by modulating a subset of it's parameters,
+          while leaving others largely unchanged.
+          An alternative to this strategy is to find a middle ground - a single set of parameter values that accommodates
+          multiple tasks. While we could identify such parameter values, they were much more sensitive to minor perturbations,
+          and so less robust. This report shows that the amount of multitasking a network takes on may be limited by
+          the amount of fragility it experiences in the process.
+        </p><br>
+    </div>
 
 
-  <div class="item">
-      <a name="Tracking 'virtual' arthritis populations"><h3 class="item-title">Tracking "virtual" arthritis populations</h3></a>
-    <p>
-        At <a href="http://www.immunetrics.com/">Immunetrics</a>, I had the opportunity to jump in
-        on projects for acute and chronic immune disorders. Pharma companies interested in rheumatoid arthritis therapies
-        asked us to predict how a new drug in their pipeline would behave in a model that reliably reproduced previous trial results.
-        These days, companies want tips on how many patients they would need in a trial to get a
-        <a href="http://www.medicine.ox.ac.uk/bandolier/booth/glossary/statpow.html">
-            good chance</a> of observing a pre-defined minimum effect to save them the expense of over-enrollment.
-    </p>
-    <p>
-        Our models spanned the molecular and cellular biology of the disease
-        up to the relevant physiology of a "virtual" patient, which were then
-        selected en masse for "virtual" clinical trials.
-        Hurdles in making models realistic include the broad spectrum of patient responses to therapy
-        set against the compendium of criteria test populations are known to satisfy (constraints).
-        The modelling process involved many cycles of
-        simulation, testing, and pruning to end up with a useable population.
-        In more mathematical terms, this amounts to a large-scale
-        constrained optimization problem in "patient space".
-    </p>
-    <p>
-        One significant challenge we as modellers faced was in understanding how well a particular
-        selection cycle was doing: Imagine testing thousands of patients for double digit types of therapies across
-        several time points for a multitude of clinical measurements and you get the idea! I found
-        trying to interpret reams of computer output in text format a dizzying experience and so created a suite of R
-        scripts to grab and plot the data pouring out of our simulations database (below: red- simulation; blue - data).
-    </p>
-    <img class="caption img-responsive" src="/static/jeffreyvwong/images/visual/nlp.png" />
-    <p>
-        This analysis also included a variety of 2- and 3-dimensional analyses on proprietary clinical trial data provided
-        by companies which, of course, I am unable to present. This 'slice-and-dice' approach enabled even
-        better resolution in developing our "virtual" population.
-    </p>
-  </div>
+    <div class="item col-xs-12">
+        <a name="A Built-In Brake for Cell Growth"><h3 class="item-title">A Built-In Brake for Cell Growth</h3></a>
+        <a href="http://www.cell.com/molecular-cell/retrieve/pii/S1097276511000414">
+             <p>Molecular Cell, 4 February 2011, Vol. 41, Issue 3, pp.275-285 </p>
+        </a>
+        <p>
+          We all start from one, single, lonely cell; Given the fact that our bodies will be made of nearly
+          100 trillion cells over a lifetime, it's pretty miraculous that we all don't get cancer
+          sooner! This suggests some pretty good safety valves in place to prevent uncontrolled
+          cell growth. Here we report a built-stopping mechanism in the E2F network that controls cell growth
+          that is triggered by dangerous levels of growth signals originating from the MYC cancer gene.
+        </p>
+        <p>
+          In this report, we wanted to examine how different amounts of the MYC gene affected the cell cycle response,
+          as measured by the amount of E2F gene produced. E2F lies at the nexus of a network
+          that governs the transition from resting to proliferation. MYC is induced by normal
+          growth signals but is also produced in great excess in human tumours, leading to the theory that
+          it's persistent activation contributes to cancer.The figure below shows microscope images of a single attempt to
+          deliver different amounts of MYC to rat cells and measure E2F. The figure shows experiments where we
+          deliver MYC (mCherry in red) at increasing levels to cells (DAPI in blue) and then track E2F (GFP in green).
+        </p>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/modelling_confocal.png" /><br>
+        <p>
+          We automated the above technique so that we could track the MYC input (x-axis) and E2F
+          output (y-axis) in hundreds of thousands of individual cells (data points) in one shot! Successive panels
+          show results when the average doses of MYC was dialed up. These experiments revealed a heretofore unnoticed
+          phenomenon: low MYC generates low E2F while high levels also leads to low levels!
+        </p>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/scatterMolCell.png" /><br>
+        <p>
+          To help understand this behaviour better, we developed a mechanistic mathematical model of the wider MYC-E2F
+          network to determine what was required to recapitulate our observations (figure below). The panel on the left
+          shows the simplified network that we modelled having normal growth signals activating MYC which, in turn, upregulates
+          E2F. Consistent with <a href="http://www.nature.com/ncb/journal/v10/n4/abs/ncb1711.html">previous work</a>, our model
+          could generate the induction of E2F by MYC but could not generate the suppression at high MYC levels (right panel, grey trajectory).
+          Indeed, our model indicated that other known suppressors of E2F downstream of MYC could not generate this behaviour,
+          and that an additional source of repression must exist (right panel, green trajectory), the nature of which remains unknown.
+        </p>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/modelling/modelling_model.png" /><br>
+        <p>
+          We theorized the biphasic E2F response to MYC is a built-in safety mechanism: normal,
+          low levels of MYC stimulated by, for example, growth factors can drive cell cycle entry,
+          while hyperactivated MYC, such as that observed in tumours, is unable to do the same.
+          Thus, a built-in brake senses high MYC and prevents E2F from driving cell cycle responses.
+        </p>
+
+    </div>
+
+
+    <div class="item col-xs-12">
+        <a name="Tracking 'virtual' arthritis populations"><h3 class="item-title">Tracking "virtual" arthritis populations</h3></a>
+        <p>
+            At <a href="http://www.immunetrics.com/">Immunetrics</a>, I had the opportunity to jump in
+            on projects for acute and chronic immune disorders. Pharma companies interested in rheumatoid arthritis therapies
+            asked us to predict how a new drug in their pipeline would behave in a model that reliably reproduced previous trial results.
+            These days, companies want tips on how many patients they would need in a trial to get a
+            <a href="http://www.medicine.ox.ac.uk/bandolier/booth/glossary/statpow.html">
+                good chance</a> of observing a pre-defined minimum effect to save them the expense of over-enrollment.
+        </p>
+        <p>
+            Our models spanned the molecular and cellular biology of the disease
+            up to the relevant physiology of a "virtual" patient, which were then
+            selected en masse for "virtual" clinical trials.
+            Hurdles in making models realistic include the broad spectrum of patient responses to therapy
+            set against the compendium of criteria test populations are known to satisfy (constraints).
+            The modelling process involved many cycles of
+            simulation, testing, and pruning to end up with a useable population.
+            In more mathematical terms, this amounts to a large-scale
+            constrained optimization problem in "patient space".
+        </p>
+        <p>
+            One significant challenge we as modellers faced was in understanding how well a particular
+            selection cycle was doing: Imagine testing thousands of patients for double digit types of therapies across
+            several time points for a multitude of clinical measurements and you get the idea! I found
+            trying to interpret reams of computer output in text format a dizzying experience and so created a suite of R
+            scripts to grab and plot the data pouring out of our simulations database (below: red- simulation; blue - data).
+        </p>
+        <img class="caption img-responsive" src="/static/jeffreyvwong/images/visual/nlp.png" />
+        <p>
+            This analysis also included a variety of 2- and 3-dimensional analyses on proprietary clinical trial data provided
+            by companies which, of course, I am unable to present. This 'slice-and-dice' approach enabled even
+            better resolution in developing our "virtual" population.
+        </p>
+    </div>
 
 </div>
 

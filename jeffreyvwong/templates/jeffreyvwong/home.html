@@ -1,4 +1,5 @@
 {% extends "jeffreyvwong/base.html" %}
+{% load staticfiles %}
 {% block head %}
     <style>
         a:link, a:visited{
@@ -6,7 +7,7 @@
             outline: 0;
         }
     </style>
-    <link href="/static/jeffreyvwong/css/carousel.css" rel="stylesheet">
+    <link href="{% static 'jeffreyvwong/css/carousel.css' %}" rel="stylesheet">
 {% endblock head %}
 
 {% block title %}Home {{ block.super }}{% endblock title %}
@@ -44,7 +45,7 @@
         </ol>
         <div class="carousel-inner">
             <div class="item active">
-                <img class="img-responsive" src="/static/jeffreyvwong/images/panels/invaders.jpg"  alt="zipper">
+                <img class="img-responsive" src="{% static 'jeffreyvwong/images/panels/invaders.jpg' %}"  alt="zipper">
                 <div class="container-fluid">
                     <div class="carousel-caption invert">
                         <h1>Bacterial Invaders</h1>
@@ -54,7 +55,7 @@
                 </div>
             </div>
             <div class="item">
-                <img src="/static/jeffreyvwong/images/panels/earth_lights.jpg" alt="gcifwebapps">
+                <img src="{% static 'jeffreyvwong/images/panels/earth_lights.jpg' %}" alt="gcifwebapps">
                 <div class="container">
                     <div class="carousel-caption">
                         <h1>Earthly Intelligence</h1>
@@ -64,7 +65,7 @@
                 </div>
             </div>
             <div class="item">
-                <img class="img-responsive" src="/static/jeffreyvwong/images/panels/multiscreen.jpg" alt="multitask">
+                <img class="img-responsive" src="{% static 'jeffreyvwong/images/panels/multiscreen.jpg' %}" alt="multitask">
                 <div class="container">
                     <div class="carousel-caption invert">
                         <h1>The Perils of Multitasking</h1>
@@ -92,27 +93,22 @@
     ================================================== -->
     <!-- Wrap the rest of the page in another container to center all the content. -->
 
-    <div class="container marketing">
+    <div class="container-fluid marketing">
 
         <!-- Three columns of text below the carousel -->
         <div class="row">
-            <div class="col-sm-12 col-md-4 col-lg-4">
-                <!--<img class="img-circle" data-src="holder.js/140x140" alt="Generic placeholder image">-->
-                <h3><a href="{% url 'jeffreyvwong_visualization' %}">Visualization</a></h3>
-                <p>Web-based applications, dashboards, and data visualizations</p>
+            <div class="col-xs-offset-2 col-xs-9 col-sm-offset-1 col-sm-5">
+                <h3 class="text-center"><a href="{% url 'jeffreyvwong_visualization' %}">Consulting</a></h3>
+                <p class="lead text-center">Data Wrangling & Visualization</p>
+                <p class="text-center"><small>Visualization | Projects</small></p>
             </div><!-- /.col-lg-4 -->
-            <div class="col-sm-12 col-md-4 col-lg-4">
-                <!--<img class="img-circle" data-src="holder.js/140x140" alt="Generic placeholder image">-->
-                <h3><a href="{% url 'jeffreyvwong_modelling' %}">Modelling</a></h3>
-                <p>Modelling, simulation, and optimization from industry and academia</p>
+            <div class="col-xs-offset-2 col-sm-offset-0 col-xs-9 col-sm-5">
+                <h3 class="text-center"><a href="{% url 'jeffreyvwong_background' %}">Background</a></h3>
+                <p class="lead text-center">Industry & Academia</p>
+                <p class="text-center"><small>Modelling | Publications</small></p>
             </div><!-- /.col-lg-4 -->
-            <div class="col-sm-12 col-md-4 col-lg-4">
-                <!--<img class="img-circle" data-src="holder.js/140x140" alt="Generic placeholder image">-->
-                <h3><a href="{% url 'jeffreyvwong_publication' %}">Publication</a></h3>
-                <p>Published work and reviews in experimental and computational biology</p>
-            </div><!-- /.col-lg-4 -->
-        </div><!-- /.row -->
-
+        </div>
+        <!-- /.row -->
     </div><!-- /.container -->
 
 
