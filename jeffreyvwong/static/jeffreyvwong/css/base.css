@@ -82,6 +82,19 @@
 -----------------------------*/
 
 
+    /*----------------------------
+          Begin: background
+    -----------------------------*/
+
+        .background .background-tabs .tab-content .dropdown{
+            position: absolute;
+            left: 4em;
+        }
+
+    /*----------------------------
+          End: background
+    -----------------------------*/
+
 
 /*----------------------------
       Begin: effeckt captions

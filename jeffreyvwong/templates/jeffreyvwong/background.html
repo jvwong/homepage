@@ -1,6 +1,6 @@
 {% extends "jeffreyvwong/base.html" %}
 
-{% block title %} Bio{{ block.super }}{% endblock title %}
+{% block title %} Background{{ block.super }}{% endblock title %}
 
 {% block meta_description %}
     <meta name="description" content="Biographical sketch related to work experience and education." />
@@ -15,20 +15,34 @@
 
 {% block content %}
 
-<div class="container-fluid col-sm-offset-1 col-sm-10">
-    <ol class="breadcrumb">
-      <li><a href="{% url 'jeffreyvwong_home' %}">Home</a></li>
-      <li>Background</li>
-    </ol>
+<div class="container-fluid col-sm-offset-1 col-sm-10 background"><br/>
 
-    <div class="bs-example bs-example-tabs">
+    <div class="background-tabs">
         <ul id="myTab" class="nav nav-tabs" role="tablist">
             <li class="active"><a href="#modelling" role="tab" data-toggle="tab">Modelling</a></li>
             <li><a href="#publication" role="tab" data-toggle="tab">Publications</a></li>
         </ul>
         <div id="myTabContent" class="tab-content">
-            <div class="tab-pane fade in active" id="modelling">
-                <div class="container-fluid">
+            <div class="tab-pane fade in active" id="modelling"><br/>
+                <div class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Jump to Section<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#Bacterial Invaders">Bacterial Invaders</a>
+                        </li>
+                        <li>
+                            <a href="#The Perils of Multitasking">The Perils of Multitasking</a>
+                        </li>
+                        <li>
+                            <a href="#A Built-In Brake for Cell Growth">A Built-In Brake for Cell Growth</a>
+                        </li>
+                        <li>
+                            <a href="#Tracking 'virtual' arthritis populations">Tracking "virtual" arthritis populations</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="container-fluid"><br/>
+
                     <div class="item col-xs-12">
                         <a name="Bacterial Invaders"><h3 class="item-title">Bacterial Invaders</h3></a>
                         <p>This work has been submitted (March 04, 2014)</p><br>
@@ -218,7 +232,34 @@
 
 
             </div>
-            <div class="tab-pane fade" id="publication">
+            <div class="tab-pane fade" id="publication"><br/>
+
+                <div class="dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">Jump to Section <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#Review: Cell Cycle">Review: Cell Cycle</a>
+                        </li>
+                        <li>
+                            <a href="#Article: Molecular Cel">Article: Molecular Cell</a>
+                        </li>
+                        <li>
+                            <a href="#News &amp; Views: Nature">News &amp; Views: Nature</a>
+                        </li>
+                        <li>
+                            <a href="#Review: Methods in Enzymology">Review: Methods in Enzymology</a>
+                        </li>
+                        <li>
+                            <a href="#Review: ACS Chemical Biology">Review: ACS Chemical Biology</a>
+                        </li>
+                        <li>
+                            <a href="#Article: Characterizing Control of PTGF-beta">Article: Characterizing Control of PTGF-beta</a>
+                        </li>
+                        <li>
+                            <a href="#Article: Discovering a novel anti-cancer gene">Article: Discovering a novel anti-cancer gene</a>
+                        </li>
+                    </ul>
+                </div><br/>
                 <div class="container-fluid">
                     <div class="item">
                         <a name="Review: Cell Cycle"><h3 class="item-title">Review: Cell Cycle</h3></a>
