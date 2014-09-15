@@ -7,4 +7,4 @@ django-taggit==0.12.1
 markup==0.2
 python-dateutil==2.2
 six==1.5.2
-
+gunicorn==19.1.1
