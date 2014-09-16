@@ -2,8 +2,7 @@ from django.http import HttpResponse
 from django.template import loader, Context
 
 from django.views.generic.base import TemplateView, View
-from jeffreyvwong.models import JsonData, Questionnaire
-from jeffreyvwong.forms import QuestionnaireForm
+from jeffreyvwong.models import JsonData
 
 import logging
 import json
@@ -17,31 +16,6 @@ class BlogosphereView(View):
         #logging.error(blogs.json)
         return HttpResponse(json.dumps(blogs.json), content_type = "application/json")    
     
-from django.views.generic.edit import FormView
-
-class QuestionnaireView(FormView):
-    template_name = 'jeffreyvwong/question_form.html'
-    form_class = QuestionnaireForm
-    success_url = '../question_success'
-    
-    def form_valid(self, form):
-        new_object = form.save()
-        new_object.save()
-        return super(QuestionnaireView, self).form_valid(form)
-
-
-
-from django.views.generic import TemplateView
-
-class QuestionnaireSuccessView(TemplateView):
-    template_name = 'jeffreyvwong/question_success.html'    
-    
-    def get_context_data(self, **kwargs):
-        context = super(QuestionnaireSuccessView, self).get_context_data(**kwargs)
-        context['latest_object'] = Questionnaire.objects.all()[:1]
-        #logging.error(context)
-        return context
-
 
 class RobotsView(TemplateView):
     def get(self, request, *args, **kwargs):

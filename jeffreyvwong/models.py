@@ -1,4 +1,4 @@
-from json_field import JSONField
+from jsonfield import JSONField
 from django.db import models
 from pygments import lexers, formatters, highlight
 from django.contrib.auth.models import User
@@ -17,7 +17,10 @@ class Language(models.Model):
         
     def __unicode__(self):
         return self.name
-    
+
+    def __str__(self):
+        return self.name
+
     @models.permalink 
     def get_absolute_url(self):
         return ('jeffreyvwong_language_detail', (), {'slug': self.slug})
@@ -45,8 +48,10 @@ class Snippet(models.Model):
         
     def __unicode__(self):
         return self.title
-    
-    
+
+    def __str__(self):
+        return self.title
+
     def highlight(self):
         return highlight(self.code,
                          self.language.get_lexer(),
@@ -64,13 +69,12 @@ class Snippet(models.Model):
     @models.permalink 
     def get_absolute_url(self):
         return ('jeffreyvwong_visualization_detail', (), {'pk': self.id})
-        
-    
+
 
 class JsonData(models.Model):
     #Core fields
     title = models.CharField(max_length=250) 
-    json = JSONField(blank = False)
+    json = JSONField(blank=False)
     
     #Auto populated 
     pub_date = models.DateTimeField(auto_now_add = True)
@@ -79,33 +83,9 @@ class JsonData(models.Model):
         verbose_name_plural = "JsonData"
     
     def __unicode__(self):
-        return self.title   
+        return self.title
+
+    def __str__(self):
+        return self.title
 
 
-
-class Questionnaire(models.Model):
-    name = models.CharField(max_length = 30)
-    email = models.CharField(max_length = 30)   
-    location = models.CharField(max_length = 30, blank = True)
-    background = models.CharField(max_length = 30, blank = True)
-    aptitude = models.CharField(max_length = 30, blank = True)
-    
-    interest = models.CharField(max_length = 30, blank = True)
-    commitment = models.CharField(max_length = 30, blank = True)
-    
-    previous = models.TextField(blank = False)
-    obstacles = models.TextField(blank = False)        
-    goals = models.TextField(blank = True)
-    include = models.TextField(blank = True)
-    avoid = models.TextField(blank = True)
-    
-    comments = models.TextField(blank = True)   
-    
-    pub_date = models.DateTimeField(auto_now_add = True)
-    
-    class Meta:
-        ordering = ['-pub_date']
-        verbose_name_plural = "Questionnaires"
-    
-    def __unicode__(self):
-        return self.name  

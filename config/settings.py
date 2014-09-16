@@ -143,7 +143,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.flatpages',
     'taggit',
-    'json_field',
+    'jsonfield',
     'jeffreyvwong'
 )
 
