@@ -1,50 +1,55 @@
 @import "_contact";
-
+@import "_home";
+@import "_cv";
 
 /*----------------------------
 	Global styles
 -----------------------------*/
 
-    body {
-        position: relative;
-        /*margin:  10px 0px 0px;*/
-        padding: 0px;
-        font-family: "Helvetica Neue";
-        font-family: sans-serif;
-        font-size: 16px;
-        z-index: 0;
-        text-align: justify;
-    }
+body {
+    position: relative;
+    /*margin:  10px 0px 0px;*/
+    padding: 0px;
+    font-family: "Helvetica Neue";
+    font-family: sans-serif;
+    font-size: 16px;
+    z-index: 0;
+    text-align: justify;
+}
 
 
-    ul.listtype_none {
-        list-style-type: none;
-    }
+ul.listtype_none {
+    list-style-type: none;
+}
 
-    ul.square li{
-        list-style-type: square;
-    }
+ul.square li{
+    list-style-type: square;
+}
 
-    ul.circle li{
-        list-style-type: circle;
-    }
+ul.circle li{
+    list-style-type: circle;
+}
 
-    p.indent{
-        text-indent: 50px;
-    }
+p.indent{
+    text-indent: 50px;
+}
 
-    @media (min-width: 768px) {
-        img.caption{
-            max-width: 600px;
-            max-height: 600px;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
+@media (min-width: 768px) {
+    img.caption{
+        max-width: 600px;
+        max-height: 600px;
+        margin-top: 15px;
+        margin-bottom: 15px;
     }
+}
 
-    blockquote{
-        font-size: 0.9em;
-    }
+blockquote{
+    font-size: 0.9em;
+}
+
+.italic{
+  font-style: italic;
+}
 
 /*----------------------------
       BEGIN: navbar override
@@ -61,12 +66,6 @@
 /*----------------------------
       Begin: content
 -----------------------------*/
-    .content{
-      min-height : 700px;
-      /*padding-top: 3em;*/
-      padding-bottom : 5em;
-    }
-
     .item{
         padding-bottom: 4em;
     }
@@ -295,104 +294,7 @@
 -----------------------------*/
 
 
-/*----------------------------
-      Begin: CV
------------------------------*/
 
-.cv-download{
-    width: 10em;
-}
-
-  .cv{
-	position: relative;
-	font-size: 15px;
-  }
-
-
-  table {
-	  width: 100%;
-	  text-align: left;
-  }
-
-
-  table td, th{
-	  font-size: 0.9em;
-	  padding: 4px 10px 4px 10px;
-	  background-color: #e3dfd5;
-	  font-weight: bold;
-  }
-
-  table th{
-	  background-color: #3f3c30;
-	  color: #eee6cb;
-	  text-decoration:none;
-  }
-
-  table .date{ width: 16%; }
-  table .degree{ width: 15%; }
-  table .department{ width: 35%; }
-  table .department-education{ width: 40%; }
-  table .university{ width: auto; }
-  table .company{ width: 20%; }
-  table .job-title{ width: 25%; }
-  table .scholarship{ width: 30%; }
-  table .supervisor{ width: 20%; }
-  table .teaching-department{ width: 20%; }
-
-
-    .job-description li{
-        font-size: 1.0em;
-        /*font-weight: bold;*/
-        list-style-type: none;
-    }
-
-    .job-description li ul li{
-        font-size: 0.9em;
-        font-weight: normal;
-        font-style: italic;
-        list-style-type: square;
-        width: 90%;
-
-    }
-
-    .job-summary{
-          width: 90%;
-          text-align: justify;
-    }
-
-    .italic{
-     font-style: italic;
-    }
-
-    .job-description-other{
-        position: relative;
-        left: 25px;
-        font-style: italic;
-        font-size: 0.9em;
-    }
-
-
-
-    #resume-address{
-        position: absolute;
-        right: 2%;
-        top: 0%;
-        font-size: 0.9em;
-        font-style: italic;
-
-    }
-
-    h4.publication{
-        position: relative;
-        left: 25px;
-    }
-    .current-author{
-        font-weight: bold;
-    }
-
-/*----------------------------
-      End: CV
------------------------------*/
 
 /* lg (large desktops, 1200px and up) */
 @media (min-width: 1200px)
@@ -407,7 +309,7 @@
 /* sm (tablets, 768px and up) */
 @media (min-width: 768px)
 {
-    .content
+    .jvw-content
     {
         width: 1000px;
         margin: 0 auto;
@@ -417,18 +319,18 @@
 /* xs (phones) */
 @media (max-width: 767px)
 {
-    .content
+    .jvw-content
     {
         width: 100%;
     }
 
-    .content .container-fluid
+    .jvw-content .container-fluid
     {
         padding-left: 0.5em;
         padding-right: 0.5em;
     }
 
-    .content .background .item
+    .jvw-content .background .item
     {
         padding-left: 0.5em;
         padding-right: 0.5em;

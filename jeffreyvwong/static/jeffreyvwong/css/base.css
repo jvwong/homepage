@@ -24,6 +24,148 @@
 /* xs (phones) */
 /* xs Nexus4 portrait*/
 /* xs Nexus4 portrait*/
+/* GLOBAL STYLES
+-------------------------------------------------- */
+/* CUSTOMIZE THE CAROUSEL
+-------------------------------------------------- */
+/* Carousel base class */
+.jvw-home-carousel .carousel {
+  height: 400px;
+  margin-bottom: 3em;
+  /* Since positioning the image, we need to help out the caption */
+}
+.jvw-home-carousel .carousel .carousel-caption {
+  z-index: 10;
+}
+.jvw-home-carousel .carousel .carousel-caption.invert {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.jvw-home-carousel .carousel .carousel-inner > .item > img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 400px;
+}
+.jvw-home-carousel .carousel .item {
+  height: 400px;
+  background-color: #333333;
+}
+/* DETAIL  CONTENT
+-------------------------------------------------- */
+/* Pad the edges of the mobile views a bit */
+.jvw-home-detail {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+/* RESPONSIVE CSS
+-------------------------------------------------- */
+/* lg (large desktops, 1200px and up) */
+/* md (desktops, 992px and up) */
+/* sm (tablets, 768px and up) */
+/* xs (phones) */
+/* xs Nexus4 portrait*/
+/* xs Nexus4 portrait*/
+/*----------------------------
+      Begin: CV
+-----------------------------*/
+.jvw-cv {
+  position: relative;
+  font-size: 15px;
+}
+.jvw-cv .cv-download {
+  width: 10em;
+}
+.jvw-cv table {
+  width: 100%;
+  text-align: left;
+}
+.jvw-cv table td,
+.jvw-cv table th {
+  font-size: 0.9em;
+  padding: 4px 10px 4px 10px;
+  background-color: #e3dfd5;
+  font-weight: bold;
+}
+.jvw-cv table th {
+  background-color: #3f3c30;
+  color: #eee6cb;
+  text-decoration: none;
+}
+.jvw-cv table .date {
+  width: 16%;
+}
+.jvw-cv table .degree {
+  width: 15%;
+}
+.jvw-cv table .department {
+  width: 35%;
+}
+.jvw-cv table .department-education {
+  width: 40%;
+}
+.jvw-cv table .university {
+  width: auto;
+}
+.jvw-cv table .company {
+  width: 20%;
+}
+.jvw-cv table .job-title {
+  width: 25%;
+}
+.jvw-cv table .scholarship {
+  width: 30%;
+}
+.jvw-cv table .supervisor {
+  width: 20%;
+}
+.jvw-cv table .teaching-department {
+  width: 20%;
+}
+.jvw-cv .job-description .job-summary {
+  width: 90%;
+  text-align: justify;
+}
+.jvw-cv .job-description li {
+  font-size: 1.0em;
+  /*font-weight: bold;*/
+  list-style-type: none;
+}
+.jvw-cv .job-description li ul li {
+  font-size: 0.9em;
+  font-weight: normal;
+  font-style: italic;
+  list-style-type: square;
+  width: 90%;
+}
+.jvw-cv .publication .reference .current-author {
+  font-weight: bold;
+}
+/*----------------------------
+      End: CV
+-----------------------------*/
+/* lg (large desktops, 1200px and up) */
+/* md (desktops, 992px and up) */
+/* sm (tablets, 768px and up) */
+/* xs (phones) */
+@media (max-width: 767px) {
+  .jvw-cv .job-description {
+    padding-left: 0em;
+    padding-right: 0em;
+  }
+  .jvw-cv .job-description .job-summary {
+    width: 100%;
+  }
+  .jvw-cv .job-description li ul li {
+    width: 100%;
+  }
+  .jvw-cv .publication {
+    padding-left: 0em;
+    padding-right: 0em;
+  }
+}
+/* xs Nexus4 portrait*/
+/* xs Nexus4 portrait*/
 /*----------------------------
 	Global styles
 -----------------------------*/
@@ -60,6 +202,9 @@ p.indent {
 blockquote {
   font-size: 0.9em;
 }
+.italic {
+  font-style: italic;
+}
 /*----------------------------
       BEGIN: navbar override
 -----------------------------*/
@@ -72,11 +217,6 @@ blockquote {
 /*----------------------------
       Begin: content
 -----------------------------*/
-.content {
-  min-height: 700px;
-  /*padding-top: 3em;*/
-  padding-bottom: 5em;
-}
 .item {
   padding-bottom: 4em;
 }
@@ -259,123 +399,25 @@ img#mayoral_map {
 /*----------------------------
       End: Visual
 -----------------------------*/
-/*----------------------------
-      Begin: CV
------------------------------*/
-.cv-download {
-  width: 10em;
-}
-.cv {
-  position: relative;
-  font-size: 15px;
-}
-table {
-  width: 100%;
-  text-align: left;
-}
-table td,
-th {
-  font-size: 0.9em;
-  padding: 4px 10px 4px 10px;
-  background-color: #e3dfd5;
-  font-weight: bold;
-}
-table th {
-  background-color: #3f3c30;
-  color: #eee6cb;
-  text-decoration: none;
-}
-table .date {
-  width: 16%;
-}
-table .degree {
-  width: 15%;
-}
-table .department {
-  width: 35%;
-}
-table .department-education {
-  width: 40%;
-}
-table .university {
-  width: auto;
-}
-table .company {
-  width: 20%;
-}
-table .job-title {
-  width: 25%;
-}
-table .scholarship {
-  width: 30%;
-}
-table .supervisor {
-  width: 20%;
-}
-table .teaching-department {
-  width: 20%;
-}
-.job-description li {
-  font-size: 1.0em;
-  /*font-weight: bold;*/
-  list-style-type: none;
-}
-.job-description li ul li {
-  font-size: 0.9em;
-  font-weight: normal;
-  font-style: italic;
-  list-style-type: square;
-  width: 90%;
-}
-.job-summary {
-  width: 90%;
-  text-align: justify;
-}
-.italic {
-  font-style: italic;
-}
-.job-description-other {
-  position: relative;
-  left: 25px;
-  font-style: italic;
-  font-size: 0.9em;
-}
-#resume-address {
-  position: absolute;
-  right: 2%;
-  top: 0%;
-  font-size: 0.9em;
-  font-style: italic;
-}
-h4.publication {
-  position: relative;
-  left: 25px;
-}
-.current-author {
-  font-weight: bold;
-}
-/*----------------------------
-      End: CV
------------------------------*/
 /* lg (large desktops, 1200px and up) */
 /* md (desktops, 992px and up) */
 /* sm (tablets, 768px and up) */
 @media (min-width: 768px) {
-  .content {
+  .jvw-content {
     width: 1000px;
     margin: 0 auto;
   }
 }
 /* xs (phones) */
 @media (max-width: 767px) {
-  .content {
+  .jvw-content {
     width: 100%;
   }
-  .content .container-fluid {
+  .jvw-content .container-fluid {
     padding-left: 0.5em;
     padding-right: 0.5em;
   }
-  .content .background .item {
+  .jvw-content .background .item {
     padding-left: 0.5em;
     padding-right: 0.5em;
   }

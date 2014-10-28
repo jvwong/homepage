@@ -1,13 +1,7 @@
 {% extends "jeffreyvwong/base.html" %}
 {% load staticfiles %}
+
 {% block head %}
-    <style>
-        a:link, a:visited{
-            text-decoration: none;
-            outline: 0;
-        }
-    </style>
-    <link href="{% static 'jeffreyvwong/css/carousel.css' %}" rel="stylesheet">
 {% endblock head %}
 
 {% block title %}Home {{ block.super }}{% endblock title %}
@@ -21,7 +15,8 @@
 
     <!-- Carousel
     ================================================== -->
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <div class="jvw-home-carousel">
+        <div id="myCarousel" class="carousel slide" data-ride="carousel">
         <!-- Indicators -->
         <ol class="carousel-indicators">
             <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -63,12 +58,12 @@
         <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
         <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
     </div><!-- /.carousel -->
-
+    </div>
     <!-- Marketing messaging and featurettes
     ================================================== -->
     <!-- Wrap the rest of the page in another container to center all the content. -->
 
-    <div class="container-fluid marketing">
+    <div class="container-fluid jvw-home-detail">
 
         <!-- Three columns of text below the carousel -->
         <div class="row">

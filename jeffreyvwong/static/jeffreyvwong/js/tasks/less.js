@@ -13,7 +13,6 @@ module.exports = function less(grunt) {
             },
             files:{
                 "../css/base.css": "../less/base.less",
-                "../css/carousel.css": "../less/_carousel.less",
                 "../css/markup.css": "../less/_markup.less",
                 "../css/pygments.css": "../less/_pygments.less"
             }
