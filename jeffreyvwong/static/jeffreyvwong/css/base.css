@@ -457,9 +457,16 @@
         width: 100%;
     }
 
-    .container .footer
+    .content .container-fluid
     {
-        display: none;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+
+    .content .background .item
+    {
+        padding-left: 0.5em;
+        padding-right: 0.5em;
     }
 }
 
