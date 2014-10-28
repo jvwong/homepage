@@ -1,4 +1,5 @@
 {% extends "jeffreyvwong/base.html" %}
+{% load staticfiles %}
 
 {% block title %}Contact {{ block.super }}{% endblock title %}
 
@@ -7,28 +8,28 @@
 {% endblock meta_description %}
 
 {% block content %}
-    <div class="container">
-        <div class="contact">
+    <div class="container-fluid">
+        <div class="jvw-contact">
 
-            <div class="contact-img col-xs-12 col-sm-5 col-md-4">
-                <img id="contact" class="shadow img-responsive" src="/static/jeffreyvwong/images/contact.jpg" />
+            <div class="jvw-contact-avatar col-xs-12 col-sm-4">
+                <img class="shadow img-responsive" src="{% static 'jeffreyvwong/images/contact.jpg' %}" />
             </div>
 
-            <div class="contact-social col-xs-12 col-sm-7 col-md-8">
+            <div class="jvw-contact-detail col-xs-12 col-sm-8">
                 <h2 class="featurette-heading">Jeffrey V Wong, Ph.D.</h2>
-                <p class="lead">
+                <p class="">
                     Based in Markham, Ontario, Canada<br>
                     phone: 647 886 0781<br>
                     email: jeff.wong [at] jeffreyvwong.ca
                 <p>
                 <a href="https://twitter.com/jraywo">
-                    <img title="@jraywo" id="twitter-logo" src="/static/jeffreyvwong/images/assets/Twitter_logo_blue.png"/>
+                    <img title="@jraywo" id="twitter-logo" src="{% static 'jeffreyvwong/images/assets/Twitter_logo_blue.png' %}"/>
                 </a>
                 <a href="https://www.facebook.com/jeff.wong.7967">
-                    <img title="Facebook" id="facebook-logo" src="/static/jeffreyvwong/images/assets/FB-f-Logo__blue_512.png"/>
+                    <img title="Facebook" id="facebook-logo" src="{% static 'jeffreyvwong/images/assets/FB-f-Logo__blue_512.png' %}"/>
                 </a>
                 <a href="http://lnkd.in/WgyJvD">
-                    <img title="Linked In" id="linkedin-logo" src="/static/jeffreyvwong/images/assets/LinkedIn.png"/>
+                    <img title="Linked In" id="linkedin-logo" src="{% static 'jeffreyvwong/images/assets/LinkedIn.png' %}"/>
                 </a>
             </div>
 

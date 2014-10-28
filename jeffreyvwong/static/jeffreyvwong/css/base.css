@@ -1,4 +1,30 @@
 /*----------------------------
+      Begin: contact
+-----------------------------*/
+.jvw-contact {
+  white-space: nowrap;
+}
+.jvw-contact .jvw-contact-detail #twitter-logo {
+  width: 35px;
+}
+.jvw-contact .jvw-contact-detail #facebook-logo {
+  width: 35px;
+}
+.jvw-contact .jvw-contact-detail #linkedin-logo {
+  height: 35px;
+}
+.jvw-contact .jvw-contact-avatar img {
+  max-width: 16em;
+  margin-top: 1.5em;
+  margin-bottom: 2em;
+}
+/* lg (large desktops, 1200px and up) */
+/* md (desktops, 992px and up) */
+/* sm (tablets, 768px and up) */
+/* xs (phones) */
+/* xs Nexus4 portrait*/
+/* xs Nexus4 portrait*/
+/*----------------------------
 	Global styles
 -----------------------------*/
 body {
@@ -330,33 +356,6 @@ h4.publication {
 }
 /*----------------------------
       End: CV
------------------------------*/
-/*----------------------------
-      Begin: contact
------------------------------*/
-.contact-social img {
-  margin-right: 0.5em;
-}
-.contact-social p,
-h2 {
-  white-space: nowrap;
-}
-img#contact {
-  max-width: 16em;
-  margin-top: 1.5em;
-  margin-bottom: 2em;
-}
-img#twitter-logo {
-  width: 35px;
-}
-img#facebook-logo {
-  width: 35px;
-}
-img#linkedin-logo {
-  height: 35px;
-}
-/*----------------------------
-      End: contact
 -----------------------------*/
 /* lg (large desktops, 1200px and up) */
 /* md (desktops, 992px and up) */
