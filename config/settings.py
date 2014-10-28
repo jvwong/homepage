@@ -86,7 +86,7 @@ STATIC_URL = '/static/'
 # various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
 )
 
 # Additional locations of static files
@@ -97,7 +97,7 @@ STATICFILES_DIRS = (
     STATIC_PATH,
 )
 
-INTERNAL_IPS = ('127.0.0.1',)
+
 
 # Make this unique, and don't share it with anybody.
 # SECRET_KEY = '0g6yk+xa!&xl%@rgf%eh%k_10v7p!ts6c00$0by@fx)95w(&pn'
