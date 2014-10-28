@@ -299,7 +299,7 @@
     width: 10em;
 }
       
-  div#resume{
+  .cv{
 	position: relative;
 	font-size: 15px;
   }  
@@ -395,16 +395,23 @@
       Begin: contact 
 -----------------------------*/
 
-.contact-social img{
-   margin-right: 0.5em;
- }
+.contact
+{
+}
+
+    .contact-social img {
+        margin-right: 0.5em;
+    }
+
+    .contact-social p, h2
+    {
+        white-space: nowrap;
+    }
 
   img#contact{
-    width: 16em;
+    max-width: 16em;
     margin-top: 1.5em;
     margin-bottom: 2em;
-    margin-left: 2em;
-    /*margin-right: 2em;*/
   }
 
   img#twitter-logo{
@@ -422,17 +429,47 @@
       End: contact 
 -----------------------------*/
 
+/* lg (large desktops, 1200px and up) */
+@media (min-width: 1200px)
+{
+}
 
-/*----------------------------
-	Begin: footer 
------------------------------*/
+/* md (desktops, 992px and up) */
+@media (min-width: 992px)
+{
+}
 
-  footer p{
-    /*position: absolute;*/
-    bottom : 0px;
-  }
+/* sm (tablets, 768px and up) */
+@media (min-width: 768px)
+{
+    .content
+    {
+        width: 1000px;
+        margin: 0 auto;
+    }
+}
 
-/*----------------------------
-	End: footer
------------------------------*/
+/* xs (phones) */
+@media (max-width: 767px)
+{
+    .content
+    {
+        width: 100%;
+    }
+
+    .container .footer
+    {
+        display: none;
+    }
+}
+
+/* xs Nexus4 portrait*/
+@media (max-width: 640px)
+{
+}
+
+/* xs Nexus4 portrait*/
+@media (max-width: 384px)
+{
+}
 
