@@ -41,8 +41,8 @@ urlpatterns = patterns('',
     url(r'^birth/$', TemplateView.as_view(template_name='jeffreyvwong/visual/birth.html'),
                                                     name='jeffreyvwong_birth'),
 
-    url(r'^sandbox/$', TemplateView.as_view(template_name='jeffreyvwong/visual/sandbox.html'),
-                                                    name='jeffreyvwong_sandbox'),
+    url(r'^gvt/$', TemplateView.as_view(template_name='jeffreyvwong/visual/gvt.html'),
+                                                    name='jeffreyvwong_gvt'),
 
 )
 
