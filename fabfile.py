@@ -126,6 +126,18 @@ def test():
     local('../virtualenv/bin/python3.4 manage.py test %s.tests' % (APP_NAME,))
 
 
+### ***** Imports  *****
+HP_NAME = "hp"
+destination_js_dir = os.path.abspath(os.path.join(lsource_dir, "%s/static/%s/js/%s" % (APP_NAME, APP_NAME, HP_NAME)))
+destination_css_dir = os.path.abspath(os.path.join(lsource_dir, "%s/static/%s/css/%s" % (APP_NAME, APP_NAME, HP_NAME)))
+hp_dir = "/home/jvwong/Projects/hockey_prospective/source/apps/gvt/static/"
+hp_css_path = os.path.abspath(os.path.join(hp_dir, "css/app.css"))
+hp_js_path = os.path.abspath(os.path.join(hp_dir, "js/dist/bundle.js"))
+
+
+def copy_hp():
+    local('cp {} {}'.format(hp_js_path, destination_js_dir))
+    local('cp {} {}'.format(hp_css_path, destination_css_dir))
 
 
 
