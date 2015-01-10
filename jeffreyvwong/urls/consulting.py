@@ -44,5 +44,8 @@ urlpatterns = patterns('',
     url(r'^gvt/$', TemplateView.as_view(template_name='jeffreyvwong/visual/gvt.html'),
                                                     name='jeffreyvwong_gvt'),
 
+    url(r'^sortable/$', TemplateView.as_view(template_name='jeffreyvwong/visual/sortable.html'),
+                                                    name='jeffreyvwong_sortable'),
+
 )
 

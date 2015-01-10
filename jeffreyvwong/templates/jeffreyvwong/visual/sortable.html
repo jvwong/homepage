@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title></title>
+  <style>
+    /* tables */
+    table.tablesorter {
+      font-family:arial;
+      background-color: #CDCDCD;
+      margin:10px 0pt 15px;
+      font-size: 8pt;
+      width: 100%;
+      text-align: left;
+    }
+    table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+      background-color: #e6EEEE;
+      border: 1px solid #FFF;
+      font-size: 8pt;
+      padding: 4px;
+    }
+    table.tablesorter thead tr .header {
+      background-image: url(/static/jeffreyvwong/images/hp/tablesorter/bg.gif);
+      background-repeat: no-repeat;
+      background-position: center right;
+      cursor: pointer;
+    }
+    table.tablesorter tbody td {
+      color: #3D3D3D;
+      padding: 4px;
+      background-color: #FFF;
+      vertical-align: top;
+    }
+    table.tablesorter tbody tr.odd td {
+      background-color:#F0F0F6;
+    }
+    table.tablesorter thead tr .headerSortUp {
+      background-image: url(/static/jeffreyvwong/images/hp/tablesorter/asc.gif);
+    }
+    table.tablesorter thead tr .headerSortDown {
+      background-image: url(/static/jeffreyvwong/images/hp/tablesorter/desc.gif);
+    }
+    table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
+      background-color: #8dbdd8;
+    }
+  </style>
+  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="/static/jeffreyvwong/js/jquery.tablesorter.min.js" charset="utf-8"></script>
+  <script type="text/javascript">
+    d3.csv('/static/jeffreyvwong/data/HPReportAHLEV.csv', function(data){
+
+      /* Process data */
+      data.forEach(function(d){
+        d['A'] = +d['A'];
+        d['A/GP'] = +d['A/GP'];
+        d['EV +'] = +d['EV +'];
+        d['EV -'] = +d['EV -'];
+        d['EV A'] = +d['EV A'];
+        d['EV A/GP'] = +d['EV A/GP'];
+        d['EV G'] = +d['EV G'];
+        d['EV G/GP'] = +d['EV G/GP'];
+        d['EV GF %'] = +d['EV GF %'] || '';
+        d['G'] = +d['G'];
+        d['G/GP'] = +d['G/GP'];
+        d['GP'] = +d['GP'];
+        d['Player #'] = +d['Player #'];
+        d['SOG'] = +d['SOG'];
+        d['SOG/GP'] = +d['SOG/GP'];
+      });
+
+      /* declare variables and functions */
+      var _container,
+          _table,
+          _caption,
+          _colgroup,
+          _thead,
+          _tbody,
+          _row,
+          _row_enter,
+          _keys
+          ;
+
+      /* get the table header names or keys */
+      _keys = Object.keys(data[0]);
+
+      /* render the table */
+      _container = d3.select('#sortable');
+
+      _table = _container.append('table')
+          .attr({
+            'class': 'table tablesorter sortable-table'
+          })
+          ;
+
+      _caption = _table.append('caption');
+
+      /* render colgroup */
+      _colgroup = _table.append('colgroup');
+      _colgroup.selectAll('col')
+          .data(_keys)
+          .enter()
+          .append('col')
+          .attr({
+            'class': function (d, i) {
+              return d.toLowerCase()
+                  .trim()
+                  .replace(/\+/g, 'plus')
+                  .replace(/\-/g, 'minus')
+                  .replace(/\#/g, 'hash')
+                  .replace(/\%/g, 'percent')
+                  .replace(/\//g, '-')
+                  .replace(/\s/g, '-')
+                  ;
+            }
+          })
+      ;
+
+      /* render thead */
+      _thead = _table.append('thead').append('tr');
+      _thead.selectAll('th')
+          .data(_keys)
+          .enter()
+          .append('th')
+          .attr({
+            'scope': 'col'
+          })
+          .text(function(d){
+            return d;
+          });
+
+      /* render tbody */
+      _tbody = _table.append('tbody');
+      _row = _tbody.selectAll('tr')
+          .data(data);
+
+      _row_enter = _row.enter()
+          .append('tr');
+
+      _row_enter.selectAll('td')
+          .data(function(row){
+            return _keys.map(function(column){
+              return {column: column, value: row[column]};
+            })
+          })
+          .enter()
+          .append('td')
+          .text(function(d, i){
+            return d.value;
+          })
+          ;
+
+
+      $(".table.tablesorter").tablesorter({widgets: ['zebra']});
+    });
+  </script>
+</head>
+  <body>
+    <div class="container">
+      <div id="sortable"></div>
+    </div>
+  </body>
+</html>
