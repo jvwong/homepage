@@ -1,18 +1,22 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>GVT</title>
-  <link rel="stylesheet" type="text/css" href="{% static 'jeffreyvwong/css/hp/app.css' %}">
-</head>
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>GVT</title>
+      <link rel="stylesheet" type="text/css" href="{% static 'jeffreyvwong/css/hp/app.css' %}">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter/1.3.11/crossfilter.js"></script>
+      <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+      <script type="text/javascript" src="{% static 'jeffreyvwong/js/hp/data.js' %}"></script>
+    </head>
   <body>
     <div class="gvt">
         <div id="bar-chart-long" class="chart"></div>
         <div id="bar-chart" class="chart"></div>
         <div id="toggle-filter" class="filter"></div>
         <div id="table-chart" class="list"></div>
-        <script type="text/javascript" src="{% static 'jeffreyvwong/js/hp/bundle.js' %}"></script>
+        <script type="text/javascript" src="{% static 'jeffreyvwong/js/hp/jacob.js' %}"></script>
+        <script type="text/javascript" src="{% static 'jeffreyvwong/js/hp/gvt.js' %}"></script>
     </div>
   </body>
 </html>
