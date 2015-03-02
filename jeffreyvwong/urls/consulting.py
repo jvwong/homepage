@@ -20,12 +20,6 @@ urlpatterns = patterns('',
                             queryset = Snippet.objects.all()),
                             name='jeffreyvwong_visualization_detail'),
 
-
-    url(r'^blogosphere/$', TemplateView.as_view(template_name='jeffreyvwong/visual/blogosphere.html'),
-                                                name='jeffreyvwong_blogosphere'),
-
-    url(r'^blogosphere_json/$', BlogosphereView.as_view(), name='jeffreyvwong_blogosphere_json'),
-
     url(r'^household/$', TemplateView.as_view(template_name='jeffreyvwong/visual/household.html'),
                                                     name='jeffreyvwong_household'),
 
@@ -38,14 +32,7 @@ urlpatterns = patterns('',
     url(r'^flow/$', TemplateView.as_view(template_name='jeffreyvwong/visual/flowFilter.html'),
                                                     name='jeffreyvwong_flow'),
 
-    url(r'^birth/$', TemplateView.as_view(template_name='jeffreyvwong/visual/birth.html'),
-                                                    name='jeffreyvwong_birth'),
-
     url(r'^gvt/$', TemplateView.as_view(template_name='jeffreyvwong/visual/gvt.html'),
                                                     name='jeffreyvwong_gvt'),
-
-    url(r'^sortable/$', TemplateView.as_view(template_name='jeffreyvwong/visual/sortable.html'),
-                                                    name='jeffreyvwong_sortable'),
-
 )
 
