@@ -16,10 +16,15 @@ a:link, a:visited, a:hover{
     color: #6b6b6b !important;
     text-decoration: none;
 }
-/*------------------------------
+.navbar {
+  margin-bottom: 0px;
+}
+.navbar .navbar-toggle .icon-bar {
+  background-color: #b7b7b7;
+}
+/*----------------------------
       END: navbar
---------------------------------*/
-
+-----------------------------*/
 
 
 /*----------------------------
@@ -233,15 +238,7 @@ blockquote {
 .italic {
   font-style: italic;
 }
-/*----------------------------
-      BEGIN: navbar override
------------------------------*/
-.navbar {
-  margin-bottom: 0px;
-}
-/*----------------------------
-      END: navbar override
------------------------------*/
+
 /*----------------------------
       Begin: content
 -----------------------------*/
