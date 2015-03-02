@@ -1,3 +1,35 @@
+/*
+* colors.less
+*/
+/* START global */
+/* END global */
+/* START navbar */
+/* END navbar */
+/*------------------------------
+      START: override Bootstrap
+--------------------------------*/
+a:link,
+a:visited {
+  color: #6b6b6b !important;
+  text-decoration: underline;
+}
+a:hover {
+  text-decoration: underline;
+}
+/*------------------------------
+      END: override Bootstrap
+--------------------------------*/
+/*------------------------------
+      START: navbar
+--------------------------------*/
+.navbar a:link,
+.navbar a:visited,
+.navbar a:hover {
+  text-decoration: none;
+}
+/*------------------------------
+      END: navbar
+--------------------------------*/
 /*----------------------------
       Begin: contact
 -----------------------------*/
@@ -233,14 +265,14 @@ blockquote {
 -----------------------------*/
 /*----------------------------
           Begin: background
-    -----------------------------*/
+-----------------------------*/
 .background .background-tabs .tab-content .dropdown {
   position: absolute;
   left: 4em;
 }
 /*----------------------------
           End: background
-    -----------------------------*/
+-----------------------------*/
 /*----------------------------
       Begin: effeckt captions
 -----------------------------*/
