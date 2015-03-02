@@ -1,29 +1,20 @@
-@import "colors";
-
-
-
 /*------------------------------
       START: override Bootstrap
 --------------------------------*/
-a:link, a:visited {
-    color: @navbar-grey !important;
-    text-decoration: underline;
-}
-a:hover{
-    text-decoration: underline;
-}
 /*------------------------------
       END: override Bootstrap
 --------------------------------*/
-
+a:link, a:visited, a:hover{
+    //color: #6b6b6b !important;
+    text-decoration: none;
+}
 
 /*------------------------------
       START: navbar
 --------------------------------*/
-.navbar{
-    a:link, a:visited, a:hover{
-        text-decoration: none;
-    }
+.navbar a:link, .navbar a:visited, .navbar a:hover{
+    color: #6b6b6b !important;
+    text-decoration: none;
 }
 /*------------------------------
       END: navbar
@@ -90,6 +81,10 @@ a:hover{
 .jvw-home-detail {
   padding-right: 15px;
   padding-left: 15px;
+}
+.jvw-home-detail a:link, .jvw-home-detail a:visited, .jvw-home-detail a:hover{
+    color: #6b6b6b;
+    text-decoration: none;
 }
 /* RESPONSIVE CSS
 -------------------------------------------------- */

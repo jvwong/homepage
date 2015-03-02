@@ -87,14 +87,7 @@ STATIC_URL = '/static/'
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'static_precompiler.finders.StaticPrecompilerFinder',
 )
-STATIC_PRECOMPILER_COMPILERS = (
-    'static_precompiler.compilers.LESS',
-)
-
-STATIC_PRECOMPILER_ROOT = os.path.abspath(os.path.join(SOURCE_DIR, "jeffreyvwong/static/jeffreyvwong/"))
-# STATIC_PRECOMPILER_OUTPUT_DIR = ''
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -151,9 +144,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'taggit',
     'jsonfield',
-    'jeffreyvwong',
-    'compressor',
-    'static_precompiler'
+    'jeffreyvwong'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
